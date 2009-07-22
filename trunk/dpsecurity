@@ -1,0 +1,135 @@
+#!/bin/bash
+
+# Backup DebPBX-1.2.10.sh - 24/06/09
+#
+# DebPBX-1.2.10
+# Author: Federico Pereira <info@opentecnologic.com>
+# Copyright 2008 Federico Pereira (LordBaseX)
+# This script is licensed under GNU GPL version 2.0
+#
+
+clear
+echo "##################################################################"
+echo "# DebPBX -Security                                               #"
+echo "### ---------------------------------------------------------- ###"
+echo "#    Presione <enter> para continuar o <control+c> para salir    #"
+echo "##################################################################"
+read
+
+	SQL_RESULT=`echo "show databases;" | mysql -u root  2>&1`
+	SQL_RESULT=`echo "${SQL_RESULT}" | sed "s/\(.*\)\(Access denied\)\(.*\)/\2/"`
+	SQL_ROOT_PASSWORD=""
+	if [ "${SQL_RESULT}" = "Access denied" ]; then
+		echo "Parece que usted ha especificado una contraseña de root para MySQL"
+	fi
+	
+	key=""
+	while [ "${SQL_RESULT}" = "Access denied" ];do
+		read -p "Por favor, introduzca la contraseña de root de MySQL? " SQL_ROOT_PASSWORD
+		if [ "${SQL-ROOT_PASSWORD}" != "" ]; then
+			SQL_ROOT_PASSWORD="-p${SQL_ROOT_PASSWORD}"
+		fi
+		SQL_RESULT=`echo "show databases;" | mysql -u root  ${SQL_ROOT_PASSWORD} 2>&1`
+		SQL_RESULT=`echo "${SQL_RESULT}" | sed "s/\(.*\)\(Access denied\)\(.*\)/\2/"`
+		if [ "${SQL_RESULT}" = "Access denied" ]; then
+			echo "ERROR: La contraseña introducida no parece ser correcta."
+		fi
+	done
+
+
+echo "+----------------------------------------------------------------+"
+echo "| Cambiando claves MYSQL                                         |"
+echo "+----------------------------------------------------------------+"
+
+echo "+----------------------------------------------------------------+"
+echo "| FreePBX                                                        |"
+echo "| Se cambiará la clave del usuario asteriskuser SQL que por      |"
+echo "| defecto es: amp109 de no hacerlo su sistema correrá peligro    |"
+echo "| y es tomado como un grave error de seguridad no hacerlo!!!     |"
+echo "| Se modificarán los siguientes archivos:                        |"
+echo "|----------------------------------------------------------------|"
+echo "| /etc/amportal.conf                                             |"
+echo "| /etc/asterisk/cdr_mysql.conf                                   |"
+echo "+----------------------------------------------------------------+"
+key=""
+read -p "Nueva clave para usuario asteriskuser SQL ? " key
+echo $key
+sed -i "s/\(^AMPDBPASS=*\)\(.*\)/\1$key/" /etc/amportal.conf
+sed -i "s/\(^FOPPASSWORD=*\)\(.*\)/\1$key/" /etc/amportal.conf
+sed -i "s/\(^password = *\)\(.*\)/\1$key/" /etc/asterisk/cdr_mysql.conf
+echo "SET PASSWORD FOR 'asteriskuser'@'localhost' = PASSWORD('$key');" | mysql -u root ${SQL_ROOT_PASSWORD}
+
+echo "+----------------------------------------------------------------+"
+echo "|A2biling                                                        |"
+echo "| Se cambiará la clave del usuario mya2billing SQL que por       |"
+echo "| defecto es: a2billing de no hacerlo su sistema correrá peligro |"
+echo "| y es tomado como un grave error de seguridad no hacerlo!!!     |"
+echo "| Se modificarán los siguientes archivos:                        |"
+echo "|----------------------------------------------------------------|"
+echo "| /etc/asterisk/a2billing.conf                                   |"
+echo "+----------------------------------------------------------------+"
+key=""
+read -p "Nueva clave para usuario a2billinguser SQL ? " key
+echo $key
+sed -i "s/\(^password = *\)\(.*\)/\1$key/" /etc/asterisk/a2billing.conf
+echo "SET PASSWORD FOR 'a2billinguser'@'localhost' = PASSWORD('$key');" | mysql -u root ${SQL_ROOT_PASSWORD}
+
+echo "+----------------------------------------------------------------+"
+echo "| Cambiando claves Asterisk Manager                              |"
+echo "+----------------------------------------------------------------+"
+
+echo "+----------------------------------------------------------------+"
+echo "| Asterisk Manager Freepbx                                       |"
+echo "| Se cambiaran las clave de Asterisk Manager que por defecto es: |"
+echo "| amp111 de no hacerlo su sistema correrá peligro y es           |"
+echo "| tomado como un grave error de seguridad no hacerlo!!!          |"
+echo "| Se modificarán los siguientes archivos:                        |"
+echo "|----------------------------------------------------------------|"
+echo "| /etc/asterisk/manager.conf                                     |"
+echo "| /etc/amportal.conf                                             |"
+echo "+----------------------------------------------------------------+"
+key=""
+read -p "Nueva clave para Asterisk Manager freepbx ? " key
+echo $key
+
+sed -i "s/\(^secret = *\)\(.*\)/\1$key/" /etc/asterisk/manager.conf
+sed -i "s/\(^AMPMGRPASS=*\)\(.*\)/\1$key/" /etc/amportal.conf
+
+echo "+----------------------------------------------------------------+"
+echo "| Asterisk Manager A2billing                                     |"
+echo "| Se cambiaran las clave de Asterisk Manager de a2billing que    |"
+echo "| por defecto es: amp111 de no hacerlo su sistema correrá peligro|"
+echo "| y es tomado como un grave error de seguridad no hacerlo!!!     |"
+echo "| Se modificarán los siguientes archivos:                        |"
+echo "|----------------------------------------------------------------|"
+echo "| /etc/asterisk/a2billing.conf                                   |"
+echo "| /etc/asterisk/manager_custom.conf                              |"
+echo "+----------------------------------------------------------------+"
+key=""
+read -p "Nueva clave para Asterisk Manager a2billing ? " key
+echo $key
+
+sed -i "s/\(^manager_secret = *\)\(.*\)/\1$key/" /etc/asterisk/a2billing.conf
+sed -i "s/\(^secret = *\)\(.*\)/\1$key/" /etc/asterisk/manager_custom.conf
+
+clear
+echo "+----------------------------------------------------------------+"
+echo "| ATENCIÓN: Se recomienda cambiar la clave de root de MySQL que  |"
+echo "| por defecto esta en blanco y un grave error de seguridad.      |"
+echo "+----------------------------------------------------------------+"
+key=""
+while [ "$key" != "y" ] && [ "$key" != "n" ];do
+	echo ""
+	read -n 1 -p "Quiere cambiar la clave de root MySQL ahora ? [y/N]" key
+done
+echo ""
+if [ $key == "y" ]; then
+	key=""
+	read -p "Escriba una nueva clave para root MySQL ? " key
+	echo "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('$key');" | mysql -u root ${SQL_ROOT_PASSWORD} 
+fi
+amportal restart
+
+echo "+----------------------------------------------------------------+"
+echo "| Done, enjoy                                                    |"
+echo "+----------------------------------------------------------------+"
