@@ -50,7 +50,7 @@ deb http://oktan.ls.fi.upm.es/debian-multimedia/ stable main
 deb-src http://oktan.ls.fi.upm.es/debian-multimedia/ stable main
 " >> /etc/apt/sources.list
 
-       dpkg -i /var/cache/apt/archives/debian-multimedia-keyring_2008.10.16_all.deb
+       dpkg -i /var/www/pub/tools/debian-multimedia-keyring_2008.10.16_all.deb
 
        aptitude update
        aptitude -y install grub2 startupmanager grub2-splashimages desktop-base
