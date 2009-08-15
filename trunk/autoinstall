@@ -195,7 +195,7 @@ echo "##################################################################"
 	SQL_ROOT_PASSWORD="-pdebpbx"
 	
 	mkdir /tmp/freepbx/
-	cp /var/www/pub/debpbx/freepbx-${VER_FREEPBX}.tar.gz  /tmp/freepbx/freepbx-${VER_FREEPBX}.tar.gz
+	cp /var/www/pub/tools/freepbx-${VER_FREEPBX}.tar.gz  /tmp/freepbx/freepbx-${VER_FREEPBX}.tar.gz
 	
 	cd /usr/src
 	tar zxvf /tmp/freepbx/freepbx-${VER_FREEPBX}.tar.gz
@@ -379,20 +379,23 @@ echo "##################################################################"
       
         mkdir -p /usr/src/a2billing/
         cd /usr/src/a2billing/
-	cp /var/www/pub/debpbx/A2Billing_${VER_A2BILLING}.tar.gz /usr/src/a2billing/A2Billing_${VER_A2BILLING}.tar.gz	
+	cp /var/www/pub/tools/A2Billing_${VER_A2BILLING}.tar.gz /usr/src/a2billing/A2Billing_${VER_A2BILLING}.tar.gz	
 	tar xzvf A2Billing_${VER_A2BILLING}.tar.gz 
 
 	echo "create database mya2billing;" | mysql -u root ${SQL_ROOT_PASSWORD}
 	echo "GRANT ALL PRIVILEGES ON mya2billing.* TO  a2billinguser@localhost IDENTIFIED BY 'a2billing';" | mysql -u root ${SQL_ROOT_PASSWORD}
-	mysql -u a2billinguser -pa2billing mya2billing </usr/src/a2billing/DataBase/mysql/Mysql-5.x/a2billing-schema-v1.4.0.sql
-   
+	mysql -u a2billinguser -pa2billing mya2billing </usr/src/a2billing/DataBase/mysql-5.x/a2billing-schema-v1.4.0.sql
+
+
 	echo "+----------------------------------------------------------------+"
 	echo "| Configurando archivo a2billing.conf	                       |"
 	echo "+----------------------------------------------------------------+"
 	
 	cp /usr/src/a2billing/a2billing.conf /etc/
 	chown asterisk:asterisk /etc/a2billing.conf
-	sed -i "s/\(dbtype *= *\)\(.*\)/\1mysql/" /etc/a2billing.conf
+	sed -i "s/\(user *= *\)\(.*\)/\1a2billinguser/" /etc/a2billing.conf
+        sed -i "s/\(password *= *\)\(.*\)/\1a2billing/" /etc/a2billing.conf
+        sed -i "s/\(dbname *= *\)\(.*\)/\1mya2billing/" /etc/a2billing.conf
 
 	echo "+----------------------------------------------------------------+"
 	echo "| web-based Graphical interfaces                                 |"
@@ -534,7 +537,7 @@ echo "##################################################################"
 	echo "GRANT ALL PRIVILEGES ON vtigercrm.* TO vtigercrmuser@localhost IDENTIFIED BY 'DebPBX2009';" | mysql -u root ${SQL_ROOT_PASSWORD}
 
 	cd /var/www/sites/plataforma/
-	tar zxvf /var/www/pub/debpbx/vtigercrm-${VER_VTIGERCRM}.tar.gz
+	tar zxvf /var/www/pub/tools/vtigercrm-${VER_VTIGERCRM}.tar.gz
 	cd /var/www/sites/plataforma/vtigercrm
 
 	chmod 777 config.inc.php
@@ -567,6 +570,14 @@ sed /etc/php5/apache2/php.ini   -r -ibackup -f - <<END_SED_SCRIPT
 s/^error_reporting *=.*/error_reporting = E_WARNING \& \~E_NOTICE/;
 END_SED_SCRIPT
 
+echo "
+[crm]
+secret=DebPBX2009
+deny=0.0.0.0/0.0.0.0
+permit=127.0.0.1/255.255.255.0
+read=system,call,log,verbose,command,agent,user
+write=system,call,log,verbose,command,agent,user
+" >> /etc/asterisk/manager_custom.conf
 
 
 #################################################################################################################################################################################################################################################################################################################################################################################################################################
@@ -581,6 +592,11 @@ END_SED_SCRIPT
 	/etc/init.d/apache2 force-reload
 
 	aptitude -y install munin munin-node mpg123 sox lame libmad0 libmad0-dev
+
+ln -s /usr/share/phpmyadmin/ /var/www/sites/plataforma/phpmyadmin
+cd /etc/phpmyadmin/
+sed '39a\$cfg['blowfish_secret'] ="asterisk";' config.inc.php > config.inc.tmp
+mv config.inc.tmp config.inc.php
 
 clear
 echo "+----------------------------------------------------------------+"
