@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Backup DebPBX-1.2.10.sh - 15/08/09
+# Backup DebPBX-1.2.10.sh - 24/06/09
 #
 # DebPBX-1.2.10 
 # Author: Federico Pereira <info@opentecnologic.com>
@@ -384,9 +384,8 @@ echo "##################################################################"
 
 	echo "create database mya2billing;" | mysql -u root ${SQL_ROOT_PASSWORD}
 	echo "GRANT ALL PRIVILEGES ON mya2billing.* TO  a2billinguser@localhost IDENTIFIED BY 'a2billing';" | mysql -u root ${SQL_ROOT_PASSWORD}
-	mysql -u a2billinguser -pa2billing mya2billing </usr/src/a2billing/DataBase/mysql-5.x/a2billing-schema-v1.4.0.sql
-
-
+        mysql -uroot ${SQL_ROOT_PASSWORD} mya2billing </usr/src/a2billing/DataBase/mysql-5.x/a2billing-schema-v1.4.0.sql
+	
 	echo "+----------------------------------------------------------------+"
 	echo "| Configurando archivo a2billing.conf	                       |"
 	echo "+----------------------------------------------------------------+"
