@@ -7,15 +7,16 @@
 # Copyright 2008 Federico Pereira (LordBaseX)
 # This script is licensed under GNU GPL version 2.0
 #
-VER_VERSION=#99991
-VER_ASTERISK=#99992
-VER_LIBPRI=#99993
-VER_ADDONS=#99994
-VER_DAHDI_LINUX=#99995
-VER_DAHDI_TOOLS=#99996
-VER_FREEPBX=#99997
-VER_A2BILLING=#99998
-VER_VTIGERCRM=#99999
+VER_VERSION=99991
+VER_ASTERISK=99992
+VER_ADDONS=99993
+VER_DAHDI_LINUX=99994
+VER_DAHDI_TOOLS=99995
+VER_LIBPRI=99996
+VER_FREEPBX=99997
+VER_A2BILLING=99998
+VER_VTIGERCRM=99999
+
 export DEBIAN_FRONTEND="noninteractive";
 
 #Virtual Host
@@ -384,8 +385,9 @@ echo "##################################################################"
 
 	echo "create database mya2billing;" | mysql -u root ${SQL_ROOT_PASSWORD}
 	echo "GRANT ALL PRIVILEGES ON mya2billing.* TO  a2billinguser@localhost IDENTIFIED BY 'a2billing';" | mysql -u root ${SQL_ROOT_PASSWORD}
-        mysql -uroot ${SQL_ROOT_PASSWORD} mya2billing </usr/src/a2billing/DataBase/mysql-5.x/a2billing-schema-v1.4.0.sql
-	
+	mysql -uroot $SQL_ROOT_PASSWORD mya2billing </usr/src/a2billing/DataBase/mysql-5.x/a2billing-schema-v1.4.0.sql
+
+
 	echo "+----------------------------------------------------------------+"
 	echo "| Configurando archivo a2billing.conf	                       |"
 	echo "+----------------------------------------------------------------+"
@@ -466,7 +468,8 @@ write = system,call,log,verbose,command,agent,user
 	echo "+----------------------------------------------------------------+"
 
 	mkdir -p /usr/share/asterisk/sounds/
-  	/usr/src/a2billing/addons/sounds/install_a2b_sounds_deb.sh      	
+	/usr/src/a2billing/addons/sounds/install_a2b_sounds.sh
+        /usr/src/a2billing/addons/sounds/install_a2b_sounds_deb.sh
 	chown -R asterisk:asterisk /usr/share/asterisk/sounds/
 
 	mkdir -p /var/lib/asterisk/mohmp3/acc_1
