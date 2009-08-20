@@ -247,48 +247,14 @@ echo "##################################################################"
 	cd /usr/src/freepbx-${VER_FREEPBX}/
 
 
-#	echo "+----------------------------------------------------------------+"
-#	echo "| Automatizando instalacion FreePBX                              |"
-#	echo "+----------------------------------------------------------------+"
+	echo "+----------------------------------------------------------------+"
+	echo "| Automatizando instalacion FreePBX                              |"
+	echo "+----------------------------------------------------------------+"
+        
+        cp /var/www/pub/debpbx/amportal.conf /etc/amportal.conf
+	chown asterisk:asterisk /etc/amportal.conf
+	#mkdir -p /var/www/sites/plataforma
 
-#	CONTADOR=0
-#	while [  $CONTADOR -lt 107 ]; do
- # 		sed -e "299d" /usr/src/freepbx-${VER_FREEPBX}/install_amp > /usr/src/freepbx-${VER_FREEPBX}/install_amp.temp
-  #		mv /usr/src/freepbx-${VER_FREEPBX}/install_amp.temp /usr/src/freepbx-${VER_FREEPBX}/install_amp
-#		let CONTADOR=CONTADOR+1
-#		#echo $CONTADOR	
-#	done
-	
-#	sed -i 's/amp109";/amp109";\n# debpbx - sistema desatendido/' /usr/src/freepbx-${VER_FREEPBX}/install_amp
-#	sed -i 's/ desatendido/ desatendido\n#1/' /usr/src/freepbx-${VER_FREEPBX}/install_amp
-#	sed -i 's/#1/#1\n#2/' /usr/src/freepbx-${VER_FREEPBX}/install_amp
-#	sed -i 's/#2/#2\n#3/' /usr/src/freepbx-${VER_FREEPBX}/install_amp
-#	sed -i 's/#3/#3\n#4/' /usr/src/freepbx-${VER_FREEPBX}/install_amp
-#	sed -i 's/#4/#4\n#5/' /usr/src/freepbx-${VER_FREEPBX}/install_amp
-#	sed -i 's/#5/#5\n#6/' /usr/src/freepbx-${VER_FREEPBX}/install_amp
-#	sed -i 's/#6/#6\n#7/' /usr/src/freepbx-${VER_FREEPBX}/install_amp
-#	sed -i 's/#7/#7\n#8/' /usr/src/freepbx-${VER_FREEPBX}/install_amp
-#	sed -i 's/#8/#8\n#9/' /usr/src/freepbx-${VER_FREEPBX}/install_amp
-#	sed -i 's/#9/#9\n#A0/' /usr/src/freepbx-${VER_FREEPBX}/install_amp
-#	sed -i 's/#A0/#A0\n#B0/' /usr/src/freepbx-${VER_FREEPBX}/install_amp
-#	sed -i 's/#B0/#B0\n#C0/' /usr/src/freepbx-${VER_FREEPBX}/install_amp
-
-#	sed -i "s/#1/\$amp_conf\[\"AMPDBUSER\"\] = \$asterisk_user;/g" "/usr/src/freepbx-${VER_FREEPBX}/install_amp"
-#	sed -i "s/#2/\$amp_conf\[\"AMPDBPASS\"\] = \$asterisk_pass;/g" "/usr/src/freepbx-${VER_FREEPBX}/install_amp"
-#	sed -i "s/#3/\$amp_conf\[\"AMPDBHOST\"\] = \"localhost\";/g" "/usr/src/freepbx-${VER_FREEPBX}/install_amp"
-#	sed -i "s/#4/\$amp_conf\[\"AMPMGRUSER\"\] = \"admin\";/g" "/usr/src/freepbx-${VER_FREEPBX}/install_amp"
-#	sed -i "s/#5/\$amp_conf\[\"AMPMGRPASS\"\] = \"amp111\";/g" "/usr/src/freepbx-${VER_FREEPBX}/install_amp"
-#	sed -i "s/#6/\$amp_conf\[\"AMPWEBROOT\"\] = \"\$webroot\";/g" "/usr/src/freepbx-${VER_FREEPBX}/install_amp"
-#	sed -i "s/#7/\$amp_conf\[\"FOPWEBROOT\"\] = \$amp_conf\[\"AMPWEBROOT\"\].\"\/panel\"\;/g" "/usr/src/freepbx-${VER_FREEPBX}/install_amp"
-#	sed -i "s/#8/\$amp_conf\[\"AMPWEBADDRESS\"\] = \"\";/g" "/usr/src/freepbx-${VER_FREEPBX}/install_amp"
-#	sed -i "s/#9/\$amp_conf\[\"FOPPASSWORD\"\] = \"\passw0rd\";/g" "/usr/src/freepbx-${VER_FREEPBX}/install_amp"
-#	sed -i "s/#A0/\$amp_conf\[\"AMPEXTENSIONS\"\] = \"\extensions\";/g" "install_amp"
-#	sed -i "s/#B0/\$amp_conf\[\"AMPBIN\"\] = \$ampbin_dir;/g" "/usr/src/freepbx-${VER_FREEPBX}/install_amp"
-#	sed -i "s/#C0/\$amp_conf\[\"AMPSBIN\"\] = \"\$ampsbin_dir\";/g" "/usr/src/freepbx-${VER_FREEPBX}/install_amp"
-
-
-#	mkdir -p /var/www/sites/plataforma
-#	./install_amp  --username=root --password=debpbx
 	./install_amp
 	/usr/src/freepbx-${VER_FREEPBX}/apply_conf.sh
 
