@@ -1,11 +1,12 @@
 #!/bin/bash
 
-# Backup DebPBX-1.2.10.sh - 24/06/09
+# Backup DebPBX-1.2.10.sh - 27/09/09
 #
 # DebPBX-1.2.10
 # Author: Federico Pereira <info@opentecnologic.com>
 # Copyright 2008 Federico Pereira (LordBaseX)
 # This script is licensed under GNU GPL version 2.0
+#
 #
 VER_VERSION=99991
 VER_ASTERISK=99992
@@ -16,9 +17,9 @@ VER_LIBPRI=99996
 VER_FREEPBX=99997
 VER_A2BILLING=99998
 VER_VTIGERCRM=99999
-VER_SPANDSP=999991
-VER_AGX_AST_ADDONS=999992
-VER_AVANTFAX=999993
+VER_SPANDSP=11111
+VER_AGX_AST_ADDONS=11112
+VER_AVANTFAX=11113
 
 export DEBIAN_FRONTEND="noninteractive";
 
@@ -31,6 +32,10 @@ echo "##################################################################"
 echo "# PARTE 1 - Preparando instalación                               #"
 echo "##################################################################"
 
+echo "+----------------------------------------------------------------+"
+echo "| Configurando Repositorio local                                 |"
+echo "+----------------------------------------------------------------+"
+
 rm /etc/apt/sources.list
 touch /etc/apt/sources.list
 
@@ -40,19 +45,24 @@ deb file:///usr/local/debpbx/ sarge main non-free
 cd /
 tar -xpf /var/www/pub/tools/repositorio.tar.gz 
 apt-key add /var/www/pub/debpbx/debpbx_key_pub.gpg
-
 aptitude update
+aptitude -y install apache2
+
+echo "+----------------------------------------------------------------+"
+echo "| Personalizando Grub                                            |"
+echo "+----------------------------------------------------------------+"
+
 aptitude -y install grub2 startupmanager grub2-splashimages desktop-base
 upgrade-from-grub-legacy
 update-grub
-#cp /var/www/pub/debpbx/debpbx.tga /boot/grub/debpbx.tga
-#cp /boot/grub/debpbx.tga /usr/share/images/grub
-#cp /boot/grub/debpbx.tga /usr/share/images/desktop-base/
-#sed -i s/moreblue-orbit-grub/debpbx/g /etc/grub.d/05_debian_theme
-#sed -i "s/\(color_normal*= *\)\(.*\)/\1white\/black/" /etc/grub.d/05_debian_theme
-#sed -i "s/\(color_highlight*= *\)\(.*\)/\1black\/white/" /etc/grub.d/05_debian_theme
-#sed -i s/OS=\"${GRUB_DISTRIBUTOR}/OS=\"DebPBX\ debpbx-${VER_VERSION}\ -\ ${GRUB_DISTRIBUTOR}/g /etc/grub.d/10_linux
-#update-grub
+cp /var/www/pub/debpbx/debpbx.tga /boot/grub/debpbx.tga
+cp /boot/grub/debpbx.tga /usr/share/images/grub
+cp /boot/grub/debpbx.tga /usr/share/images/desktop-base/
+sed -i s/moreblue-orbit-grub/debpbx/g /etc/grub.d/05_debian_theme
+sed -i "s/\(color_normal*= *\)\(.*\)/\1white\/black/" /etc/grub.d/05_debian_theme
+sed -i "s/\(color_highlight*= *\)\(.*\)/\1black\/white/" /etc/grub.d/05_debian_theme
+sed -i s/OS=\"${GRUB_DISTRIBUTOR}/OS=\"DebPBX\ debpbx-${VER_VERSION}\ -\ ${GRUB_DISTRIBUTOR}/g /etc/grub.d/10_linux
+update-grub
 cp /var/www/pub/debpbx/.bash_login /root/.bash_login
 cp /var/www/pub/debpbx/dpsecurity /usr/local/sbin/dpsecurity
 chmod +x /usr/local/sbin/dpsecurity
@@ -60,21 +70,14 @@ cp /var/www/pub/debpbx/debpbx /etc/debpbx
 echo "Banner /etc/debpbx" >> /etc/ssh/sshd_config
 cp /var/www/pub/debpbx/.bashrc /root/.bashrc
 
-aptitude update
-aptitude -y install linux-source-$KERNEL_VERSION kernel-package g++ libncurses5-dev linux-libc-dev sqlite libnewt-dev libusb-dev zlib1g-dev libmysqlclient15-dev libsqlite0-dev loco mc unzip zip iptraf nmap unrar rar screen subversion libqt4-core libqt4-gui ntpdate tcpdump libiksemel-dev libtiff4-dev cmake libxml2-dev bison libaudiofile-dev
-
-aptitude update
-aptitude install -y linux-headers-`uname -r` build-essential hylafax-server iaxmodem bind9 postfix ghostscript netpbm libungif4-dev sudo cups expect libmagic-dev
-
-aptitude update
-aptitude install -y apache2 php5 php5-common php5-cli mysql-server-5.0 php-pear php5-mysql php-db libapache2-mod-php5 php5-gd php5-curl libapache2-mod-perl2 php5-dev php5-ldap php5-mhash php5-odbc php5-mcrypt curl libwww-perl php5-imap python-setuptools python-mysqldb python-sqlalchemy python-psycopg2 imagemagick phpmyadmin
 
 echo "+----------------------------------------------------------------+"
 echo "| Descargando sources kernel                                     |"
 echo "+----------------------------------------------------------------+"
 
+aptitude -y install linux-source-$KERNEL_VERSION kernel-package g++ libncurses5-dev linux-libc-dev sqlite libnewt-dev libusb-dev zlib1g-dev libmysqlclient15-dev libsqlite0-dev libqt4-core libqt4-gui libiksemel-dev libtiff4-dev cmake libxml2-dev bison libaudiofile-dev
 cd /usr/src/
-tar xvjf linux-source-${KERNEL_VERSION}.tar.bz2
+tar xjf linux-source-${KERNEL_VERSION}.tar.bz2
 ln -s /usr/src/linux-source-${KERNEL_VERSION} /usr/src/linux
 ln -s /lib/modules/${KERNEL_VERSION}/ /lib/modules/`uname -r`/asterisk
 
@@ -101,7 +104,7 @@ dpkg-reconfigure -f noninteractive locales
 echo "+----------------------------------------------------------------+"
 echo "| Reconfiguración mysql                                          |"
 echo "+----------------------------------------------------------------+"
-
+aptitude -y install mysql-server-5.0
 echo "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('debpbx');" | mysql -u root
 SQL_ROOT_PASSWORD="-pdebpbx"
 
@@ -135,6 +138,7 @@ echo "+----------------------------------------------------------------+"
 echo "| Reconfiguración postfix                                        |"
 echo "+----------------------------------------------------------------+"
 
+aptitude -y install postfix
 postconf -e 'myhostname = srv1.debpbx.org'
 postconf -e 'mydestination = srv1.debpbx.org, localhost.debpbx.org, localhost.localdomain, localhost'
 postconf -e 'inet_protocols = all'
@@ -146,6 +150,7 @@ echo "+----------------------------------------------------------------+"
 echo "| Reconfiguración bind9                                          |"
 echo "+----------------------------------------------------------------+"
 
+aptitude -y install bind9
 /etc/init.d/bind9 stop
 sed -i "s/\(^\OPTIONS=\)\(.*\)/\1\"-u bind -t \/var\/lib\/named\"/" /etc/default/bind9
 mkdir -p /var/lib/named/etc
@@ -175,7 +180,7 @@ sed -e "3d" /etc/resolv.conf > /etc/resolv.conf.temp
 mv /etc/resolv.conf.temp /etc/resolv.conf
 sed -e "3d" /etc/resolv.conf > /etc/resolv.conf.temp
 mv /etc/resolv.conf.temp /etc/resolv.conf
-rm /etc/resolv.conf.temp
+
 
 sed -i "s/#prepend domain-name-servers 127.0.0.1;/prepend domain-name-servers 127.0.0.1;/g" "/etc/dhcp3/dhclient.conf"
 sed -i "s/domain-name-servers,//g" "/etc/dhcp3/dhclient.conf"
@@ -286,7 +291,6 @@ echo "+----------------------------------------------------------------+"
 cd /usr/src/agx-ast-addons
 ./build.sh
 
-
 ###################################################################################################
 ###################################################################################################
 ###################################################################################################
@@ -295,6 +299,9 @@ clear
 echo "##################################################################"
 echo "# PARTE 2 - Instalando FreePBX                                   #"
 echo "##################################################################"
+
+aptitude update
+aptitude install -y php5 php5-cli php-pear php5-mysql php-db libapache2-mod-php5 php5-gd php5-curl
 
 echo "CREATE DATABASE IF NOT EXISTS asteriskcdrdb;" | mysql -u root ${SQL_ROOT_PASSWORD}
 echo "CREATE DATABASE IF NOT EXISTS asterisk;" | mysql -u root ${SQL_ROOT_PASSWORD}
@@ -329,11 +336,7 @@ chown -R asterisk:asterisk /var/run/asterisk
 
 cp /usr/src/freepbx-${VER_FREEPBX}/install_amp /usr/src/freepbx-${VER_FREEPBX}/install_amp-orig
 chmod 755 /usr/src/freepbx-${VER_FREEPBX}/install_amp
-LOCAL_IP=`ifconfig eth0 | egrep -o '([0-9]{1,3}\.){3}[0-9]{1,3}' | egrep -v '255|(127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})'`
-sed -i "s/xx.xx.xx.xx/${LOCAL_IP}/g" "/usr/src/freepbx-${VER_FREEPBX}/install_amp"
-chmod 755 /usr/src/freepbx-${VER_FREEPBX}/install_amp
 cd /usr/src/freepbx-${VER_FREEPBX}/
-
 
 echo "+----------------------------------------------------------------+"
 echo "| Automatizando instalacion FreePBX                              |"
@@ -498,9 +501,10 @@ PASS="debpbx";
 DB="avantfax";
 HTTPDUSER="asterisk";
 HTTPDGROUP="asterisk";
-
-
+    
 aptitude -y install apache2-mpm-prefork apache2-utils apache2.2-common libapr1 libaprutil1 libsqlite3-0 libnetpbm10-dev libungif-bin php-mail php-mail-mime php-file psutils rsync 
+
+aptitude -y install build-essential hylafax-server iaxmodem ghostscript netpbm libungif4-dev sudo cups expect libmagic-dev
 
 pear channel-update pear.php.net
 pear upgrade-all
@@ -607,10 +611,13 @@ echo "##################################################################"
 echo "# PARTE 4 - Instalando A2Billing                                 #"
 echo "##################################################################"
 
+aptitude -y install php5-common php5-mcrypt python-setuptools python-mysqldb python-psycopg2 python-sqlalchemy
+
+
 mkdir -p /usr/src/a2billing/
 cd /usr/src/a2billing/
 cp /var/www/pub/tools/A2Billing_${VER_A2BILLING}.tar.gz /usr/src/a2billing/A2Billing_${VER_A2BILLING}.tar.gz
-tar xzvf A2Billing_${VER_A2BILLING}.tar.gz
+tar xzf A2Billing_${VER_A2BILLING}.tar.gz
 
 echo "create database mya2billing;" | mysql -u root ${SQL_ROOT_PASSWORD}
 echo "GRANT ALL PRIVILEGES ON mya2billing.* TO a2billinguser@localhost IDENTIFIED BY 'a2billing';" | mysql -u root ${SQL_ROOT_PASSWORD}
@@ -763,11 +770,13 @@ echo "##################################################################"
 echo "# PARTE 5 - Instalando vtiger CRM                                #"
 echo "##################################################################"
 
+aptitude install -y libapache2-mod-perl2 php5-dev php5-ldap php5-mhash php5-odbc  curl libwww-perl php5-imap imagemagick 
+
 echo "CREATE DATABASE vtigercrm DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;" | mysql -u root ${SQL_ROOT_PASSWORD}
 echo "GRANT ALL PRIVILEGES ON vtigercrm.* TO vtigercrmuser@localhost IDENTIFIED BY 'DebPBX2009';" | mysql -u root ${SQL_ROOT_PASSWORD}
 
 cd /var/www/html
-tar zxvf /var/www/pub/tools/vtigercrm-${VER_VTIGERCRM}.tar.gz
+tar zxf /var/www/pub/tools/vtigercrm-${VER_VTIGERCRM}.tar.gz
 cd /var/www/html/vtigercrm
 
 chmod 777 config.inc.php
@@ -822,7 +831,11 @@ sed -i "s/\(DocumentRoot *\)\(.*\)/\1\/var\/www\/html\//" /etc/apache2/sites-ena
 #sed -i "s/\(DocumentRoot *\)\(.*\)/\1\/var\/www\/sites\/plataforma\//" /etc/apache2/sites-enabled/000-default
 /etc/init.d/apache2 force-reload
 
-aptitude -y install munin munin-node mpg123 sox lame libmad0 libmad0-dev
+echo "+----------------------------------------------------------------+"
+echo "| Programas varios tools                                         |"
+echo "+----------------------------------------------------------------+"
+
+aptitude -y install loco mc unzip zip iptraf nmap unrar rar screen subversion ntpdate tcpdump munin munin-node mpg123 sox lame libmad0 libmad0-dev phpmyadmin
 
 ln -s /usr/share/phpmyadmin/ /var/www/html/phpmyadmin
 cd /etc/phpmyadmin/
