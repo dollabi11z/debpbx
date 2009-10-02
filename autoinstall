@@ -1,6 +1,6 @@
 #!/bin/bash
-
-# Backup DebPBX-1.2.10.sh - 2/10/09
+#
+# autoinstall - 2/10/09
 #
 # DebPBX-1.2.10
 # Author: Federico Pereira <info@opentecnologic.com>
@@ -815,7 +815,7 @@ write=system,call,log,verbose,command,agent,user
 
 
 echo "+----------------------------------------------------------------+"
-echo "| Reconfigurando apache2 |"
+echo "| Reconfigurando apache2                                         |"
 echo "+----------------------------------------------------------------+"
 
 
