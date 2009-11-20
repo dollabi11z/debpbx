@@ -14,12 +14,11 @@ VER_ADDONS=99993
 VER_DAHDI_LINUX=99994
 VER_DAHDI_TOOLS=99995
 VER_LIBPRI=99996
+
 VER_FREEPBX=99997
 VER_A2BILLING=99998
 VER_VTIGERCRM=99999
-VER_SPANDSP=11111
-VER_AGX_AST_ADDONS=11112
-VER_AVANTFAX=11113
+VER_AVANTFAX=11111
 
 export DEBIAN_FRONTEND="noninteractive";
 
@@ -196,12 +195,8 @@ tar zxf /var/www/pub/telephony/asterisk/asterisk-addons-${VER_ADDONS}.tar.gz
 tar zxf /var/www/pub/telephony/libpri/libpri-${VER_LIBPRI}.tar.gz
 tar zxf /var/www/pub/telephony/dahdi-linux/dahdi-linux-${VER_DAHDI_LINUX}.tar.gz
 tar zxf /var/www/pub/telephony/dahdi-tools/dahdi-tools-${VER_DAHDI_TOOLS}.tar.gz
-tar zxf /var/www/pub/tools/spandsp-${VER_SPANDSP}.tgz
-bzip2 -dc /var/www/pub/tools/agx-ast-addons-${VER_AGX_AST_ADDONS}.tar.bz | tar -x
 tar zxf /var/www/pub/tools/freepbx-${VER_FREEPBX}.tar.gz
 tar zxf /var/www/pub/tools/avantfax-${VER_AVANTFAX}.tgz
-
-
 
 echo "+----------------------------------------------------------------+"
 echo "| Compilando Dahdi-Linux                                         |"
@@ -268,24 +263,6 @@ make
 make install
 make samples
 
-echo "+----------------------------------------------------------------+"
-echo "| Compilando Spandsp                                             |"
-echo "+----------------------------------------------------------------+"
-
-cd /usr/src/spandsp-${VER_SPANDSP}
-./configure
-make
-make install
-ldconfig -v
-
-echo "+----------------------------------------------------------------+"
-echo "| Compilando Agx-ast-addons                                      |"
-echo "+----------------------------------------------------------------+"
-
-cd /usr/src/agx-ast-addons
-./build.sh
-
-
 ###################################################################################################
 ###################################################################################################
 ###################################################################################################
@@ -327,13 +304,11 @@ chown -R asterisk:asterisk /var/run/asterisk
 /usr/sbin/asterisk
 
 cp /usr/src/freepbx-${VER_FREEPBX}/install_amp /usr/src/freepbx-${VER_FREEPBX}/install_amp-orig
-sed -i "s/\(^\$webroot*\)\(.*\)/\1 = \"\/var\/www\";/" /usr/src/freepbx-${VER_FREEPBX}/install_amp
-chmod 755 /usr/src/freepbx-${VER_FREEPBX}/install_amp
+sed -i "s/\(^\$webroot*\)\(.*\)/\1 = \"\/var\/www\/html\";/" /usr/src/freepbx-${VER_FREEPBX}/install_amp
 LOCAL_IP=`ifconfig eth0 | egrep -o '([0-9]{1,3}\.){3}[0-9]{1,3}' | egrep -v '255|(127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})'`
 sed -i "s/xx.xx.xx.xx/${LOCAL_IP}/g" "/usr/src/freepbx-${VER_FREEPBX}/install_amp"
 chmod 755 /usr/src/freepbx-${VER_FREEPBX}/install_amp
 cd /usr/src/freepbx-${VER_FREEPBX}/
-
 
 echo "+----------------------------------------------------------------+"
 echo "| Automatizando instalacion FreePBX                              |"
@@ -602,7 +577,6 @@ echo "
 ###################################################################################################
 ###################################################################################################
 
-
 clear
 echo "##################################################################"
 echo "# PARTE 4 - Instalando A2Billing                                 #"
@@ -613,11 +587,9 @@ cd /usr/src/a2billing/
 cp /var/www/pub/tools/A2Billing_${VER_A2BILLING}.tar.gz /usr/src/a2billing/A2Billing_${VER_A2BILLING}.tar.gz
 tar xzf A2Billing_${VER_A2BILLING}.tar.gz
 
-
 echo "create database mya2billing;" | mysql -u root ${SQL_ROOT_PASSWORD}
 echo "GRANT ALL PRIVILEGES ON mya2billing.* TO a2billinguser@localhost IDENTIFIED BY 'a2billing';" | mysql -u root ${SQL_ROOT_PASSWORD}
 mysql -uroot $SQL_ROOT_PASSWORD mya2billing </usr/src/a2billing/DataBase/mysql-5.x/a2billing-schema-v1.4.0.sql
-
 
 echo "+----------------------------------------------------------------+"
 echo "| Configurando archivo a2billing.conf                            |"
@@ -697,13 +669,12 @@ write = system,call,log,verbose,command,agent,user
 " >> /etc/asterisk/manager_custom.conf
 
 echo "+----------------------------------------------------------------+"
-echo "| Instalación de Sound |"
+echo "| Instalación de Sound                                           |"
 echo "+----------------------------------------------------------------+"
 
-mkdir -p /usr/share/asterisk/sounds/
-#/usr/src/a2billing/addons/sounds/install_a2b_sounds.sh ?????????????????
-#/usr/src/a2billing/addons/sounds/install_a2b_sounds_deb.sh ?????????????????
-chown -R asterisk:asterisk /usr/share/asterisk/sounds/
+sed -i "s/\(ast_sound=*\)\(.*\)/\1\/var\/lib\/asterisk\/sounds/" /usr/src/a2billing/addons/sounds/install_a2b_sounds_deb.sh
+/usr/src/a2billing/addons/sounds/install_a2b_sounds_deb.sh
+chown -R asterisk:asterisk /var/lib/asterisk/sounds/
 
 mkdir -p /var/lib/asterisk/mohmp3/acc_1
 mkdir -p /var/lib/asterisk/mohmp3/acc_2
@@ -715,7 +686,7 @@ mkdir -p /var/lib/asterisk/mohmp3/acc_7
 mkdir -p /var/lib/asterisk/mohmp3/acc_8
 mkdir -p /var/lib/asterisk/mohmp3/acc_9
 mkdir -p /var/lib/asterisk/mohmp3/acc_10
-chmod -p 777 /var/lib/asterisk/mohmp3/acc_*
+chmod -R 777 /var/lib/asterisk/mohmp3/acc_*
 chown -R asterisk:asterisk /var/lib/asterisk/mohmp3/
 
 echo "
@@ -754,14 +725,13 @@ chmod +x /etc/init.d/a2b-callback-daemon
 
 update-rc.d a2b-callback-daemon defaults 40 60
 
-
 ###################################################################################################
 ###################################################################################################
 ###################################################################################################
 
 clear
 echo "##################################################################"
-echo "# PARTE 5 - Instalando vtiger CRM #"
+echo "# PARTE 5 - Instalando vtiger CRM                                #"
 echo "##################################################################"
 
 echo "CREATE DATABASE vtigercrm DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;" | mysql -u root ${SQL_ROOT_PASSWORD}
@@ -837,4 +807,5 @@ echo "|                  visite http://www.debpbx.org                  |"
 echo "+----------------------------------------------------------------+"
 /etc/init.d/ssh restart
 exit 0
+
 
