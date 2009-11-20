@@ -39,7 +39,7 @@ deb file:///usr/local/debpbx/ sarge main non-free
 " >> /etc/apt/sources.list
 cd /
 tar -xpf /var/www/pub/tools/repositorio.tar.gz
-apt-key add /var/www/pub/debpbx/debpbx_key_pub.gpg
+apt-key add /usr/local/debpbx/debpbx_key_pub.gpg
 
 aptitude update
 aptitude -y install grub2 startupmanager grub2-splashimages desktop-base
