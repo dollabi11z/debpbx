@@ -1,6 +1,6 @@
  #!/bin/bash             
 #                       
-# autoinstall - 2/10/09 
+# autoinstall - 28/11/09 
 #                       
 # DebPBX-1.2.10         
 # Author: Federico Pereira <info@opentecnologic.com>
@@ -8,17 +8,17 @@
 # This script is licensed under GNU GPL version 2.0 
 #                                                   
 #                                                   
-VER_VERSION="1.2.10";                               
-VER_ASTERISK="1.4.27";                              
-VER_ADDONS="1.4.9";                                 
-VER_DAHDI_LINUX="2.2.0.2";                          
-VER_DAHDI_TOOLS="2.2.0";                            
-VER_LIBPRI="1.4.10.2";                              
+VER_VERSION=99991
+VER_ASTERISK=99992
+VER_ADDONS=99993
+VER_DAHDI_LINUX=99994
+VER_DAHDI_TOOLS=99995
+VER_LIBPRI=99996
 
-VER_FREEPBX="2.5.2";
-VER_A2BILLING="1.4.1";
-VER_VTIGERCRM="5.1.0";
-VER_AVANTFAX="3.1.6"; 
+VER_FREEPBX=99997
+VER_A2BILLING=99998
+VER_VTIGERCRM=99999
+VER_AVANTFAX=11111
 
 export DEBIAN_FRONTEND="noninteractive";
 
@@ -233,22 +233,110 @@ sed -i "s/\(chmod(newtmp*\)\(.*\)/\/* \1\2 *\//" /usr/src/asterisk-${VER_ASTERIS
 sed -i "s/\(chmod(tmptxtfile*\)\(.*\)/\/* \1\2 *\//" /usr/src/asterisk-${VER_ASTERISK}/apps/app_voicemail.c
 sed -i "s/\(res = ast_play_and_wait(chan, \"vm-no\");\)/res = say_and_wait(chan, 0 , chan->language);/" /usr/src/asterisk-${VER_ASTERISK}/apps/app_voicemail.c
 ./configure                                                                                                                                                   
-MAKEOPTS="/usr/src/asterisk-${VER_ASTERISK}/menuselect.makeopts"                                                                                              
-echo 'MENUSELECT_APPS=app_osplookup app_rpt app_skel' >> ${MAKEOPTS}                                                                                          
-echo 'MENUSELECT_CDR=cdr_odbc cdr_pgsql cdr_radius cdr_tds' >> ${MAKEOPTS}                                                                                    
-echo 'MENUSELECT_CHANNELS=chan_alsa chan_gtalk chan_h323 chan_misdn chan_nbs chan_vpb' >> ${MAKEOPTS}                                                         
-echo 'MENUSELECT_CODECS=codec_ilbc codec_speex codec_zap' >> ${MAKEOPTS}                                                                                      
-echo 'MENUSELECT_FORMATS=format_ogg_vorbis' >> ${MAKEOPTS}                                                                                                    
-echo 'MENUSELECT_FUNCS=func_curl func_odbc' >> ${MAKEOPTS}                                                                                                    
-echo 'MENUSELECT_PBX=pbx_gtkconsole' >> ${MAKEOPTS}                                                                                                           
-echo 'MENUSELECT_RES=res_config_odbc res_config_pgsql res_crypto res_jabber res_odbc res_snmp' >> ${MAKEOPTS}                                                 
-echo 'MENUSELECT_OPTS_app_voicemail=' >> ${MAKEOPTS}                                                                                                          
-echo 'MENUSELECT_CFLAGS=LOADABLE_MODULES' >> ${MAKEOPTS}                                                                                                      
-echo 'MENUSELECT_EMBED=apps cdr channels codecs formats funcs pbx res' >> ${MAKEOPTS}                                                                         
-echo 'MENUSELECT_CORE_SOUNDS=CORE-SOUNDS-EN-WAV CORE-SOUNDS-EN-ULAW CORE-SOUNDS-EN-ALAW CORE-SOUNDS-EN-GSM CORE-SOUNDS-EN-G729 CORE-SOUNDS-EN-G722 CORE-SOUNDS-ES-WAV CORE-SOUNDS-ES-ULAW CORE-SOUNDS-ES-ALAW CORE-SOUNDS-ES-GSM CORE-SOUNDS-ES-G729 CORE-SOUNDS-ES-G722' >> ${MAKEOPTS}                                                                                
-echo 'MENUSELECT_MOH=MOH-FREEPLAY-WAV MOH-FREEPLAY-ULAW MOH-FREEPLAY-ALAW MOH-FREEPLAY-GSM MOH-FREEPLAY-G729 MOH-FREEPLAY-G722' >> ${MAKEOPTS}                                      
-echo 'MENUSELECT_EXTRA_SOUNDS=EXTRA-SOUNDS-EN-WAV EXTRA-SOUNDS-EN-ULAW EXTRA-SOUNDS-EN-ALAW EXTRA-SOUNDS-EN-GSM EXTRA-SOUNDS-EN-G729 EXTRA-SOUNDS-EN-G722' >> ${MAKEOPTS}           
-echo 'MENUSELECT_BUILD_DEPS=res_adsi chan_local res_indications app_meetme res_monitor res_smdi res_features' >> ${MAKEOPTS}                                                        
+echo
+"
+MENUSELECT_DEPENDS_app_adsiprog=RES_ADSI                         
+MENUSELECT_DEPENDS_app_dahdibarge=DAHDI                          
+MENUSELECT_DEPENDS_app_dahdiras=DAHDI WORKING_FORK               
+MENUSELECT_DEPENDS_app_dahdiscan=DAHDI                           
+MENUSELECT_DEPENDS_app_dial=CHAN_LOCAL                           
+MENUSELECT_DEPENDS_app_externalivr=WORKING_FORK                  
+MENUSELECT_DEPENDS_app_festival=WORKING_FORK                     
+MENUSELECT_DEPENDS_app_flash=DAHDI                               
+MENUSELECT_DEPENDS_app_followme=CHAN_LOCAL                       
+MENUSELECT_DEPENDS_app_ices=WORKING_FORK                         
+MENUSELECT_DEPENDS_app_meetme=DAHDI                              
+MENUSELECT_DEPENDS_app_milliwatt=RES_INDICATIONS                 
+MENUSELECT_DEPENDS_app_mp3=WORKING_FORK                          
+MENUSELECT_DEPENDS_app_nbscat=WORKING_FORK                       
+MENUSELECT_DEPENDS_app_osplookup=OSPTK SSL                       
+MENUSELECT_DEPENDS_app_page=DAHDI APP_MEETME                     
+MENUSELECT_DEPENDS_app_queue=RES_MONITOR                         
+MENUSELECT_DEPENDS_app_rpt=DAHDI TONEZONE                        
+MENUSELECT_DEPENDS_app_voicemail=RES_ADSI RES_SMDI               
+MENUSELECT_DEPENDS_cdr_odbc=UNIXODBC LTDL                        
+MENUSELECT_DEPENDS_cdr_pgsql=PGSQL                               
+MENUSELECT_DEPENDS_cdr_radius=RADIUS                             
+MENUSELECT_DEPENDS_cdr_sqlite=SQLITE                             
+MENUSELECT_DEPENDS_cdr_tds=FREETDS                               
+MENUSELECT_DEPENDS_chan_agent=CHAN_LOCAL                         
+MENUSELECT_DEPENDS_chan_alsa=ASOUND                              
+MENUSELECT_DEPENDS_chan_dahdi=RES_SMDI DAHDI TONEZONE RES_FEATURES PRI 
+MENUSELECT_DEPENDS_chan_gtalk=IKSEMEL RES_JABBER GNUTLS
+MENUSELECT_DEPENDS_chan_h323=OPENH323
+MENUSELECT_DEPENDS_chan_iax2=RES_FEATURES DAHDI
+MENUSELECT_DEPENDS_chan_mgcp=RES_FEATURES
+MENUSELECT_DEPENDS_chan_misdn=ISDNNET MISDN SUPPSERV
+MENUSELECT_DEPENDS_chan_nbs=NBS
+MENUSELECT_DEPENDS_chan_oss=OSSAUDIO
+MENUSELECT_DEPENDS_chan_phone=IXJUSER
+MENUSELECT_DEPENDS_chan_sip=RES_FEATURES
+MENUSELECT_DEPENDS_chan_vpb=VPBAPI
+MENUSELECT_DEPENDS_codec_dahdi=DAHDI_TRANSCODE DAHDI
+MENUSELECT_DEPENDS_codec_gsm=GSM
+MENUSELECT_DEPENDS_codec_speex=SPEEX SPEEX_PREPROCESS SPEEXDSP
+MENUSELECT_DEPENDS_format_ogg_vorbis=VORBIS OGG
+MENUSELECT_DEPENDS_func_curl=CURL
+MENUSELECT_DEPENDS_func_odbc=UNIXODBC LTDL RES_ODBC
+MENUSELECT_DEPENDS_pbx_dundi=ZLIB
+MENUSELECT_DEPENDS_pbx_gtkconsole=GTK
+MENUSELECT_DEPENDS_res_agi=WORKING_FORK
+MENUSELECT_DEPENDS_res_config_odbc=UNIXODBC LTDL RES_ODBC
+MENUSELECT_DEPENDS_res_config_pgsql=PGSQL
+MENUSELECT_DEPENDS_res_crypto=SSL
+MENUSELECT_DEPENDS_res_features=CHAN_LOCAL
+MENUSELECT_DEPENDS_res_jabber=IKSEMEL GNUTLS
+MENUSELECT_DEPENDS_res_musiconhold=WORKING_FORK DAHDI
+MENUSELECT_DEPENDS_res_odbc=UNIXODBC LTDL
+MENUSELECT_DEPENDS_res_snmp=NETSNMP
+MENUSELECT_DEPENDS_ODBC_STORAGE=UNIXODBC LTDL
+MENUSELECT_DEPENDS_IMAP_STORAGE=IMAP_TK SSL
+MENUSELECT_DEPENDS_apps=GNU_LD
+MENUSELECT_DEPENDS_cdr=GNU_LD
+MENUSELECT_DEPENDS_channels=GNU_LD
+MENUSELECT_DEPENDS_codecs=GNU_LD
+MENUSELECT_DEPENDS_formats=GNU_LD
+MENUSELECT_DEPENDS_funcs=GNU_LD
+MENUSELECT_DEPENDS_pbx=GNU_LD
+MENUSELECT_DEPENDS_res=GNU_LD
+" >> /usr/src/asterisk-${VER_ASTERISK}/menuselect.makedeps
+
+echo
+"
+MENUSELECT_APPS=app_ivrdemo app_osplookup app_rpt app_skel
+MENUSELECT_CDR=cdr_odbc cdr_pgsql cdr_radius cdr_tds
+MENUSELECT_CHANNELS=chan_alsa chan_features chan_h323 chan_misdn chan_nbs chan_vpb
+MENUSELECT_CODECS=codec_ilbc codec_speex
+MENUSELECT_FORMATS=format_ogg_vorbis
+MENUSELECT_FUNCS=func_curl func_odbc
+MENUSELECT_PBX=pbx_gtkconsole
+MENUSELECT_RES=res_config_odbc res_config_pgsql res_odbc res_snmp
+MENUSELECT_OPTS_app_voicemail=
+MENUSELECT_CFLAGS=LOADABLE_MODULES
+MENUSELECT_EMBED=
+MENUSELECT_CORE_SOUNDS=CORE-SOUNDS-EN-ULAW CORE-SOUNDS-EN-ALAW CORE-SOUNDS-EN-G729
+MENUSELECT_MOH=MOH-OPSOUND-ULAW MOH-OPSOUND-ALAW MOH-OPSOUND-G729
+MENUSELECT_EXTRA_SOUNDS=EXTRA-SOUNDS-EN-ULAW EXTRA-SOUNDS-EN-ALAW EXTRA-SOUNDS-EN-G729
+MENUSELECT_BUILD_DEPS=res_adsi chan_local res_indications app_meetme res_monitor res_smdi res_features res_jabber
+MENUSELECT_DEPSFAILED=MENUSELECT_APPS=app_osplookup
+MENUSELECT_DEPSFAILED=MENUSELECT_CDR=cdr_odbc
+MENUSELECT_DEPSFAILED=MENUSELECT_CDR=cdr_pgsql
+MENUSELECT_DEPSFAILED=MENUSELECT_CDR=cdr_radius
+MENUSELECT_DEPSFAILED=MENUSELECT_CDR=cdr_tds
+MENUSELECT_DEPSFAILED=MENUSELECT_CHANNELS=chan_alsa
+MENUSELECT_DEPSFAILED=MENUSELECT_CHANNELS=chan_h323
+MENUSELECT_DEPSFAILED=MENUSELECT_CHANNELS=chan_misdn
+MENUSELECT_DEPSFAILED=MENUSELECT_CHANNELS=chan_nbs
+MENUSELECT_DEPSFAILED=MENUSELECT_CHANNELS=chan_vpb
+MENUSELECT_DEPSFAILED=MENUSELECT_CODECS=codec_speex
+MENUSELECT_DEPSFAILED=MENUSELECT_FORMATS=format_ogg_vorbis
+MENUSELECT_DEPSFAILED=MENUSELECT_FUNCS=func_curl
+MENUSELECT_DEPSFAILED=MENUSELECT_FUNCS=func_odbc
+MENUSELECT_DEPSFAILED=MENUSELECT_RES=res_config_odbc
+MENUSELECT_DEPSFAILED=MENUSELECT_RES=res_config_pgsql
+MENUSELECT_DEPSFAILED=MENUSELECT_RES=res_odbc
+MENUSELECT_DEPSFAILED=MENUSELECT_RES=res_snmp
+" >>/usr/src/asterisk-${VER_ASTERISK}/
 make                                                                                                                                                                                
 make install                                                                                                                                                                        
 make samples                                                                                                                                                                        
@@ -469,12 +557,8 @@ FAXDOMAIN="fax.mydomain.com";
 INSTDIR="/var/www/html/avantfax";
 HYLADIR="/usr";                  
 SPOOL="/var/spool/hylafax";      
-USER="avantfaxuser";             
-PASS="debpbx";                   
-DB="avantfax";                   
 HTTPDUSER="asterisk";            
 HTTPDGROUP="asterisk";           
-
 
 aptitude -y install apache2-mpm-prefork apache2-utils apache2.2-common libapr1 libaprutil1 libsqlite3-0 libnetpbm10-dev libungif-bin php-mail php-mail-mime php-file psutils rsync
 
@@ -523,12 +607,10 @@ chown -R $HTTPDUSER.$HTTPDGROUP $INSTDIR
 chmod -R 0770 $INSTDIR/tmp $INSTDIR/faxes
 chown -R $HTTPDUSER.uucp $INSTDIR/tmp $INSTDIR/faxes
 
-
 echo "## Creating AvantFAX MySQL database ##"
-mysql --user=root SQL_ROOT_PASSWORD -e "GRANT ALL ON $DB.* TO $USER@localhost IDENTIFIED BY \"$PASS\"" mysql
-mysqladmin --default-character-set=utf8 --user=$USER --password=$PASS create $DB                            
-mysql --user=$USER --password=$PASS $DB < create_tables.sql                                                 
-mysqlshow --user=$USER --password=$PASS $DB                                                                 
+echo "CREATE DATABASE IF NOT EXISTS avantfax;" | mysql -u root ${SQL_ROOT_PASSWORD}
+echo "GRANT ALL PRIVILEGES ON avantfaxdb.* TO avantfax@localhost IDENTIFIED BY 'd58fe49';" | mysql -u root ${SQL_ROOT_PASSWORD}  
+mysql -uavantfax -pd58fe49 avantfax < /usr/src/ avantfax-${VER_AVANTFAX}/create_tables.sql  
 
 # SYMLINK AVANTFAX SCRIPTS
 
