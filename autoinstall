@@ -607,7 +607,7 @@ chown -R $HTTPDUSER.uucp $INSTDIR/tmp $INSTDIR/faxes
 
 echo "## Creating AvantFAX MySQL database ##"
 echo "CREATE DATABASE IF NOT EXISTS avantfax;" | mysql -u root ${SQL_ROOT_PASSWORD}
-echo "GRANT ALL PRIVILEGES ON avantfaxdb.* TO avantfax@localhost IDENTIFIED BY 'd58fe49';" | mysql -u root ${SQL_ROOT_PASSWORD}  
+echo "GRANT ALL PRIVILEGES ON avantfax.* TO avantfax@localhost IDENTIFIED BY 'd58fe49';" | mysql -u root ${SQL_ROOT_PASSWORD}  
 mysql -uavantfax -pd58fe49 avantfax < /usr/src/avantfax-${VER_AVANTFAX}/create_tables.sql  
 
 # SYMLINK AVANTFAX SCRIPTS
