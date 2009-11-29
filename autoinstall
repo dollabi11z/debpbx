@@ -875,8 +875,8 @@ sed -i "s/\(DocumentRoot *\)\(.*\)/\1\/var\/www\/html\//" /etc/apache2/sites-ena
 
 aptitude -y install munin munin-node mpg123 sox lame libmad0 libmad0-dev
 
-mv /var/www/munin /var/www/html/munin
 ln -s /usr/share/phpmyadmin/ /var/www/html/phpmyadmin
+ln -s /var/www/munin/ /var/www/html/munin
 cd /etc/phpmyadmin/
 sed '39a\$cfg['blowfish_secret'] ="asterisk";' config.inc.php > config.inc.tmp
 mv config.inc.tmp config.inc.php
