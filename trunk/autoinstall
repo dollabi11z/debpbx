@@ -1,4 +1,4 @@
-#!/bin/bash             
+ #!/bin/bash             
 #                       
 # autoinstall - 2/10/09 
 #                       
@@ -232,68 +232,65 @@ sed -i "s/\(chmod(template*\)\(.*\)/\/* \1\2 *\//" /usr/src/asterisk-${VER_ASTER
 sed -i "s/\(chmod(newtmp*\)\(.*\)/\/* \1\2 *\//" /usr/src/asterisk-${VER_ASTERISK}/apps/app_voicemail.c  
 sed -i "s/\(chmod(tmptxtfile*\)\(.*\)/\/* \1\2 *\//" /usr/src/asterisk-${VER_ASTERISK}/apps/app_voicemail.c
 sed -i "s/\(res = ast_play_and_wait(chan, \"vm-no\");\)/res = say_and_wait(chan, 0 , chan->language);/" /usr/src/asterisk-${VER_ASTERISK}/apps/app_voicemail.c
-./configure                                                                                                                                                   
 
-echo
-"
-MENUSELECT_DEPENDS_app_adsiprog=RES_ADSI                         
-MENUSELECT_DEPENDS_app_dahdibarge=DAHDI                          
-MENUSELECT_DEPENDS_app_dahdiras=DAHDI WORKING_FORK               
-MENUSELECT_DEPENDS_app_dahdiscan=DAHDI                           
-MENUSELECT_DEPENDS_app_dial=CHAN_LOCAL                           
-MENUSELECT_DEPENDS_app_externalivr=WORKING_FORK                  
-MENUSELECT_DEPENDS_app_festival=WORKING_FORK                     
-MENUSELECT_DEPENDS_app_flash=DAHDI                               
-MENUSELECT_DEPENDS_app_followme=CHAN_LOCAL                       
-MENUSELECT_DEPENDS_app_ices=WORKING_FORK                         
-MENUSELECT_DEPENDS_app_meetme=DAHDI                              
-MENUSELECT_DEPENDS_app_milliwatt=RES_INDICATIONS                 
-MENUSELECT_DEPENDS_app_mp3=WORKING_FORK                          
-MENUSELECT_DEPENDS_app_nbscat=WORKING_FORK                       
-MENUSELECT_DEPENDS_app_osplookup=OSPTK SSL                       
-MENUSELECT_DEPENDS_app_page=DAHDI APP_MEETME                     
-MENUSELECT_DEPENDS_app_queue=RES_MONITOR                         
-MENUSELECT_DEPENDS_app_rpt=DAHDI TONEZONE                        
-MENUSELECT_DEPENDS_app_voicemail=RES_ADSI RES_SMDI               
-MENUSELECT_DEPENDS_cdr_odbc=UNIXODBC LTDL                        
-MENUSELECT_DEPENDS_cdr_pgsql=PGSQL                               
-MENUSELECT_DEPENDS_cdr_radius=RADIUS                             
-MENUSELECT_DEPENDS_cdr_sqlite=SQLITE                             
-MENUSELECT_DEPENDS_cdr_tds=FREETDS                               
-MENUSELECT_DEPENDS_chan_agent=CHAN_LOCAL                         
-MENUSELECT_DEPENDS_chan_alsa=ASOUND                              
+echo "MENUSELECT_DEPENDS_app_adsiprog=RES_ADSI                         
+MENUSELECT_DEPENDS_app_dahdibarge=DAHDI                                
+MENUSELECT_DEPENDS_app_dahdiras=DAHDI WORKING_FORK                     
+MENUSELECT_DEPENDS_app_dahdiscan=DAHDI                                 
+MENUSELECT_DEPENDS_app_dial=CHAN_LOCAL                                 
+MENUSELECT_DEPENDS_app_externalivr=WORKING_FORK                        
+MENUSELECT_DEPENDS_app_festival=WORKING_FORK                           
+MENUSELECT_DEPENDS_app_flash=DAHDI                                     
+MENUSELECT_DEPENDS_app_followme=CHAN_LOCAL                             
+MENUSELECT_DEPENDS_app_ices=WORKING_FORK                               
+MENUSELECT_DEPENDS_app_meetme=DAHDI                                    
+MENUSELECT_DEPENDS_app_milliwatt=RES_INDICATIONS                       
+MENUSELECT_DEPENDS_app_mp3=WORKING_FORK                                
+MENUSELECT_DEPENDS_app_nbscat=WORKING_FORK                             
+MENUSELECT_DEPENDS_app_osplookup=OSPTK SSL                             
+MENUSELECT_DEPENDS_app_page=DAHDI APP_MEETME                           
+MENUSELECT_DEPENDS_app_queue=RES_MONITOR                               
+MENUSELECT_DEPENDS_app_rpt=DAHDI TONEZONE                              
+MENUSELECT_DEPENDS_app_voicemail=RES_ADSI RES_SMDI                     
+MENUSELECT_DEPENDS_cdr_odbc=UNIXODBC LTDL                              
+MENUSELECT_DEPENDS_cdr_pgsql=PGSQL                                     
+MENUSELECT_DEPENDS_cdr_radius=RADIUS                                   
+MENUSELECT_DEPENDS_cdr_sqlite=SQLITE                                   
+MENUSELECT_DEPENDS_cdr_tds=FREETDS                                     
+MENUSELECT_DEPENDS_chan_agent=CHAN_LOCAL                               
+MENUSELECT_DEPENDS_chan_alsa=ASOUND                                    
 MENUSELECT_DEPENDS_chan_dahdi=RES_SMDI DAHDI TONEZONE RES_FEATURES PRI 
-MENUSELECT_DEPENDS_chan_gtalk=IKSEMEL RES_JABBER GNUTLS
-MENUSELECT_DEPENDS_chan_h323=OPENH323
-MENUSELECT_DEPENDS_chan_iax2=RES_FEATURES DAHDI
-MENUSELECT_DEPENDS_chan_mgcp=RES_FEATURES
-MENUSELECT_DEPENDS_chan_misdn=ISDNNET MISDN SUPPSERV
-MENUSELECT_DEPENDS_chan_nbs=NBS
-MENUSELECT_DEPENDS_chan_oss=OSSAUDIO
-MENUSELECT_DEPENDS_chan_phone=IXJUSER
-MENUSELECT_DEPENDS_chan_sip=RES_FEATURES
-MENUSELECT_DEPENDS_chan_vpb=VPBAPI
-MENUSELECT_DEPENDS_codec_dahdi=DAHDI_TRANSCODE DAHDI
-MENUSELECT_DEPENDS_codec_gsm=GSM
-MENUSELECT_DEPENDS_codec_speex=SPEEX SPEEX_PREPROCESS SPEEXDSP
-MENUSELECT_DEPENDS_format_ogg_vorbis=VORBIS OGG
-MENUSELECT_DEPENDS_func_curl=CURL
-MENUSELECT_DEPENDS_func_odbc=UNIXODBC LTDL RES_ODBC
-MENUSELECT_DEPENDS_pbx_dundi=ZLIB
-MENUSELECT_DEPENDS_pbx_gtkconsole=GTK
-MENUSELECT_DEPENDS_res_agi=WORKING_FORK
-MENUSELECT_DEPENDS_res_config_odbc=UNIXODBC LTDL RES_ODBC
-MENUSELECT_DEPENDS_res_config_pgsql=PGSQL
-MENUSELECT_DEPENDS_res_crypto=SSL
-MENUSELECT_DEPENDS_res_features=CHAN_LOCAL
-MENUSELECT_DEPENDS_res_jabber=IKSEMEL GNUTLS
-MENUSELECT_DEPENDS_res_musiconhold=WORKING_FORK DAHDI
-MENUSELECT_DEPENDS_res_odbc=UNIXODBC LTDL
-MENUSELECT_DEPENDS_res_snmp=NETSNMP
-MENUSELECT_DEPENDS_ODBC_STORAGE=UNIXODBC LTDL
-MENUSELECT_DEPENDS_IMAP_STORAGE=IMAP_TK SSL
-MENUSELECT_DEPENDS_apps=GNU_LD
-MENUSELECT_DEPENDS_cdr=GNU_LD
+MENUSELECT_DEPENDS_chan_gtalk=IKSEMEL RES_JABBER GNUTLS                
+MENUSELECT_DEPENDS_chan_h323=OPENH323                                  
+MENUSELECT_DEPENDS_chan_iax2=RES_FEATURES DAHDI                        
+MENUSELECT_DEPENDS_chan_mgcp=RES_FEATURES                              
+MENUSELECT_DEPENDS_chan_misdn=ISDNNET MISDN SUPPSERV                   
+MENUSELECT_DEPENDS_chan_nbs=NBS                                        
+MENUSELECT_DEPENDS_chan_oss=OSSAUDIO                                   
+MENUSELECT_DEPENDS_chan_phone=IXJUSER                                  
+MENUSELECT_DEPENDS_chan_sip=RES_FEATURES                               
+MENUSELECT_DEPENDS_chan_vpb=VPBAPI                                     
+MENUSELECT_DEPENDS_codec_dahdi=DAHDI_TRANSCODE DAHDI                   
+MENUSELECT_DEPENDS_codec_gsm=GSM                                       
+MENUSELECT_DEPENDS_codec_speex=SPEEX SPEEX_PREPROCESS SPEEXDSP         
+MENUSELECT_DEPENDS_format_ogg_vorbis=VORBIS OGG                        
+MENUSELECT_DEPENDS_func_curl=CURL                                      
+MENUSELECT_DEPENDS_func_odbc=UNIXODBC LTDL RES_ODBC                    
+MENUSELECT_DEPENDS_pbx_dundi=ZLIB                                      
+MENUSELECT_DEPENDS_pbx_gtkconsole=GTK                                  
+MENUSELECT_DEPENDS_res_agi=WORKING_FORK                                
+MENUSELECT_DEPENDS_res_config_odbc=UNIXODBC LTDL RES_ODBC              
+MENUSELECT_DEPENDS_res_config_pgsql=PGSQL                              
+MENUSELECT_DEPENDS_res_crypto=SSL                                      
+MENUSELECT_DEPENDS_res_features=CHAN_LOCAL                             
+MENUSELECT_DEPENDS_res_jabber=IKSEMEL GNUTLS                           
+MENUSELECT_DEPENDS_res_musiconhold=WORKING_FORK DAHDI                  
+MENUSELECT_DEPENDS_res_odbc=UNIXODBC LTDL                              
+MENUSELECT_DEPENDS_res_snmp=NETSNMP                                    
+MENUSELECT_DEPENDS_ODBC_STORAGE=UNIXODBC LTDL                          
+MENUSELECT_DEPENDS_IMAP_STORAGE=IMAP_TK SSL                            
+MENUSELECT_DEPENDS_apps=GNU_LD                                         
+MENUSELECT_DEPENDS_cdr=GNU_LD                                          
 MENUSELECT_DEPENDS_channels=GNU_LD
 MENUSELECT_DEPENDS_codecs=GNU_LD
 MENUSELECT_DEPENDS_formats=GNU_LD
@@ -301,10 +298,8 @@ MENUSELECT_DEPENDS_funcs=GNU_LD
 MENUSELECT_DEPENDS_pbx=GNU_LD
 MENUSELECT_DEPENDS_res=GNU_LD
 " >> /usr/src/asterisk-${VER_ASTERISK}/menuselect.makedeps
-
-echo
-"
-MENUSELECT_APPS=app_ivrdemo app_osplookup app_rpt app_skel
+     
+echo "MENUSELECT_APPS=app_ivrdemo app_osplookup app_rpt app_skel
 MENUSELECT_CDR=cdr_odbc cdr_pgsql cdr_radius cdr_tds
 MENUSELECT_CHANNELS=chan_alsa chan_features chan_h323 chan_misdn chan_nbs chan_vpb
 MENUSELECT_CODECS=codec_ilbc codec_speex
@@ -339,6 +334,7 @@ MENUSELECT_DEPSFAILED=MENUSELECT_RES=res_odbc
 MENUSELECT_DEPSFAILED=MENUSELECT_RES=res_snmp
 " >> /usr/src/asterisk-${VER_ASTERISK}/menuselect.makeopts
 
+./configure                                                                                                                                                   
 make                                                                                                                                                                                
 make install                                                                                                                                                                        
 make samples                                                                                                                                                                        
@@ -892,5 +888,3 @@ echo "|                  visite http://www.debpbx.org                  |"
 echo "+----------------------------------------------------------------+"
 /etc/init.d/ssh restart
 exit 0
-
-
