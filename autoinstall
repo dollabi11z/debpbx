@@ -927,6 +927,46 @@ chown asterisk:asterisk /var/www/html/admin/images/debpbx-logo.png
 chown asterisk:asterisk /var/www/html/index.html
 sed -i "s/height: 80px;/height: 120px;/g" "/var/www/html/mainstyle.css"
 
+echo "+----------------------------------------------------------------+"
+echo "| Reconfiguración repositorios                                   |"
+echo "+----------------------------------------------------------------+"
+
+rm /etc/apt/sources.list
+touch /etc/apt/sources.list
+
+echo "
+deb http://ftp.us.debian.org/debian/ lenny main non-free contrib
+deb-src http://ftp.us.debian.org/debian/ lenny main non-free contrib
+
+deb http://security.debian.org/ lenny/updates main contrib non-free
+deb-src http://security.debian.org/ lenny/updates main contrib non-free
+
+deb http://volatile.debian.org/debian-volatile lenny/volatile main contrib non-free
+deb-src http://volatile.debian.org/debian-volatile lenny/volatile main contrib non-free
+" >> /etc/apt/sources.list 
+aptitude update
+
+echo "+----------------------------------------------------------------+"
+echo "| Reconfiguración hosts                                          |"
+echo "+----------------------------------------------------------------+"
+
+rm /etc/hosts
+LOCAL_IP=`ifconfig eth0 | egrep -o '([0-9]{1,3}\.){3}[0-9]{1,3}' | egrep -v '255|(127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})'`
+
+echo "
+127.0.0.1 localhost.localdomain localhost
+$LOCAL_IP srv1.debpbx.org srv1           
+
+# The following lines are desirable for IPv6 capable hosts
+::1 localhost ip6-localhost ip6-loopback                  
+fe00::0 ip6-localnet                                      
+ff00::0 ip6-mcastprefix                                   
+ff02::1 ip6-allnodes                                      
+ff02::2 ip6-allrouters                                    
+ff02::3 ip6-allhosts                                      
+" >> /etc/hosts   
+
+
 clear
 echo "+----------------------------------------------------------------+"
 echo "|                   - Instalación Finalizada -                   |"
