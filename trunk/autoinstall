@@ -48,11 +48,11 @@ update-grub
 #cp /var/www/pub/debpbx/debpbx.tga /boot/grub/debpbx.tga                
 #cp /boot/grub/debpbx.tga /usr/share/images/grub                        
 #cp /boot/grub/debpbx.tga /usr/share/images/desktop-base/               
-#sed -i s/moreblue-orbit-grub/debpbx/g /etc/grub.d/05_debian_theme      
-#sed -i "s/\(color_normal*= *\)\(.*\)/\1white\/black/" /etc/grub.d/05_debian_theme
-#sed -i "s/\(color_highlight*= *\)\(.*\)/\1black\/white/" /etc/grub.d/05_debian_theme
-#sed -i s/OS=\"${GRUB_DISTRIBUTOR}/OS=\"DebPBX\ debpbx-${VER_VERSION}\ -\ ${GRUB_DISTRIBUTOR}/g /etc/grub.d/10_linux
-#update-grub                                                                                                        
+sed -i s/moreblue-orbit-grub/debpbx/g /etc/grub.d/05_debian_theme      
+sed -i "s/\(color_normal*= *\)\(.*\)/\1white\/black/" /etc/grub.d/05_debian_theme
+sed -i "s/\(color_highlight*= *\)\(.*\)/\1black\/white/" /etc/grub.d/05_debian_theme
+sed -i s/OS=\"${GRUB_DISTRIBUTOR}/OS=\"DebPBX\ debpbx-${VER_VERSION}\ -\ ${GRUB_DISTRIBUTOR}/g /etc/grub.d/10_linux
+update-grub                                                                                                        
 cp /var/www/pub/debpbx/.bash_login /root/.bash_login                                                                
 cp /var/www/pub/debpbx/dpsecurity /usr/local/sbin/dpsecurity                                                        
 chmod +x /usr/local/sbin/dpsecurity                                                                                 
@@ -887,6 +887,8 @@ echo "| Instalando DebPBX Panel                                        |"
 echo "+----------------------------------------------------------------+"
 
 cd /var/www/html/
+rm /var/www/html/index.html
+rm /var/www/html/mainstyle.css
 tar zxf /var/www/pub/debpbx/debpbx-panel.tar.gz
 chown asterisk:asterisk -R /var/www/html/
 
@@ -936,5 +938,5 @@ echo "|                   - Instalación Finalizada -                   |"
 echo "|                  visite http://www.debpbx.org                  |"
 echo "+----------------------------------------------------------------+"
 /etc/init.d/ssh restart
-amportal restart
+/usr/local/sbin/amportal restart
 exit 0
