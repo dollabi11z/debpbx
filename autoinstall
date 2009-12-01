@@ -95,7 +95,7 @@ sed -i "s/# en_US.ISO-8859-15 ISO-8859-15/en_US.ISO-8859-15 ISO-8859-15/g" "/etc
 sed -i "s/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g" "/etc/locale.gen"                        
 
 #default Locale = es_ES@euro
-sed -i "s/\(^\LANG=\)\(.*\)/\1es_ES@euro/" /etc/default/locale
+sed -i "s/\(^\LANG=\)\(.*\)/\1es_AR.UTF-8 UTF-8/" /etc/default/locale
 dpkg-reconfigure -f noninteractive locales                    
 
 echo "+----------------------------------------------------------------+"
