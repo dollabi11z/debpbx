@@ -881,51 +881,7 @@ cd /etc/phpmyadmin/
 sed '39a\$cfg['blowfish_secret'] ="asterisk";' config.inc.php > config.inc.tmp
 mv config.inc.tmp config.inc.php
 
-# Personalización
-rm /var/www/html/index.html
-echo "<HTML>                         
-<HEAD>                               
-<head>                               
-    <title>DebPBX & FreePBX</title>  
-    <meta http-equiv="Content-Type" content="text/html">
-    <link href="mainstyle.css" rel="stylesheet" type="text/css">
-</head>                                                         
-
-<body>
-<div id="page">
-
-<div class="header">
-
-    <a href="index.php"><img src="admin/images/debpbx-logo.png"><img src="admin/images/freepbx.png"></a>
-
-</div>
-
-<div class="message">
-        Welcome
-</div>
-
-<div class="content">
-
-<h4><a href="recordings/">Voicemail & Recordings (ARI)</a></h4>
-<h4><a href="panel/">Flash Operator Panel (FOP)</a></h4>
-<h4><a href="admin/">FreePBX Administration</a></h4>
-<h4><a href="vtigercrm/">VtigerCRM</a></h4>
-<h4><a href="avantfax/">Avantfax Administration</a></h4>
-<h4><a href="a2billing/admin/">A2billing Administration</a></h4>
-<h4><a href="phpmyadmin/">phpMyAdmin</a></h4>
-<h4><a href="munin/">Munin</a></h4>
-<br><br><br><br><br><br>
-</div>
-
-        </div>
-
-</body>
-</html>
-" >> /var/www/html/index.html
-cp /var/www/pub/debpbx/debpbx-logo.png /var/www/html/admin/images/debpbx-logo.png
-chown asterisk:asterisk /var/www/html/admin/images/debpbx-logo.png
-chown asterisk:asterisk /var/www/html/index.html
-sed -i "s/height: 80px;/height: 120px;/g" "/var/www/html/mainstyle.css"
+rm /etc/rc2.d/S99install
 
 echo "+----------------------------------------------------------------+"
 echo "| Reconfiguración repositorios                                   |"
