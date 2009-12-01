@@ -880,8 +880,16 @@ ln -s /var/www/munin/ /var/www/html/munin
 cd /etc/phpmyadmin/
 sed '39a\$cfg['blowfish_secret'] ="asterisk";' config.inc.php > config.inc.tmp
 mv config.inc.tmp config.inc.php
-
 rm /etc/rc2.d/S99install
+
+echo "+----------------------------------------------------------------+"
+echo "| Instalando DebPBX Panel                                        |"
+echo "+----------------------------------------------------------------+"
+
+cd /var/www/html/
+tar zxf /var/www/pub/debpbx/debpbx-panel.tar.gz
+chown asterisk:asterisk -R /var/www/html/
+
 
 echo "+----------------------------------------------------------------+"
 echo "| Reconfiguración repositorios                                   |"
@@ -900,7 +908,6 @@ deb-src http://security.debian.org/ lenny/updates main contrib non-free
 deb http://volatile.debian.org/debian-volatile lenny/volatile main contrib non-free
 deb-src http://volatile.debian.org/debian-volatile lenny/volatile main contrib non-free
 " >> /etc/apt/sources.list 
-aptitude update
 
 echo "+----------------------------------------------------------------+"
 echo "| Reconfiguración hosts                                          |"
@@ -929,4 +936,5 @@ echo "|                   - Instalación Finalizada -                   |"
 echo "|                  visite http://www.debpbx.org                  |"
 echo "+----------------------------------------------------------------+"
 /etc/init.d/ssh restart
+amportal restart
 exit 0
