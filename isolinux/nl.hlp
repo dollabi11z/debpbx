@@ -1,0 +1,154 @@
+F1Welkom bij Ubuntu!Dit is een installatie-CD-ROM voor Ubuntu
+8.04, gemaakt op 20090709.
+
+HULPINDEX
+
+SLEUTELONDERWERP
+
+<F1F1>   Deze pagina, de hulpindex
+<F2F2>   Vereisten voor het installeren van Ubuntu.
+<F3F3>   Opstartmethoden voor speciale manieren om deze CD-ROM te gebruiken.
+<F4F4>   Extra opstartmethoden; een beschadigd systeem redden.
+<F5F5>   Speciale opstartparameters, overzicht.
+<F6F6>   Speciale opstartparameters voor speciale machines.
+<F7F7>   Speciale opstartparameters voor bepaalde schijfcontrollers.
+<F8F8>   Speciale opstartparameters voor het installatiesysteem.
+<F9F9>   Hoe hulp te verkrijgen.
+<F10F10>  Auteursrechten en garanties.
+
+Druk F2 tot F10 voor details, of Escape om de hulp te verlaten.F2VEREISTEN OM UBUNTU TE INSTALLERENU hebt minstens 32 megabytes  RAM nodig om dit Ubuntu-installatieprogramma
+te gebruiken.
+
+U hebt voldoende vrije ruimte op uw harde schijf nodig om een nieuwe
+partitie van minimaal 2 gigabytes te kunnen aanmaken voor een standaard
+Ubuntu desktop-systeem, of minstens 400 megabytes voor een minimale
+server-installatie. U zult meer schijfruimte nodig hebben om aanvullende
+pakketten te installeren, afhankelijk van wat u met uw nieuwe Ubuntu-systeem
+wil doen.
+
+Zie de Installatiehandleiding of de FAQ voor meer informatie; beide
+documenten zijn beschikbaar op de Ubuntu-website, http://www.ubuntu.com/
+
+Dank u dat u voor Ubuntu hebt gekozen!
+
+Druk op F1 voor de hulpindex, of op Escape om de hulp te verlaten.F3OPSTARTMETHODENBeschikbare opstartmethoden:
+
+Ubuntu installeren
+  Start de installatie -- dit is de standaard CD-ROM installatie.
+Geheugentest
+  Voer een geheugentest uit.
+
+("Ubuntu" kan worden vervangen door de naam van een ander, verwant
+besturingsysteem. Dit is een algemene hulptekst.)
+
+Kies met de cursortoetsen een van deze opstartmethoden uit het menu om deze
+te gebruiken. Druk op F4 om alternatieve opstart- en installatiemodi te
+kiezen. Druk op F6 om de opstartparameters te bewerken. Druk nogmaals op F6
+om een keuze te kunnen maken uit een menu met veel voorkomende
+opstartparameters.
+
+Druk op F1 voor de hulpindex, of op Escape om de hulp te verlaten.F4EEN BESCHADIGD SYSTEEM REDDENGebruik één van deze opstartmethoden om een bestaande installatie te redden
+
+Een beschadigd systeem redden
+  Opstarten in reddingsmodus.
+
+Kies met de cursortoetsen een van deze opstartmethoden uit het menu om deze
+te gebruiken. Druk op F4 om alternatieve opstart- en installatiemodi te
+kiezen. Druk op F6 om de opstartparameters te bewerken. Druk nogmaals op F6
+om een keuze te kunnen maken uit een menu met veel voorkomende
+opstartparameters.
+
+Druk op F1 voor de hulpindex, of op Escape om de hulp te verlaten.F5SPECIALE OPSTARTPARAMETERS - OVERZICHTOp enkele systemen kan het nodig zijn om parameters mee te geven door op F6
+te drukken om het systeem te kunnen starten. Bijvoorbeeld, Linux is
+misschien niet in staat om uw hardware automatisch te detecteren, en het kan
+nodig zijn om nadrukkelijk de locatie of het type ervan op te geven voordat
+deze wordt herkend.
+
+Voor meer informatie over welke opstartparameters u kan gebruiken, druk:
+
+<F6F6>   opstartparameters voor speciale machines
+<F7F7>   opstartparameters voor diverse schijfcontrollers
+<F8F8>   opstartparameters die door het installatiesysteem worden begrepen
+
+Veel kernelmodules worden dynamisch door het installatieprogramma geladen,
+en parameters voor die modules kunnen niet via de opdrachtregel worden
+gegeven worden. Als u bij het laden van de modules naar de parameters
+gevraagd wil worden, start dan op in expert-modus (zie <F3F3>).
+
+Druk op F1 voor de hulpindex, of op Escape om de hulp te verlaten.F6SPECIALE OPSTARTPARAMETERS - DIVERSE HARDWAREU kunt door op F6 te drukken, de volgende opstartparameters in combinatie
+met de opstartmethode gebruiken (zie <F3F3>). Als u hexadecimale nummers
+gebruikt, dient u het voorvoegsel 0x te gebruiken (bijv., 0x300).
+
+HARDWARE                               OP TE GEVEN PARAMETER
+
+IBM PS/1 of ValuePoint (IDE-schijf)    hd=cylinders,koppen,sectoren
+Sommige IBM ThinkPads                  floppy.floppy=thinkpad
+IBM Pentium Microchannel               mca-pentium no-hlt
+I/O-poort reeksen beschermen           reserve=iobase,extent[,...]
+Omzeil slecht werkende FPU (oude machines)
+                                       no387
+Laptops met schermweergaveproblemen    vga=771
+Gebruik eerste seriële poort op 9600 baud
+                                       console=ttyS0,9600n8
+Gebruik van de algemene IDE-driver afdwingen
+                                       generic.all_generic_ide=1
+Als uw systeem vaak hangt of andere hardwarefouten vertoont, schakel dan
+foutieve APIC interrupt routering uit  noapic nolapic
+
+Druk op F1 voor de hulpindex, of op Escape om de hulp te verlaten.F7SPECIALE OPSTARTPARAMETERS - DIVERSE SCHIJVENU kunt door op F6 te drukken, de volgende opstartparameters in combinatie
+met de opstartmethode gebruiken (zie <F3F3>).
+
+HARDWARE                     OP TE GEVEN PARAMETER
+
+Adaptec 151x, 152x           aha152x.aha152x=iobase[,irq[,scsi-id[,reconnect]]]
+Adaptec 1542                 aha1542.aha1542=iobase[,buson,busoff[,dmaspeed]]
+Adaptec 274x, 284x           aic7xxx.aic7xxx=no_reset (ingeschakeld indien
+niet-nul)
+BusLogic SCSI-hosts          BusLogic.BusLogic=iobase
+Bepaalde Dell machines       aic7xxx.aic7xxx=no_probe
+
+Deze lijst is onvolledig, zie de kernel's kernel-parameters.txt voor meer.
+
+Druk op F1 voor de hulpindex, of op Escape om de hulp te verlaten.F8SPECIALE OPSTARTPARAMETERS - INSTALLATIESYSTEEMU kunt door op F6 te drukken, de volgende opstartparameters in combinatie
+met de opstartmethode gebruiken (zie <F3F3>). Deze parameters bepalen hoe
+het installatieprogramma werkt.
+
+RESULTAAT                               PARAMETER
+
+Veel debug-informatie                   DEBCONF_DEBUG=5
+Opstartproces debuggen                  BOOT_DEBUG=2|3
+Framebuffer uitschakelen                fb=false
+Niet naar USB zoeken                    debian-installer/probe/usb=false
+PCMCIA niet opstarten                   hw-detect/start_pcmcia=false
+Statische netwerkconfiguratie afdwingen netcfg/disable_dhcp=true
+Toetsenbordindeling instellen           bootkbd=be
+Een braille-tty gebruiken               brltty=stuurprogramma,apparaat,teksttabel
+Gebruik toegankelijkheidsthema met hoog contrast
+                                        theme=dark
+Gebruik speciale taken                  tasks="kde-desktop, standard"
+
+Druk op F1 voor de hulpindex, of op Escape om de hulp te verlaten.F9HULP KRIJGENWanhoop niet als u Ubuntu niet kunt installeren! Het Ubuntu-team staat klaar
+om u te helpen! We zijn vooral geïnteresseerd in installatieproblemen, want
+over het algemeen komen ze niet bij slechts één persoon voor. We hebben
+ofwel eerder van uw specifieke probleem gehoord en kunnen u een snelle
+oplossing bieden, of we willen helpen het samen met u op te lossen, zodat de
+volgende met hetzelfde probleem voordeel van uw ervaringen zal hebben!
+
+Zie de Installatiehandleiding of de FAQ voor meer informatie; beide
+documenten zijn beschikbaar op de Ubuntu-website, http://www.ubuntu.com/
+
+Druk op F1 voor de hulpindex, of op Escape om de hulp te verlaten.F10AUTEURSRECHTEN EN GARANTIESUbuntu is Copyright (C) 2004-2008 Canonical Ltd., en bevat het werk van vele
+andere oorspronkelijke auteurs en medewerkers.
+
+Het Ubuntu-systeem kan vrijelijk verder verspreid worden. Na installatie
+staan de exacte distributievoorwaarden voor elk pakket beschreven in het
+bijhorende /usr/share/doc/pakketnaam/copyright bestand.
+
+Ubuntu wordt geleverd ZONDER ENIGE GARANTIE, voor zover de wet dat
+toelaat.
+
+Dit installatiesysteem is gebaseerd op het Debian-installatieprogramma. Zie
+http://www.debian.org/ voor meer details en informatie over het
+Debian-project.
+
+Druk op F1 voor de hulpindex, of op Escape om de hulp te verlaten. 
