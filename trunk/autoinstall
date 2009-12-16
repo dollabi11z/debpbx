@@ -126,6 +126,7 @@ ff02::3 ip6-allhosts
 
 127.0.0.1 downloads.asterisk.org
 127.0.0.1 downloads.digium.com  
+127.0.0.1 pear.php.net
 " >> /etc/hosts                 
 
 echo srv1.debpbx.org > /etc/hostname
