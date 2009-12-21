@@ -1,24 +1,24 @@
-#!/bin/bash                            
-#                                       
-# autoinstall - 2/10/09                 
-#                                       
-# DebPBX-1.2.10                         
+#!/bin/bash             
+#                       
+# autoinstall - 2/10/09 
+#                       
+# DebPBX-1.2.10         
 # Author: Federico Pereira <info@opentecnologic.com>
 # Copyright 2008 Federico Pereira (LordBaseX)       
 # This script is licensed under GNU GPL version 2.0 
 #                                                   
 #                                                   
-VER_VERSION=99991                                   
-VER_ASTERISK=99992                                  
-VER_ADDONS=99993                                    
-VER_DAHDI_LINUX=99994                               
-VER_DAHDI_TOOLS=99995                               
-VER_LIBPRI=99996                                    
+VER_VERSION=99991
+VER_ASTERISK=99992
+VER_ADDONS=99993
+VER_DAHDI_LINUX=99994
+VER_DAHDI_TOOLS=99995
+VER_LIBPRI=99996
 
 VER_FREEPBX=99997
 VER_A2BILLING=99998
 VER_VTIGERCRM=99999
-VER_AVANTFAX=11111 
+VER_AVANTFAX=11111
 
 export DEBIAN_FRONTEND="noninteractive";
 
@@ -48,7 +48,7 @@ update-grub
 #cp /var/www/pub/debpbx/debpbx.tga /boot/grub/debpbx.tga                
 #cp /boot/grub/debpbx.tga /usr/share/images/grub                        
 #cp /boot/grub/debpbx.tga /usr/share/images/desktop-base/               
-sed -i s/moreblue-orbit-grub/debpbx/g /etc/grub.d/05_debian_theme       
+sed -i s/moreblue-orbit-grub/debpbx/g /etc/grub.d/05_debian_theme      
 sed -i "s/\(color_normal*= *\)\(.*\)/\1white\/black/" /etc/grub.d/05_debian_theme
 sed -i "s/\(color_highlight*= *\)\(.*\)/\1black\/white/" /etc/grub.d/05_debian_theme
 sed -i s/OS=\"${GRUB_DISTRIBUTOR}/OS=\"DebPBX\ debpbx-${VER_VERSION}\ -\ ${GRUB_DISTRIBUTOR}/g /etc/grub.d/10_linux
@@ -61,7 +61,7 @@ echo "Banner /etc/debpbx" >> /etc/ssh/sshd_config
 cp /var/www/pub/debpbx/.bashrc /root/.bashrc                                                                        
 
 aptitude update
-aptitude -y install linux-source-$KERNEL_VERSION kernel-package g++ libncurses5-dev linux-libc-dev sqlite libnewt-dev libusb-dev zlib1g-dev libmysqlclient15-dev libsqlite0-dev loco mc unzip zip iptraf nmap screen subversion libqt4-core libqt4-gui ntpdate tcpdump libiksemel-dev libtiff4-dev cmake libxml2-dev bison libaudiofile-dev                             
+aptitude -y install linux-source-$KERNEL_VERSION kernel-package g++ libncurses5-dev linux-libc-dev sqlite libnewt-dev libusb-dev zlib1g-dev libmysqlclient15-dev libsqlite0-dev loco mc unzip zip iptraf nmap screen subversion libqt4-core libqt4-gui ntpdate tcpdump libiksemel-dev libtiff4-dev cmake libxml2-dev bison libaudiofile-dev                   
 
 aptitude update
 aptitude install -y linux-headers-`uname -r` build-essential hylafax-server iaxmodem bind9 postfix ghostscript netpbm libungif4-dev sudo cups expect libmagic-dev
@@ -96,7 +96,7 @@ sed -i "s/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g" "/etc/locale.gen"
 
 #default Locale = es_ES@euro
 sed -i "s/\(^\LANG=\)\(.*\)/\1es_AR.UTF-8 UTF-8/" /etc/default/locale
-dpkg-reconfigure -f noninteractive locales                           
+dpkg-reconfigure -f noninteractive locales                    
 
 echo "+----------------------------------------------------------------+"
 echo "| Reconfiguración mysql                                          |"
@@ -126,7 +126,7 @@ ff02::3 ip6-allhosts
 
 127.0.0.1 downloads.asterisk.org
 127.0.0.1 downloads.digium.com  
-127.0.0.1 pear.php.net          
+127.0.0.1 pear.php.net
 " >> /etc/hosts                 
 
 echo srv1.debpbx.org > /etc/hostname
@@ -292,48 +292,48 @@ MENUSELECT_DEPENDS_ODBC_STORAGE=UNIXODBC LTDL
 MENUSELECT_DEPENDS_IMAP_STORAGE=IMAP_TK SSL                            
 MENUSELECT_DEPENDS_apps=GNU_LD                                         
 MENUSELECT_DEPENDS_cdr=GNU_LD                                          
-MENUSELECT_DEPENDS_channels=GNU_LD                                     
-MENUSELECT_DEPENDS_codecs=GNU_LD                                       
-MENUSELECT_DEPENDS_formats=GNU_LD                                      
-MENUSELECT_DEPENDS_funcs=GNU_LD                                        
-MENUSELECT_DEPENDS_pbx=GNU_LD                                          
-MENUSELECT_DEPENDS_res=GNU_LD                                          
-" >> /usr/src/asterisk-${VER_ASTERISK}/menuselect.makedeps             
-                                                                       
-echo "MENUSELECT_APPS=app_ivrdemo app_osplookup app_rpt app_skel       
-MENUSELECT_CDR=cdr_odbc cdr_pgsql cdr_radius cdr_tds                   
+MENUSELECT_DEPENDS_channels=GNU_LD
+MENUSELECT_DEPENDS_codecs=GNU_LD
+MENUSELECT_DEPENDS_formats=GNU_LD
+MENUSELECT_DEPENDS_funcs=GNU_LD
+MENUSELECT_DEPENDS_pbx=GNU_LD
+MENUSELECT_DEPENDS_res=GNU_LD
+" >> /usr/src/asterisk-${VER_ASTERISK}/menuselect.makedeps
+     
+echo "MENUSELECT_APPS=app_ivrdemo app_osplookup app_rpt app_skel
+MENUSELECT_CDR=cdr_odbc cdr_pgsql cdr_radius cdr_tds
 MENUSELECT_CHANNELS=chan_alsa chan_features chan_h323 chan_misdn chan_nbs chan_vpb
-MENUSELECT_CODECS=codec_ilbc codec_speex                                          
-MENUSELECT_FORMATS=format_ogg_vorbis                                              
-MENUSELECT_FUNCS=func_curl func_odbc                                              
-MENUSELECT_PBX=pbx_gtkconsole                                                     
-MENUSELECT_RES=res_config_odbc res_config_pgsql res_odbc res_snmp                 
-MENUSELECT_OPTS_app_voicemail=                                                    
-MENUSELECT_CFLAGS=LOADABLE_MODULES                                                
-MENUSELECT_EMBED=                                                                 
+MENUSELECT_CODECS=codec_ilbc codec_speex
+MENUSELECT_FORMATS=format_ogg_vorbis
+MENUSELECT_FUNCS=func_curl func_odbc
+MENUSELECT_PBX=pbx_gtkconsole
+MENUSELECT_RES=res_config_odbc res_config_pgsql res_odbc res_snmp
+MENUSELECT_OPTS_app_voicemail=
+MENUSELECT_CFLAGS=LOADABLE_MODULES
+MENUSELECT_EMBED=
 MENUSELECT_CORE_SOUNDS=CORE-SOUNDS-EN-ULAW CORE-SOUNDS-EN-ALAW CORE-SOUNDS-EN-G729
-MENUSELECT_MOH=MOH-OPSOUND-ULAW MOH-OPSOUND-ALAW MOH-OPSOUND-G729                 
+MENUSELECT_MOH=MOH-OPSOUND-ULAW MOH-OPSOUND-ALAW MOH-OPSOUND-G729
 MENUSELECT_EXTRA_SOUNDS=EXTRA-SOUNDS-EN-ULAW EXTRA-SOUNDS-EN-ALAW EXTRA-SOUNDS-EN-G729
 MENUSELECT_BUILD_DEPS=res_adsi chan_local res_indications app_meetme res_monitor res_smdi res_features res_jabber
-MENUSELECT_DEPSFAILED=MENUSELECT_APPS=app_osplookup                                                              
-MENUSELECT_DEPSFAILED=MENUSELECT_CDR=cdr_odbc                                                                    
-MENUSELECT_DEPSFAILED=MENUSELECT_CDR=cdr_pgsql                                                                   
-MENUSELECT_DEPSFAILED=MENUSELECT_CDR=cdr_radius                                                                  
-MENUSELECT_DEPSFAILED=MENUSELECT_CDR=cdr_tds                                                                     
-MENUSELECT_DEPSFAILED=MENUSELECT_CHANNELS=chan_alsa                                                              
-MENUSELECT_DEPSFAILED=MENUSELECT_CHANNELS=chan_h323                                                              
-MENUSELECT_DEPSFAILED=MENUSELECT_CHANNELS=chan_misdn                                                             
-MENUSELECT_DEPSFAILED=MENUSELECT_CHANNELS=chan_nbs                                                               
-MENUSELECT_DEPSFAILED=MENUSELECT_CHANNELS=chan_vpb                                                               
-MENUSELECT_DEPSFAILED=MENUSELECT_CODECS=codec_speex                                                              
-MENUSELECT_DEPSFAILED=MENUSELECT_FORMATS=format_ogg_vorbis                                                       
-MENUSELECT_DEPSFAILED=MENUSELECT_FUNCS=func_curl                                                                 
-MENUSELECT_DEPSFAILED=MENUSELECT_FUNCS=func_odbc                                                                 
-MENUSELECT_DEPSFAILED=MENUSELECT_RES=res_config_odbc                                                             
-MENUSELECT_DEPSFAILED=MENUSELECT_RES=res_config_pgsql                                                            
-MENUSELECT_DEPSFAILED=MENUSELECT_RES=res_odbc                                                                    
-MENUSELECT_DEPSFAILED=MENUSELECT_RES=res_snmp                                                                    
-" >> /usr/src/asterisk-${VER_ASTERISK}/menuselect.makeopts                                                       
+MENUSELECT_DEPSFAILED=MENUSELECT_APPS=app_osplookup
+MENUSELECT_DEPSFAILED=MENUSELECT_CDR=cdr_odbc
+MENUSELECT_DEPSFAILED=MENUSELECT_CDR=cdr_pgsql
+MENUSELECT_DEPSFAILED=MENUSELECT_CDR=cdr_radius
+MENUSELECT_DEPSFAILED=MENUSELECT_CDR=cdr_tds
+MENUSELECT_DEPSFAILED=MENUSELECT_CHANNELS=chan_alsa
+MENUSELECT_DEPSFAILED=MENUSELECT_CHANNELS=chan_h323
+MENUSELECT_DEPSFAILED=MENUSELECT_CHANNELS=chan_misdn
+MENUSELECT_DEPSFAILED=MENUSELECT_CHANNELS=chan_nbs
+MENUSELECT_DEPSFAILED=MENUSELECT_CHANNELS=chan_vpb
+MENUSELECT_DEPSFAILED=MENUSELECT_CODECS=codec_speex
+MENUSELECT_DEPSFAILED=MENUSELECT_FORMATS=format_ogg_vorbis
+MENUSELECT_DEPSFAILED=MENUSELECT_FUNCS=func_curl
+MENUSELECT_DEPSFAILED=MENUSELECT_FUNCS=func_odbc
+MENUSELECT_DEPSFAILED=MENUSELECT_RES=res_config_odbc
+MENUSELECT_DEPSFAILED=MENUSELECT_RES=res_config_pgsql
+MENUSELECT_DEPSFAILED=MENUSELECT_RES=res_odbc
+MENUSELECT_DEPSFAILED=MENUSELECT_RES=res_snmp
+" >> /usr/src/asterisk-${VER_ASTERISK}/menuselect.makeopts
 
 ./configure                                                                                                                                                   
 make                                                                                                                                                                                
@@ -609,7 +609,7 @@ chown -R $HTTPDUSER.uucp $INSTDIR/tmp $INSTDIR/faxes
 echo "## Creating AvantFAX MySQL database ##"
 echo "CREATE DATABASE IF NOT EXISTS avantfax;" | mysql -u root ${SQL_ROOT_PASSWORD}
 echo "GRANT ALL PRIVILEGES ON avantfax.* TO avantfax@localhost IDENTIFIED BY 'd58fe49';" | mysql -u root ${SQL_ROOT_PASSWORD}  
-mysql -uavantfax -pd58fe49 avantfax < /usr/src/avantfax-${VER_AVANTFAX}/create_tables.sql                                      
+mysql -uavantfax -pd58fe49 avantfax < /usr/src/avantfax-${VER_AVANTFAX}/create_tables.sql  
 
 # SYMLINK AVANTFAX SCRIPTS
 
@@ -851,7 +851,16 @@ cat /tmp/php.ini > /etc/php5/apache2/php.ini
 sed -i "s/\(output_buffering *= *\)\(.*\)/\1On/" /etc/php5/apache2/php.ini                           
 sed /etc/php5/apache2/php.ini -r -ibackup -f - <<END_SED_SCRIPT                                      
 s/^error_reporting *=.*/error_reporting = E_WARNING \& \~E_NOTICE/;                                  
-END_SED_SCRIPT                                                                                       
+END_SED_SCRIPT
+
+echo "
+[crm]
+secret=DebPBX2009
+deny=0.0.0.0/0.0.0.0
+permit=127.0.0.1/255.255.255.0
+read=system,call,log,verbose,command,agent,user
+write=system,call,log,verbose,command,agent,user
+" >> /etc/asterisk/manager_custom.conf
 
 #autoinstall
 rm -rf /var/www/html/vtigercrm/install
@@ -859,17 +868,7 @@ rm /var/www/html/vtigercrm/install.php
 rm /var/www/html/vtigercrm/migrate.php
 chmod 777 /var/www/html/vtigercrm/config.inc.php
 
-echo "
-[crm] 
-secret=DebPBX2009
-deny=0.0.0.0/0.0.0.0
-permit=127.0.0.1/255.255.255.0
-read=system,call,log,verbose,command,agent,user
-write=system,call,log,verbose,command,agent,user
-" >> /etc/asterisk/manager_custom.conf          
-
-
-#################################################################################################################################################################################################################################################################################################################################################################################################################################                                                                                                                           
+#################################################################################################################################################################################################################################################################################################################################################################################################################################
 
 
 echo "+----------------------------------------------------------------+"
@@ -879,16 +878,16 @@ echo "+----------------------------------------------------------------+"
 
 sed -i "s/\(RedirectMatch*\)\(.*\)//" /etc/apache2/sites-enabled/000-default
 sed -i "s/\(DocumentRoot *\)\(.*\)/\1\/var\/www\/html\//" /etc/apache2/sites-enabled/000-default
-/etc/init.d/apache2 force-reload                                                                
+/etc/init.d/apache2 force-reload
 
 aptitude -y install munin munin-node mpg123 sox lame libmad0 libmad0-dev
 
 ln -s /usr/share/phpmyadmin/ /var/www/html/phpmyadmin
-ln -s /var/www/munin/ /var/www/html/munin            
-cd /etc/phpmyadmin/                                  
+ln -s /var/www/munin/ /var/www/html/munin
+cd /etc/phpmyadmin/
 sed '39a\$cfg['blowfish_secret'] ="asterisk";' config.inc.php > config.inc.tmp
-mv config.inc.tmp config.inc.php                                              
-rm /etc/rc2.d/S99install                                                      
+mv config.inc.tmp config.inc.php
+rm /etc/rc2.d/S99install
 
 echo "+----------------------------------------------------------------+"
 echo "| Instalando DebPBX Panel                                        |"
@@ -898,7 +897,7 @@ cd /var/www/html/
 rm /var/www/html/index.html
 rm /var/www/html/mainstyle.css
 tar zxf /var/www/pub/debpbx/debpbx-panel.tar.gz
-chown asterisk:asterisk -R /var/www/html/      
+chown asterisk:asterisk -R /var/www/html/
 
 
 echo "+----------------------------------------------------------------+"
@@ -917,7 +916,7 @@ deb-src http://security.debian.org/ lenny/updates main contrib non-free
 
 deb http://volatile.debian.org/debian-volatile lenny/volatile main contrib non-free
 deb-src http://volatile.debian.org/debian-volatile lenny/volatile main contrib non-free
-" >> /etc/apt/sources.list
+" >> /etc/apt/sources.list 
 
 echo "+----------------------------------------------------------------+"
 echo "| Reconfiguración hosts                                          |"
@@ -928,16 +927,16 @@ LOCAL_IP=`ifconfig eth0 | egrep -o '([0-9]{1,3}\.){3}[0-9]{1,3}' | egrep -v '255
 
 echo "
 127.0.0.1 localhost.localdomain localhost
-$LOCAL_IP srv1.debpbx.org srv1
+$LOCAL_IP srv1.debpbx.org srv1           
 
 # The following lines are desirable for IPv6 capable hosts
-::1 localhost ip6-localhost ip6-loopback
-fe00::0 ip6-localnet
-ff00::0 ip6-mcastprefix
-ff02::1 ip6-allnodes
-ff02::2 ip6-allrouters
-ff02::3 ip6-allhosts
-" >> /etc/hosts
+::1 localhost ip6-localhost ip6-loopback                  
+fe00::0 ip6-localnet                                      
+ff00::0 ip6-mcastprefix                                   
+ff02::1 ip6-allnodes                                      
+ff02::2 ip6-allrouters                                    
+ff02::3 ip6-allhosts                                      
+" >> /etc/hosts   
 
 
 clear
@@ -948,4 +947,3 @@ echo "+----------------------------------------------------------------+"
 /etc/init.d/ssh restart
 /usr/local/sbin/amportal restart
 exit 0
-
