@@ -3,9 +3,12 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 20-12-2009 a las 20:46:34
+-- Tiempo de generación: 20-12-2009 a las 21:03:05
 -- Versión del servidor: 5.0.51
 -- Versión de PHP: 5.2.6-1+lenny3
+--
+-- DebPBX 1.2.10 
+--
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -743,6 +746,8 @@ CREATE TABLE IF NOT EXISTS `vtiger_asterisk` (
 -- Volcar la base de datos para la tabla `vtiger_asterisk`
 --
 
+INSERT INTO `vtiger_asterisk` (`server`, `port`, `username`, `password`, `version`) VALUES
+('127.0.0.1', '5038', 'crm', 'DebPBX2009', '1.4');
 
 -- --------------------------------------------------------
 
@@ -762,7 +767,7 @@ CREATE TABLE IF NOT EXISTS `vtiger_asteriskextensions` (
 --
 
 INSERT INTO `vtiger_asteriskextensions` (`userid`, `asterisk_extension`, `use_asterisk`) VALUES
-(1, NULL, NULL),
+(1, '100', ''),
 (2, NULL, NULL);
 
 -- --------------------------------------------------------
@@ -6225,7 +6230,7 @@ CREATE TABLE IF NOT EXISTS `vtiger_loginhistory` (
 --
 
 INSERT INTO `vtiger_loginhistory` (`login_id`, `user_name`, `user_ip`, `logout_time`, `login_time`, `status`) VALUES
-(1, 'admin', '192.168.10.105', '0000-00-00 00:00:00', '2009-12-20 20:43:17', 'Signed in');
+(1, 'admin', '192.168.10.105', '2009-12-20 21:01:06', '2009-12-20 20:43:17', 'Signed off');
 
 -- --------------------------------------------------------
 
@@ -14376,12 +14381,14 @@ CREATE TABLE IF NOT EXISTS `vtiger_tracker` (
   `item_id` varchar(36) default NULL,
   `item_summary` varchar(255) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Volcar la base de datos para la tabla `vtiger_tracker`
 --
 
+INSERT INTO `vtiger_tracker` (`id`, `user_id`, `module_name`, `item_id`, `item_summary`) VALUES
+(3, '1', 'Users', '1', 'Administrator ');
 
 -- --------------------------------------------------------
 
@@ -14769,7 +14776,7 @@ CREATE TABLE IF NOT EXISTS `vtiger_users` (
 --
 
 INSERT INTO `vtiger_users` (`id`, `user_name`, `user_password`, `user_hash`, `cal_color`, `first_name`, `last_name`, `reports_to_id`, `is_admin`, `currency_id`, `description`, `date_entered`, `date_modified`, `modified_user_id`, `title`, `department`, `phone_home`, `phone_mobile`, `phone_work`, `phone_other`, `phone_fax`, `email1`, `email2`, `yahoo_id`, `status`, `signature`, `address_street`, `address_city`, `address_state`, `address_country`, `address_postalcode`, `user_preferences`, `tz`, `holidays`, `namedays`, `workdays`, `weekstart`, `date_format`, `hour_format`, `start_hour`, `end_hour`, `activity_view`, `lead_view`, `imagename`, `deleted`, `confirm_password`, `internal_mailer`, `reminder_interval`, `reminder_next_time`, `crypt_type`, `accesskey`) VALUES
-(1, 'admin', '$1$ad$bqMTngHXFo5G8An8Aig//.', 'd868c7ee2782de29f99dd99196ff9f81', '#E6FAD8', '', 'Administrator', '', 'on', 1, '', '2009-12-20 20:43:16', '0000-00-00 00:00:00', NULL, '', '', '', '', '', '', '', 'demo@debpbx.org', '', '', 'Active', '', '', '', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 'yyyy-mm-dd', 'am/pm', '08:00', '23:00', 'This Week', 'Today', '', 0, '$1$ad$peilFE10wX.4b0aIm7/.t/', '1', '1 Minute', '2009-12-20 20:45', 'MD5', 'KwHkaki2lou2o3a'),
+(1, 'admin', '$1$ad$bqMTngHXFo5G8An8Aig//.', 'd868c7ee2782de29f99dd99196ff9f81', '#E6FAD8', '', 'Administrator', '', 'on', 1, '', '2009-12-20 20:43:16', '0000-00-00 00:00:00', NULL, '', '', '', '', '', '', '', 'demo@debpbx.org', '', '', 'Active', '', '', '', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 'yyyy-mm-dd', 'am/pm', '08:00', '23:00', 'This Week', 'Today', '', 0, '$1$ad$peilFE10wX.4b0aIm7/.t/', '1', '1 Minute', '2009-12-20 21:01', 'MD5', 'KwHkaki2lou2o3a'),
 (2, 'standarduser', '$1$st$uLfsbaxHqXKBxU5m5SkIg0', NULL, '#E6FAD8', '', 'StandardUser', '', 'off', 1, '', '2009-12-20 20:14:19', '0000-00-00 00:00:00', NULL, '', '', '', '', '', '', '', 'demo@debpbx.org', '', '', 'Active', '', '', '', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 'yyyy-mm-dd', '24', '08:00', '23:00', 'This Week', 'Today', '', 0, '$1$st$1iX6Nfn6NbdWdlCljgg3u1', '1', '1 Minute', NULL, 'MD5', 'Os3Sip6UfRRMZqzy');
 
 -- --------------------------------------------------------
