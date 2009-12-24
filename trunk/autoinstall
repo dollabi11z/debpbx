@@ -823,6 +823,9 @@ cd /var/www/html
 tar zxf /var/www/pub/tools/vtigercrm-${VER_VTIGERCRM}.tar.gz
 cd /var/www/html/vtigercrm                                  
 
+#Language
+unzip -o /var/www/pub/debpbx/vtigercrm/Spanish_es_es_TSolucio_510GA.zip
+
 chmod 777 config.inc.php
 chmod 777 tabdata.php   
 chmod 777 install.php   
