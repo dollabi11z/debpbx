@@ -850,7 +850,7 @@ cat /tmp/php.ini > /etc/php5/apache2/php.ini
 sed -i "s/\(output_buffering *= *\)\(.*\)/\1On/" /etc/php5/apache2/php.ini                           
 sed /etc/php5/apache2/php.ini -r -ibackup -f - <<END_SED_SCRIPT                                      
 s/^error_reporting *=.*/error_reporting = E_WARNING \& \~E_NOTICE/;                                  
-END_SED_SCRIPT                                                                                       
+END_SED_SCRIPT
 
 echo "
 [crm] 
@@ -880,7 +880,7 @@ cp /var/www/pub/debpbx/vtigercrm/sharing_privileges_2.php /var/www/html/vtigercr
 cp /var/www/pub/debpbx/vtigercrm/user_privileges_1.php /var/www/html/vtigercrm/user_privileges/user_privileges_1.php
 cp /var/www/pub/debpbx/vtigercrm/user_privileges_2.php /var/www/html/vtigercrm/user_privileges/user_privileges_2.php
 
-chown -Rfv asterisk:asterisk /var/www/html/vtigercrm
+chown -R asterisk:asterisk /var/www/html/vtigercrm
 
 #################################################################################################################################################################################################################################################################################################################################################################################################################################
 
