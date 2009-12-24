@@ -817,7 +817,7 @@ echo "##################################################################"
 
 echo "CREATE DATABASE vtigercrm DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;" | mysql -u root ${SQL_ROOT_PASSWORD}
 echo "GRANT ALL PRIVILEGES ON vtigercrm.* TO vtigercrmuser@localhost IDENTIFIED BY 'DebPBX2009';" | mysql -u root ${SQL_ROOT_PASSWORD}
-mysql -u vtigercrmuser -pDebPBX2009 vtigercrm < /var/www/pub/debpbx/vtigercrm.sql
+mysql -u vtigercrmuser -pDebPBX2009 vtigercrm < /var/www/pub/debpbx/vtigercrm/vtigercrm.sql                                                     
 
 cd /var/www/html
 tar zxf /var/www/pub/tools/vtigercrm-${VER_VTIGERCRM}.tar.gz
@@ -844,29 +844,43 @@ chmod -Rv 777 test/user/
 chmod -Rv 777 test/logo/                
 chmod -Rv 777 logs/                     
 chmod -Rv 777 install/                  
-chown -Rfv asterisk:asterisk /var/www/html/vtigercrm
 
 sed -e 's/max_execution_time = .*/max_execution_time = 600/' /etc/php5/apache2/php.ini > /tmp/php.ini
 cat /tmp/php.ini > /etc/php5/apache2/php.ini                                                         
 sed -i "s/\(output_buffering *= *\)\(.*\)/\1On/" /etc/php5/apache2/php.ini                           
 sed /etc/php5/apache2/php.ini -r -ibackup -f - <<END_SED_SCRIPT                                      
 s/^error_reporting *=.*/error_reporting = E_WARNING \& \~E_NOTICE/;                                  
-END_SED_SCRIPT
+END_SED_SCRIPT                                                                                       
 
 echo "
-[crm]
+[crm] 
 secret=DebPBX2009
 deny=0.0.0.0/0.0.0.0
 permit=127.0.0.1/255.255.255.0
 read=system,call,log,verbose,command,agent,user
 write=system,call,log,verbose,command,agent,user
-" >> /etc/asterisk/manager_custom.conf
+" >> /etc/asterisk/manager_custom.conf          
 
 #autoinstall
 rm -rf /var/www/html/vtigercrm/install
 rm /var/www/html/vtigercrm/install.php
 rm /var/www/html/vtigercrm/migrate.php
+
+cp /var/www/pub/debpbx/vtigercrm/config.inc.php /var/www/html/vtigercrm/config.inc.php
 chmod 777 /var/www/html/vtigercrm/config.inc.php
+
+cp /var/www/pub/debpbx/vtigercrm/parent_tabdata.php /var/www/html/vtigercrm/parent_tabdata.php
+chmod 466 /var/www/html/vtigercrm/parent_tabdata.php
+
+cp /var/www/pub/debpbx/vtigercrm/tabdata.php /var/www/html/vtigercrm/tabdata.php
+chmod 466 /var/www/html/vtigercrm/tabdata.php
+
+cp /var/www/pub/debpbx/vtigercrm/sharing_privileges_1.php /var/www/html/vtigercrm/user_privileges/sharing_privileges_1.php
+cp /var/www/pub/debpbx/vtigercrm/sharing_privileges_2.php /var/www/html/vtigercrm/user_privileges/sharing_privileges_2.php
+cp /var/www/pub/debpbx/vtigercrm/user_privileges_1.php /var/www/html/vtigercrm/user_privileges/user_privileges_1.php
+cp /var/www/pub/debpbx/vtigercrm/user_privileges_2.php /var/www/html/vtigercrm/user_privileges/user_privileges_2.php
+
+chown -Rfv asterisk:asterisk /var/www/html/vtigercrm
 
 #################################################################################################################################################################################################################################################################################################################################################################################################################################
 
