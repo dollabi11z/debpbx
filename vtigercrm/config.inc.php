@@ -99,7 +99,7 @@ $dbconfigoption['ssl'] = false;
 
 $host_name = $dbconfig['db_hostname'];
 
-$site_URL = 'http://$dbconfig['db_server']/vtigercrm';
+$site_URL = 'http://127.0.0.1/vtigercrm';
 
 // root directory path
 $root_directory = '/var/www/html/vtigercrm/';
@@ -185,7 +185,8 @@ $disable_persistent_connections = false;
 
 // defined languages available. the key must be the language file prefix. (Example 'en_us' is the prefix for every 'en_us.lang.php' file)
 // languages default value = en_us=>US English                                                                                           
-$languages = Array('en_us'=>'US English',);                                                                                              
+//$languages = Array('en_us'=>'US English',);                                                                                              
+$languages = Array(’es_es’⇒‘ES Spanish’,en_us’⇒‘US English’);
 
 //Master currency name
 $currency_name = 'Argentina, Pesos';
@@ -196,7 +197,7 @@ $default_charset = 'UTF-8';
 
 // default language
 // default_language default value = en_us
-$default_language = 'en_us';
+$default_language = 'es_es';
 
 // add the language pack name to every translation string in the display.
 // translation_string_prefix default value = false
