@@ -561,9 +561,26 @@ HTTPDGROUP="asterisk";
 
 aptitude -y install apache2-mpm-prefork apache2-utils apache2.2-common libapr1 libaprutil1 libsqlite3-0 libnetpbm10-dev libungif-bin php-mail php-mail-mime php-file psutils rsync
 
-pear channel-update pear.php.net
-pear upgrade-all                
-pear install Mail Net_SMTP Mail_mime MDB2_driver_mysql fileinfo
+echo "+----------------------------------------------------------------+"
+echo "| Autoinstall Pear                                               |"
+echo "+----------------------------------------------------------------+
+
+#pear channel-update pear.php.net
+#pear upgrade-all                
+#pear install Mail Net_SMTP Mail_mime MDB2_driver_mysql fileinfo
+
+pear install /var/www/pub/pear/Structures_Graph-1.0.3.tgz
+pear install /var/www/pub/pear/Mail_mimeDecode-1.5.1.tgz
+pear install /var/www/pub/pear/Archive_Tar-1.3.3.tgz
+pear install /var/www/pub/pear/Net_Socket-1.0.9.tgz
+pear install /var/www/pub/pear/XML_Util-1.2.1.tgz
+pear install /var/www/pub/pear/PEAR-1.9.0.tgz
+pear install /var/www/pub/pear/Net_SMTP-1.3.4.tgz
+pear install /var/www/pub/pear/Mail_Mime-1.5.2.tgz
+pear install /var/www/pub/pear/Mail-1.1.14.tgz
+pear install /var/www/pub/pear/MDB2_Driver_mysql-1.4.1.tgz
+pear install /var/www/pub/pear/Fileinfo-1.0.4.tgz
+
 
 cd /usr/src/avantfax-${VER_AVANTFAX}
 
