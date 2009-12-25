@@ -5779,7 +5779,8 @@ CREATE TABLE IF NOT EXISTS `vtiger_language` (
 --
 
 INSERT INTO `vtiger_language` (`id`, `name`, `prefix`, `label`, `lastupdated`, `sequence`, `isdefault`, `active`) VALUES
-(1, 'English', 'en_us', 'US English', '2009-12-20 20:14:17', NULL, 1, 1);
+(1, 'English', 'en_us', 'US English', '2009-12-20 20:14:17', NULL, 1, 1),
+(2, 'Spanish', 'es_es', 'ES Spanish', '2009-12-25 16:29:13', NULL, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -5797,7 +5798,7 @@ CREATE TABLE IF NOT EXISTS `vtiger_language_seq` (
 --
 
 INSERT INTO `vtiger_language_seq` (`id`) VALUES
-(1);
+(2);
 
 -- --------------------------------------------------------
 
