@@ -149,7 +149,7 @@ $history_max_viewed = '5';
 
 // map sugar language codes to jscalendar language codes
 // unimplemented until jscalendar language files are fixed
-// $cal_codes = array('en_us'=>'en', 'ja'=>'jp', 'sp_ve'=>'sp', 'it_it'=>'it', 'tw_zh'=>'zh', 'pt_br'=>'pt', 'se'=>'sv', 'cn_zh'=>'zh', 'ge_ge'=>'de', 'ge_ch'=>'de', 'fr'=>'fr');
+// $cal_codes = array('en_us'=>'en','es_es'=>'es','ja'=>'jp', 'sp_ve'=>'sp', 'it_it'=>'it', 'tw_zh'=>'zh', 'pt_br'=>'pt', 'se'=>'sv', 'cn_zh'=>'zh', 'ge_ge'=>'de', 'ge_ch'=>'de', 'fr'=>'fr');
 
 // default_module default value = Home
 $default_module = 'Home';             
