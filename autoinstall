@@ -840,9 +840,60 @@ cd /var/www/html
 tar zxf /var/www/pub/tools/vtigercrm-${VER_VTIGERCRM}.tar.gz
 cd /var/www/html/vtigercrm                                  
 
+#Modulos
+mkdir -p /tmp/vtigercrm
+cd /tmp/vtigercrm
+unzip -o /var/www/html/vtigercrm/packages/5.1.0/mandatory/PBXManager.zip
+cp -rf /tmp/vtigercrm/cron/ /var/www/html/vtigercrm/
+cp -rf /tmp/vtigercrm/modules/ /var/www/html/vtigercrm/
+cp -rf  /tmp/vtigercrm/templates/ /var/www/html/vtigercrm/Smarty/
+rm -fr cron/ modules/ templates/
+rm manifest.xml
+
+unzip -o /var/www/html/vtigercrm/packages/5.1.0/mandatory/ServiceContracts.zip
+cp -rf /tmp/vtigercrm/modules/ /var/www/html/vtigercrm/
+rm -fr modules/
+rm manifest.xml
+
+unzip -o /var/www/html/vtigercrm/packages/5.1.0/mandatory/Services.zip
+cp -rf /tmp/vtigercrm/modules/ /var/www/html/vtigercrm/
+rm -fr modules/
+rm manifest.xml
+
+unzip -o /var/www/html/vtigercrm/packages/5.1.0/optional/CustomerPortal.zip
+cp -rf /tmp/vtigercrm/modules/ /var/www/html/vtigercrm/
+cp -rf  /tmp/vtigercrm/templates/ /var/www/html/vtigercrm/Smarty/
+rm -fr  modules/ templates/
+rm manifest.xml
+
+unzip -o /var/www/html/vtigercrm/packages/5.1.0/optional/FieldFormulas.zip
+cp -rf /tmp/vtigercrm/modules/ /var/www/html/vtigercrm/
+cp -rf  /tmp/vtigercrm/templates/ /var/www/html/vtigercrm/Smarty/
+rm -fr  modules/ templates/
+rm manifest.xml
+
+unzip -o /var/www/html/vtigercrm/packages/5.1.0/optional/RecycleBin.zip
+cp -rf /tmp/vtigercrm/modules/ /var/www/html/vtigercrm/
+cp -rf  /tmp/vtigercrm/templates/ /var/www/html/vtigercrm/Smarty/
+rm -fr  modules/ templates/
+rm manifest.xml
+
+unzip -o /var/www/html/vtigercrm/packages/5.1.0/optional/Tooltip.zip
+cp -rf /tmp/vtigercrm/modules/ /var/www/html/vtigercrm/
+cp -rf  /tmp/vtigercrm/templates/ /var/www/html/vtigercrm/Smarty/
+rm -fr  modules/ templates/
+rm manifest.xml
+
+unzip -o /var/www/html/vtigercrm/packages/5.1.0/optional/Webforms.zip
+cp -rf /tmp/vtigercrm/modules/ /var/www/html/vtigercrm/
+cp -rf  /tmp/vtigercrm/templates/ /var/www/html/vtigercrm/Smarty/
+rm -fr  modules/ templates/
+rm manifest.xml
+
 #Language
 unzip -o /var/www/pub/debpbx/vtigercrm/Spanish_es_es_TSolucio_510GA.zip
 
+cd /var/www/html/vtigercrm
 chmod 777 config.inc.php
 chmod 777 tabdata.php   
 chmod 777 install.php   
