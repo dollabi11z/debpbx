@@ -186,7 +186,7 @@ $disable_persistent_connections = false;
 // defined languages available. the key must be the language file prefix. (Example 'en_us' is the prefix for every 'en_us.lang.php' file)
 // languages default value = en_us=>US English                                                                                           
 //$languages = Array('en_us'=>'US English',);                                                                                              
-$languages = Array(’es_es’⇒‘ES Spanish’,en_us’⇒‘US English’);
+$languages = Array('es_es'=>'ES Spanish','en_us'=>'US English');
 
 //Master currency name
 $currency_name = 'Argentina, Pesos';
