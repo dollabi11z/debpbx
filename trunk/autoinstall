@@ -565,9 +565,9 @@ echo "+----------------------------------------------------------------+"
 echo "| Autoinstall Pear                                               |"
 echo "+----------------------------------------------------------------+"
 
-#pear channel-update pear.php.net
-#pear upgrade-all                
-#pear install Mail Net_SMTP Mail_mime MDB2_driver_mysql fileinfo
+pear channel-update pear.php.net
+pear upgrade-all                
+pear install Mail Net_SMTP Mail_mime MDB2_driver_mysql fileinfo
 
 #pear install /var/www/pub/pear/Structures_Graph-1.0.3.tgz
 #pear install /var/www/pub/pear/Mail_mimeDecode-1.5.1.tgz
@@ -843,65 +843,7 @@ cd /var/www/html/vtigercrm
 #Language
 unzip -o /var/www/pub/debpbx/vtigercrm/Spanish_es_es_TSolucio_510GA.zip
 
-#Modulos
-mkdir -p /tmp/vtigercrm
-cd /tmp/vtigercrm
-unzip -o /var/www/html/vtigercrm/packages/5.1.0/mandatory/PBXManager.zip
-cp -rf /tmp/vtigercrm/cron/ /var/www/html/vtigercrm/
-cp -rf /tmp/vtigercrm/modules/ /var/www/html/vtigercrm/
-cp -rf  /tmp/vtigercrm/templates/ /var/www/html/vtigercrm/Smarty/
-rm -fr cron/ modules/ templates/
-rm manifest.xml
-
-cd /tmp/vtigercrm
-unzip -o /var/www/html/vtigercrm/packages/5.1.0/mandatory/ServiceContracts.zip
-cp -rf /tmp/vtigercrm/modules/ /var/www/html/vtigercrm/
-rm -fr modules/
-rm manifest.xml
-
-cd /tmp/vtigercrm
-unzip -o /var/www/html/vtigercrm/packages/5.1.0/mandatory/Services.zip
-cp -rf /tmp/vtigercrm/modules/ /var/www/html/vtigercrm/
-rm -fr modules/
-rm manifest.xml
-
-cd /tmp/vtigercrm
-unzip -o /var/www/html/vtigercrm/packages/5.1.0/optional/CustomerPortal.zip
-cp -rf /tmp/vtigercrm/modules/ /var/www/html/vtigercrm/
-cp -rf  /tmp/vtigercrm/templates/ /var/www/html/vtigercrm/Smarty/
-rm -fr  modules/ templates/
-rm manifest.xml
-
-cd /tmp/vtigercrm
-unzip -o /var/www/html/vtigercrm/packages/5.1.0/optional/FieldFormulas.zip
-cp -rf /tmp/vtigercrm/modules/ /var/www/html/vtigercrm/
-cp -rf  /tmp/vtigercrm/templates/ /var/www/html/vtigercrm/Smarty/
-rm -fr  modules/ templates/
-rm manifest.xml
-
-cd /tmp/vtigercrm
-unzip -o /var/www/html/vtigercrm/packages/5.1.0/optional/RecycleBin.zip
-cp -rf /tmp/vtigercrm/modules/ /var/www/html/vtigercrm/
-cp -rf  /tmp/vtigercrm/templates/ /var/www/html/vtigercrm/Smarty/
-rm -fr  modules/ templates/
-rm manifest.xml
-
-cd /tmp/vtigercrm
-unzip -o /var/www/html/vtigercrm/packages/5.1.0/optional/Tooltip.zip
-cp -rf /tmp/vtigercrm/modules/ /var/www/html/vtigercrm/
-cp -rf  /tmp/vtigercrm/templates/ /var/www/html/vtigercrm/Smarty/
-rm -fr  modules/ templates/
-rm manifest.xml
-
-cd /tmp/vtigercrm
-unzip -o /var/www/html/vtigercrm/packages/5.1.0/optional/Webforms.zip
-cp -rf /tmp/vtigercrm/modules/ /var/www/html/vtigercrm/
-cp -rf  /tmp/vtigercrm/templates/ /var/www/html/vtigercrm/Smarty/
-rm -fr  modules/ templates/
-rm manifest.xml
-
-
-cd /var/www/html/vtigercrm
+#Cambiando permisos y dueño.
 chmod 777 config.inc.php
 chmod 777 tabdata.php   
 chmod 777 install.php   
@@ -958,6 +900,149 @@ cp /var/www/pub/debpbx/vtigercrm/sharing_privileges_1.php /var/www/html/vtigercr
 cp /var/www/pub/debpbx/vtigercrm/sharing_privileges_2.php /var/www/html/vtigercrm/user_privileges/sharing_privileges_2.php
 cp /var/www/pub/debpbx/vtigercrm/user_privileges_1.php /var/www/html/vtigercrm/user_privileges/user_privileges_1.php
 cp /var/www/pub/debpbx/vtigercrm/user_privileges_2.php /var/www/html/vtigercrm/user_privileges/user_privileges_2.php
+
+#Modulos PBXManager################################################################################
+mkdir -p /tmp/vtigercrm
+cd /tmp/vtigercrm      
+unzip -o /var/www/html/vtigercrm/packages/5.1.0/mandatory/PBXManager.zip
+
+mkdir -p /var/www/html/vtigercrm/cron/modules/PBXManager
+cp -rf /tmp/vtigercrm/cron/ /var/www/html/vtigercrm/cron/modules/PBXManager                
+chown -R asterisk:asterisk /var/www/html/vtigercrm/cron/modules/PBXManager
+chmod -R 777 /var/www/html/vtigercrm/cron/modules/PBXManager
+
+mkdir -p /var/www/html/vtigercrm/modules/PBXManager
+cp -rf /tmp/vtigercrm/modules/ /var/www/html/vtigercrm/
+chown -R asterisk:asterisk /var/www/html/vtigercrm/modules/PBXManager
+chmod -R 777 /var/www/html/vtigercrm/modules/PBXManager
+
+mkdir -p /var/www/html/vtigercrm/Smarty/templates/modules/PBXManager
+cp -rf  /tmp/vtigercrm/templates/EditView.tpl /var/www/html/vtigercrm/Smarty/templates/modules/PBXManager
+cp -rf  /tmp/vtigercrm/templates/Settings.tpl /var/www/html/vtigercrm/Smarty/templates/modules/PBXManager
+chown -R asterisk:asterisk /var/www/html/vtigercrm/Smarty/templates/modules/PBXManager
+chmod -R 777 /var/www/html/vtigercrm/Smarty/templates/modules/PBXManager
+     
+rm -fr /tmp/vtigercrm/cron
+rm -fr /tmp/vtigercrm/modules
+rm -fr /tmp/vtigercrm/templates
+rm -fr /tmp/vtigercrm/manifest.xml                       
+###################################################################################################
+#ServiceContracts##################################################################################
+cd /tmp/vtigercrm
+unzip -o /var/www/html/vtigercrm/packages/5.1.0/mandatory/ServiceContracts.zip
+
+cp -rf /tmp/vtigercrm/modules/ /var/www/html/vtigercrm/                       
+chown -R asterisk:asterisk /var/www/html/vtigercrm/modules/ServiceContracts
+chmod -R 777 /var/www/html/vtigercrm/modules/ServiceContracts
+
+rm -fr /tmp/vtigercrm/modules
+rm -fr /tmp/vtigercrm/manifest.xml   
+###################################################################################################
+#Services##########################################################################################
+cd /tmp/vtigercrm
+unzip -o /var/www/html/vtigercrm/packages/5.1.0/mandatory/Services.zip
+
+cp -rf /tmp/vtigercrm/modules/ /var/www/html/vtigercrm/  
+chown -R asterisk:asterisk /var/www/html/vtigercrm/modules/Services
+chmod -R 777 /var/www/html/vtigercrm/modules/Services
+           
+rm -fr /tmp/vtigercrm/modules
+rm -fr /tmp/vtigercrm/manifest.xml   
+###################################################################################################
+#CustomerPortal####################################################################################  
+cd /tmp/vtigercrm
+unzip -o /var/www/html/vtigercrm/packages/5.1.0/optional/CustomerPortal.zip
+
+cp -rf /tmp/vtigercrm/modules/ /var/www/html/vtigercrm/                    
+chown -R asterisk:asterisk /var/www/html/vtigercrm/modules/CustomerPortal
+chmod -R 777 /var/www/html/vtigercrm/modules/CustomerPortal
+
+mkdir -p /var/www/html/vtigercrm/Smarty/templates/modules/CustomerPortal
+cp -rf  /tmp/vtigercrm/templates/AdvancedSettingsContents.tpl /var/www/html/vtigercrm/Smarty/templates/modules/CustomerPortal
+cp -rf  /tmp/vtigercrm/templates/AdvancedSettings.tpl /var/www/html/vtigercrm/Smarty/templates/modules/CustomerPortal
+cp -rf  /tmp/vtigercrm/templates/BasicSetttingsContents.tpl /var/www/html/vtigercrm/Smarty/templates/modules/CustomerPortal
+cp -rf  /tmp/vtigercrm/templates/BasicSetttings.tpl /var/www/html/vtigercrm/Smarty/templates/modules/CustomerPortal
+chown -R asterisk:asterisk /var/www/html/vtigercrm/Smarty/templates/modules/CustomerPortal
+chmod -R 777 /var/www/html/vtigercrm/Smarty/templates/modules/CustomerPortal
+   
+rm -fr /tmp/vtigercrm/modules
+rm -fr /tmp/vtigercrm/templates
+rm -fr /tmp/vtigercrm/manifest.xml
+###################################################################################################
+#FieldFormulas#####################################################################################
+cd /tmp/vtigercrm
+unzip -o /var/www/html/vtigercrm/packages/5.1.0/optional/FieldFormulas.zip
+
+cp -rf /tmp/vtigercrm/modules/ /var/www/html/vtigercrm/
+chown -R asterisk:asterisk /var/www/html/vtigercrm/modules/FieldFormulas       
+chmod -R 777 /var/www/html/vtigercrm/modules/FieldFormulas
+
+mkdir -p /var/www/html/vtigercrm/Smarty/templates/modules/FieldFormulas
+cp -rf  /tmp/vtigercrm/templates/EditExpressions.tpl /var/www/html/vtigercrm/Smarty/templates/modules/FieldFormulas        
+cp -rf  /tmp/vtigercrm/templates/ModuleTitle.tpl /var/www/html/vtigercrm/Smarty/templates/modules/FieldFormulas
+chown -R asterisk:asterisk /var/www/html/vtigercrm/Smarty/templates/modules/FieldFormulas
+chmod -R 777 /var/www/html/vtigercrm/Smarty/templates/modules/FieldFormulas
+
+rm -fr /tmp/vtigercrm/modules
+rm -fr /tmp/vtigercrm/templates
+rm -fr /tmp/vtigercrm/manifest.xml
+###################################################################################################                                                
+#RecycleBin########################################################################################
+cd /tmp/vtigercrm
+unzip -o /var/www/html/vtigercrm/packages/5.1.0/optional/RecycleBin.zip
+
+cp -rf /tmp/vtigercrm/modules/ /var/www/html/vtigercrm/
+chown -R asterisk:asterisk /var/www/html/vtigercrm/modules/RecycleBin       
+chmod -R 777 /var/www/html/vtigercrm/modules/RecycleBin
+                
+mkdir -p /var/www/html/vtigercrm/Smarty/templates/modules/RecycleBin
+cp -rf  /tmp/vtigercrm/templates/RecycleBinContents.tpl /var/www/html/vtigercrm/Smarty/templates/modules/RecycleBin     
+cp -rf  /tmp/vtigercrm/templates/RecycleBin.tpl /var/www/html/vtigercrm/Smarty/templates/modules/RecycleBin 
+chown -R asterisk:asterisk /var/www/html/vtigercrm/Smarty/templates/modules/RecycleBin
+chmod -R 777 /var/www/html/vtigercrm/Smarty/templates/modules/RecycleBin
+
+rm -fr /tmp/vtigercrm/modules
+rm -fr /tmp/vtigercrm/templates
+rm -fr /tmp/vtigercrm/manifest.xml
+###################################################################################################
+#Tooltip###########################################################################################
+cd /tmp/vtigercrm
+unzip -o /var/www/html/vtigercrm/packages/5.1.0/optional/Tooltip.zip
+
+cp -rf /tmp/vtigercrm/modules/ /var/www/html/vtigercrm/             
+chown -R asterisk:asterisk /var/www/html/vtigercrm/modules/Tooltip
+chmod -R 777 /var/www/html/vtigercrm/modules/Tooltip
+
+mkdir -p /var/www/html/vtigercrm/Smarty/templates/modules/Tooltip
+cp -rf  /tmp/vtigercrm/templates/default.tpl /var/www/html/vtigercrm/Smarty/templates/modules/Tooltip
+cp -rf  /tmp/vtigercrm/templates/DetailQuickView.tpl /var/www/html/vtigercrm/Smarty/templates/modules/Tooltip
+cp -rf  /tmp/vtigercrm/templates/EditQuickView.tpl /var/www/html/vtigercrm/Smarty/templates/modules/Tooltip
+cp -rf  /tmp/vtigercrm/templates/Quickview.tpl /var/www/html/vtigercrm/Smarty/templates/modules/Tooltip
+chown -R asterisk:asterisk /var/www/html/vtigercrm/Smarty/templates/modules/Tooltip
+chmod -R 777 /var/www/html/vtigercrm/Smarty/templates/modules/Tooltip
+
+rm -fr /tmp/vtigercrm/modules
+rm -fr /tmp/vtigercrm/templates
+rm -fr /tmp/vtigercrm/manifest.xml                                                            
+###################################################################################################
+#Webforms##########################################################################################
+cd /tmp/vtigercrm
+unzip -o /var/www/html/vtigercrm/packages/5.1.0/optional/Webforms.zip
+
+cp -rf /tmp/vtigercrm/modules/ /var/www/html/vtigercrm/              
+chown -R asterisk:asterisk /var/www/html/vtigercrm/modules/Webforms
+chmod -R 777 /var/www/html/vtigercrm/modules/Webforms
+
+mkdir -p /var/www/html/vtigercrm/Smarty/templates/modules/Webforms
+cp -rf  /tmp/vtigercrm/templates/ErrorPage.tpl /var/www/html/vtigercrm/Smarty/templates/modules/Webforms  
+cp -rf  /tmp/vtigercrm/templates/SuccessPage.tpl /var/www/html/vtigercrm/Smarty/templates/modules/Webforms
+chown -R asterisk:asterisk /var/www/html/vtigercrm/Smarty/templates/modules/Webforms
+chmod -R 777 /var/www/html/vtigercrm/Smarty/templates/modules/Webforms
+
+rm -fr /tmp/vtigercrm/modules
+rm -fr /tmp/vtigercrm/templates
+rm -fr /tmp/vtigercrm/manifest.xml                                                        
+###################################################################################################
 
 chown -R asterisk:asterisk /var/www/html/vtigercrm
 
