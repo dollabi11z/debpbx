@@ -26,6 +26,24 @@ KERNEL_VERSION=`uname -r`
 KERNEL_VERSION=`echo ${KERNEL_VERSION} | sed -e "s/\-\(.*\)//"`
 KERNEL_UP_VERSION=`echo ${KERNEL_VERSION} | sed -e "s/\(2\.[4,6]\)\(.*\)/\1/"`
 
+MYSQL_ROOT_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20`
+ASTERISK_DB_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20`
+ASTERISK_MGR_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20` 
+ARI_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20` 
+FOP_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20`
+
+HOSTS="srv1"
+HOSTNAME="debpbx.org"
+HOST_AND_HOSTNAME="${HOSTS}.${HOSTNAME}"
+
+echo "#Asegúrese de mantener estos en un lugar seguro!" > /root/passwords
+echo "MySQL root password : $MYSQL_ROOT_PW" >> /root/passwords
+echo "Asterisk database password : $ASTERISK_DB_PW" >> /root/passwords
+echo "Asterisk manager portal password : $ASTERISK_MGR_PW" >> /root/passwords
+echo "Flash Operator Panel : ${OP_PW}" >> /root/passwords
+echo "ARI password : $ARI_PW" >> /root/passwords
+echo "Contraseñas generadas al azar ..."
+
 clear
 echo "##################################################################"
 echo "# PARTE 1 - Preparando instalación                               #"
@@ -102,8 +120,8 @@ echo "+----------------------------------------------------------------+"
 echo "| Reconfiguración mysql                                          |"
 echo "+----------------------------------------------------------------+"
 
-echo "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('debpbx');" | mysql -u root
-SQL_ROOT_PASSWORD="-pdebpbx"                                                    
+echo "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('${MYSQL_ROOT_PW}');" | mysql -u root
+                                                  
 
 echo "+----------------------------------------------------------------+"
 echo "| Reconfiguración hosts                                          |"
@@ -114,7 +132,7 @@ LOCAL_IP=`ifconfig eth0 | egrep -o '([0-9]{1,3}\.){3}[0-9]{1,3}' | egrep -v '255
 
 echo "
 127.0.0.1 localhost.localdomain localhost
-$LOCAL_IP srv1.debpbx.org srv1           
+${LOCAL_IP} ${HOST_AND_HOSTNAME} ${HOSTS}         
 
 # The following lines are desirable for IPv6 capable hosts
 ::1 localhost ip6-localhost ip6-loopback                  
@@ -136,11 +154,11 @@ echo "+----------------------------------------------------------------+"
 echo "| Reconfiguración postfix                                        |"
 echo "+----------------------------------------------------------------+"
 
-postconf -e 'myhostname = srv1.debpbx.org'
-postconf -e 'mydestination = srv1.debpbx.org, localhost.debpbx.org, localhost.localdomain, localhost'
+postconf -e 'myhostname = ${HOST_AND_HOSTNAME}'
+postconf -e 'mydestination = ${HOST_AND_HOSTNAME}, localhost.${HOSTNAME}, localhost.localdomain, localhost'
 postconf -e 'inet_protocols = all'                                                                   
 postconf -e 'mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128'                              
-echo srv1.debpbx.org > /etc/mailname                                                                 
+echo ${HOST_AND_HOSTNAME} > /etc/mailname                                                                 
 /etc/init.d/postfix restart                                                                          
 
 echo "+----------------------------------------------------------------+"
@@ -359,14 +377,14 @@ echo "##################################################################"
 echo "# PARTE 2 - Instalando FreePBX                                   #"
 echo "##################################################################"
 
-echo "CREATE DATABASE IF NOT EXISTS asteriskcdrdb;" | mysql -u root ${SQL_ROOT_PASSWORD}
-echo "CREATE DATABASE IF NOT EXISTS asterisk;" | mysql -u root ${SQL_ROOT_PASSWORD}     
-echo "GRANT ALL PRIVILEGES ON asteriskcdrdb.* TO asteriskuser@localhost IDENTIFIED BY 'amp109';" | mysql -u root ${SQL_ROOT_PASSWORD}
-echo "GRANT ALL PRIVILEGES ON asterisk.* TO asteriskuser@localhost IDENTIFIED BY 'amp109';" | mysql -u root ${SQL_ROOT_PASSWORD}     
+echo "CREATE DATABASE IF NOT EXISTS asteriskcdrdb;" | mysql -u root -p${MYSQL_ROOT_PW}
+echo "CREATE DATABASE IF NOT EXISTS asterisk;" | mysql -u root -p${MYSQL_ROOT_PW} 
+echo "GRANT ALL PRIVILEGES ON asteriskcdrdb.* TO asteriskuser@localhost IDENTIFIED BY '${ASTERISK_DB_PW}';" | mysql -u root -p${MYSQL_ROOT_PW}
+echo "GRANT ALL PRIVILEGES ON asterisk.* TO asteriskuser@localhost IDENTIFIED BY '${ASTERISK_DB_PW}';" | mysql -u root -p${MYSQL_ROOT_PW}  
 
 sed -i "s/\(CREATE TABLE cdr\)/DROP TABLE IF EXISTS \`cdr\`;\n\1/" /usr/src/freepbx-${VER_FREEPBX}/SQL/cdr_mysql_table.sql
-mysql -u asteriskuser -pamp109 asteriskcdrdb < /usr/src/freepbx-${VER_FREEPBX}/SQL/cdr_mysql_table.sql                    
-mysql -u asteriskuser -pamp109 asterisk < /usr/src/freepbx-${VER_FREEPBX}/SQL/newinstall.sql                              
+mysql -u asteriskuser -p${ASTERISK_DB_PW} asteriskcdrdb < /usr/src/freepbx-${VER_FREEPBX}/SQL/cdr_mysql_table.sql                    
+mysql -u asteriskuser -p${ASTERISK_DB_PW} asterisk < /usr/src/freepbx-${VER_FREEPBX}/SQL/newinstall.sql                              
 
 cp /etc/php5/apache2/php.ini /etc/php5/apache2/php.ini-orig
 sed -e 's/upload_max_filesize = .*/upload_max_filesize = 128M/' /etc/php5/apache2/php.ini > /tmp/php.ini
@@ -403,6 +421,10 @@ echo "+----------------------------------------------------------------+"
 
 cp /var/www/pub/debpbx/amportal.conf /etc/amportal.conf
 chown asterisk:asterisk /etc/amportal.conf             
+sed -i "s/\(AMPDBPASS= *\)\(.*\)/\1${ASTERISK_DB_PW}/" /etc/amportal.conf 
+sed -i "s/\(AMPMGRPASS= *\)\(.*\)/\1${ASTERISK_MGR_PW}/" /etc/amportal.conf 
+sed -i "s/\(AMPMGRPASS= *\)\(.*\)/\1${ASTERISK_MGR_PW}/" /etc/amportal.conf
+sed -i "s/\(FOPPASSWORD= *\)\(.*\)/\1${FOP_PW}/" /etc/amportal.conf
 
 ./install_amp
 /usr/src/freepbx-${VER_FREEPBX}/apply_conf.sh
@@ -1105,7 +1127,7 @@ LOCAL_IP=`ifconfig eth0 | egrep -o '([0-9]{1,3}\.){3}[0-9]{1,3}' | egrep -v '255
 
 echo "
 127.0.0.1 localhost.localdomain localhost
-$LOCAL_IP srv1.debpbx.org srv1           
+${LOCAL_IP} ${HOST_AND_HOSTNAME} ${HOSTS}          
 
 # The following lines are desirable for IPv6 capable hosts
 ::1 localhost ip6-localhost ip6-loopback                  
@@ -1125,3 +1147,4 @@ echo "+----------------------------------------------------------------+"
 /etc/init.d/ssh restart
 /usr/local/sbin/amportal restart
 exit 0
+
