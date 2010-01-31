@@ -31,6 +31,9 @@ ASTERISK_DB_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20`
 ASTERISK_MGR_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20` 
 ARI_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20` 
 FOP_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20`
+A2BILLING_DB_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20`
+
+IP_ADRESS=`ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
 
 HOSTS="srv1"
 HOSTNAME="debpbx.org"
@@ -40,8 +43,9 @@ echo "#Asegúrese de mantener estos en un lugar seguro!" > /root/passwords
 echo "MySQL root password : $MYSQL_ROOT_PW" >> /root/passwords
 echo "Asterisk database password : $ASTERISK_DB_PW" >> /root/passwords
 echo "Asterisk manager portal password : $ASTERISK_MGR_PW" >> /root/passwords
-echo "Flash Operator Panel : ${OP_PW}" >> /root/passwords
-echo "ARI password : $ARI_PW" >> /root/passwords
+echo "Flash Operator Panel : ${FOP_PW}" >> /root/passwords
+echo "ARI password : ${ARI_PW}" >> /root/passwords
+echo "A2billing : ${A2BILLING_DB_PW}" >> /root/passwords
 echo "Contraseñas generadas al azar ..."
 
 clear
@@ -128,11 +132,9 @@ echo "| Reconfiguración hosts                                          |"
 echo "+----------------------------------------------------------------+"
 
 rm /etc/hosts
-LOCAL_IP=`ifconfig eth0 | egrep -o '([0-9]{1,3}\.){3}[0-9]{1,3}' | egrep -v '255|(127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})'`
-
 echo "
 127.0.0.1 localhost.localdomain localhost
-${LOCAL_IP} ${HOST_AND_HOSTNAME} ${HOSTS}         
+${IP_ADRESS} ${HOST_AND_HOSTNAME} ${HOSTS}         
 
 # The following lines are desirable for IPv6 capable hosts
 ::1 localhost ip6-localhost ip6-loopback                  
@@ -144,7 +146,6 @@ ff02::3 ip6-allhosts
 
 127.0.0.1 downloads.asterisk.org
 127.0.0.1 downloads.digium.com  
-127.0.0.1 pear.php.net
 " >> /etc/hosts                 
 
 echo srv1.debpbx.org > /etc/hostname
@@ -408,23 +409,23 @@ chown -R asterisk:asterisk /var/run/asterisk
 
 /usr/sbin/asterisk
 
-cp /usr/src/freepbx-${VER_FREEPBX}/install_amp /usr/src/freepbx-${VER_FREEPBX}/install_amp-orig
-sed -i "s/\(^\$webroot*\)\(.*\)/\1 = \"\/var\/www\/html\";/" /usr/src/freepbx-${VER_FREEPBX}/install_amp
-LOCAL_IP=`ifconfig eth0 | egrep -o '([0-9]{1,3}\.){3}[0-9]{1,3}' | egrep -v '255|(127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})'`
-sed -i "s/xx.xx.xx.xx/${LOCAL_IP}/g" "/usr/src/freepbx-${VER_FREEPBX}/install_amp"                                          
-chmod 755 /usr/src/freepbx-${VER_FREEPBX}/install_amp                                                                       
-cd /usr/src/freepbx-${VER_FREEPBX}/                                                                                         
+# patch safe_asterisk script to use bash
+sed -i "s|#!/bin/sh|#!/bin/bash|" /usr/sbin/safe_asterisk
 
 echo "+----------------------------------------------------------------+"
 echo "| Automatizando instalacion FreePBX                              |"
 echo "+----------------------------------------------------------------+"
 
-cp /var/www/pub/debpbx/amportal.conf /etc/amportal.conf
-chown asterisk:asterisk /etc/amportal.conf             
-sed -i "s/\(AMPDBPASS= *\)\(.*\)/\1${ASTERISK_DB_PW}/" /etc/amportal.conf 
+cd /usr/src/freepbx-${VER_FREEPBX}/  
+# start asterisk
+#./start_asterisk start
+cp amportal.conf /etc/amportal.conf        
+sed -i "s/# \(AMPDBUSER=asteriskuser\) */\1/" /etc/amportal.conf
+sed -i "s/# \(AMPDBPASS=\).*/\1${ASTERISK_DB_PW}/" /etc/amportal.conf
 sed -i "s/\(AMPMGRPASS= *\)\(.*\)/\1${ASTERISK_MGR_PW}/" /etc/amportal.conf 
-sed -i "s/\(AMPMGRPASS= *\)\(.*\)/\1${ASTERISK_MGR_PW}/" /etc/amportal.conf
 sed -i "s/\(FOPPASSWORD= *\)\(.*\)/\1${FOP_PW}/" /etc/amportal.conf
+sed -i "/#AMPWEBADDRESS=192.168.1.101/d" /etc/amportal.conf
+sed -i "s/AMPWEBADDRESS=/AMPWEBADDRESS=${IP_ADDRESS}/" /etc/amportal.conf
 
 ./install_amp
 /usr/src/freepbx-${VER_FREEPBX}/apply_conf.sh
@@ -441,7 +442,6 @@ chmod 770 /var/lib/asterisk/
 chown -R asterisk:asterisk /var/www/         
 cp /var/www/html/admin/modules/dashboard/images/notify_* /var/www/html/admin/images/
 ln -s /var/lib/asterisk/moh /var/lib/asterisk/mohmp3                                
-
 
 echo "+----------------------------------------------------------------+"
 echo "| Startup script (Asterisk+FrePBX)                               |"
@@ -584,25 +584,11 @@ HTTPDGROUP="asterisk";
 aptitude -y install apache2-mpm-prefork apache2-utils apache2.2-common libapr1 libaprutil1 libsqlite3-0 libnetpbm10-dev libungif-bin php-mail php-mail-mime php-file psutils rsync
 
 echo "+----------------------------------------------------------------+"
-echo "| Autoinstall Pear                                               |"
+echo "| Pear                                                           |"
 echo "+----------------------------------------------------------------+"
 
-#pear channel-update pear.php.net
-#pear upgrade-all                
-#pear install Mail Net_SMTP Mail_mime MDB2_driver_mysql fileinfo
-
-#pear install /var/www/pub/pear/Structures_Graph-1.0.3.tgz
-#pear install /var/www/pub/pear/Mail_mimeDecode-1.5.1.tgz
-#pear install /var/www/pub/pear/Archive_Tar-1.3.3.tgz
-#pear install /var/www/pub/pear/Net_Socket-1.0.9.tgz
-#pear install /var/www/pub/pear/XML_Util-1.2.1.tgz
-#pear install /var/www/pub/pear/PEAR-1.9.0.tgz
-#pear install /var/www/pub/pear/Net_SMTP-1.3.4.tgz
-#pear install /var/www/pub/pear/Mail_Mime-1.5.2.tgz
-#pear install /var/www/pub/pear/Mail-1.1.14.tgz
-pear install /var/www/pub/pear/MDB2_Driver_mysql-1.4.1.tgz
-#pear install /var/www/pub/pear/Fileinfo-1.0.4.tgz
-
+pear channel-update pear.php.net
+pear install db Mail Net_SMTP Mail_mime MDB2_driver_mysql fileinfo
 
 cd /usr/src/avantfax-${VER_AVANTFAX}
 
@@ -1127,7 +1113,7 @@ LOCAL_IP=`ifconfig eth0 | egrep -o '([0-9]{1,3}\.){3}[0-9]{1,3}' | egrep -v '255
 
 echo "
 127.0.0.1 localhost.localdomain localhost
-${LOCAL_IP} ${HOST_AND_HOSTNAME} ${HOSTS}          
+${IP_ADRESS} ${HOST_AND_HOSTNAME} ${HOSTS}         
 
 # The following lines are desirable for IPv6 capable hosts
 ::1 localhost ip6-localhost ip6-loopback                  
@@ -1137,7 +1123,6 @@ ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters                                    
 ff02::3 ip6-allhosts                                      
 " >> /etc/hosts   
-
 
 clear
 echo "+----------------------------------------------------------------+"
