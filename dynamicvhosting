@@ -1,11 +1,31 @@
-# $Header: /home/cvsroot/gentoo-x86/net-www/apache/files/conf/DynamicVhosts.conf,v 1.2 2002/05/04 23:23:01 woodchip Exp $
-
+#
+#   HMMMMI              MI       MMMMI    MMMMM.  MMI    MM
+#   HM: IMMM            MI       MM IMMM  MM  MMM  MM.  MMI
+#   HM:    MM   MMMMM   MIMMMM   MM   MM  MM   MM   MM MMI
+#   HM:     MM MM   MM  MM   MM  MM   MM  MMMMMM     MMM.
+#   HM:     MM:MMMMMMM  MI   MM  MMMMMM   MM   MM:   MMM:
+#   HM:    MM .MM       MI   MM  MM       MM    MM  MM MMM
+#   HM: IMMM   MMM  HM  MM  MMI  MM       MM  MMM  MM   MMI
+#   HMMMMI      .MMMM   MHMMM    MM       MMMMM   MM     MM
+#
+#                                            www.debpbx.org
+#
+# $ID: dynamicvhosting, v 0.2  2009/12/01 00:00:00 federico Exp $
+#
+# Dynamic Virtual Hosting - Version 0.2
+# Author: Federico Pereira <fpereira@debpbx.org>
+# Copyright 2008 DebPBX - Federico Pereira (LordBaseX)
+# Content-Type: text/plain; charset=UTF-8
+# This script is licensed under GNU GPL version 2.0
+#
+#$Header: /home/cvsroot/gentoo-x86/net-www/apache/files/conf/DynamicVhosts.conf,v 1.2 2002/05/04 23:23:01 woodchip Exp $
+#
 #Simple dynamic virtual hosts
 #
 #   This extract from apache.conf implements the virtual host arrangement
 #   outlined at http://www.apache.org/docs/vhosts/mass.html, using
 #   mod_vhost_alias.
-
+#
 # get the server name from the Host: header
 UseCanonicalName Off
 #
@@ -21,7 +41,7 @@ UseCanonicalName Off
 #   solution by just turning UseCanonicalName Off into UseCanonicalName DNS.
 #   The server name that is inserted into the filename is then derived from
 #   the IP address of the virtual host.
-
+#
 <VirtualHost _default_:80>
     # SSLDisable
     SSLEngine off
@@ -57,7 +77,6 @@ UseCanonicalName Off
     Options FollowSymLinks MultiViews
     <Directory "/">
     </Directory>
-
 
 #   SSL Cipher Suite:
 #   List the ciphers that the client is permitted to negotiate.
@@ -191,3 +210,4 @@ CustomLog /var/log/apache2/ssl_request.log \
 # RewriteOptions inherit
 
 </VirtualHost>
+
