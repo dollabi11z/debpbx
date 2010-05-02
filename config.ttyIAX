@@ -6,9 +6,9 @@
 #
 
 #
-CountryCode:            0034
-AreaCode:               959
-FAXNumber:              267758
+CountryCode:            0054
+AreaCode:               11
+FAXNumber:              2241431400
 LongDistancePrefix:     00
 InternationalPrefix:    00
 DialStringRules:        etc/dialrules
@@ -20,7 +20,7 @@ DeviceMode:             0600
 RingsBeforeAnswer:      1
 SpeakerVolume:          off
 GettyArgs:              "-h %l dx_%s"
-LocalIdentifier:        TUEMPRESA
+LocalIdentifier:        OPENTECNOLOGIC
 TagLineFont:            etc/lutRS18.pcf
 TagLineFormat:          "From %%l|%c|Page %%P of %%T"
 MaxRecvPages:           50
@@ -51,10 +51,5 @@ CallIDPattern:          "NDID="
 # Uncomment these if you really want them, but you probably don't.
 #CallIDPattern:          "DATE="
 #CallIDPattern:          "TIME="
+#
 
-#
-## AvantFAX configuration
-#
-FaxrcvdCmd:     bin/faxrcvd.php
-DynamicConfig:  bin/dynconf.php
-UseJobTSI:      true
