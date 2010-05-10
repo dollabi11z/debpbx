@@ -11,7 +11,7 @@
 #
 #                                            www.debpbx.org
 #
-# $ID: config.ini.php, v 0.1  2009/12/24 00:00:00 federico Exp $
+# $ID: config.ini.php, v 0.2  2010/05/10 00:00:00 federico Exp $
 #
 # Vitigercrm
 # Author: Federico Pereira <fpereira@debpbx.org>
@@ -62,22 +62,22 @@ $HELPDESK_SUPPORT_EMAIL_REPLY_ID = $HELPDESK_SUPPORT_EMAIL_ID;
       db_username        
       db_password        
       db_name            
-*/                       
+*/
 
 $dbconfig['db_server'] = 'localhost';
-$dbconfig['db_port'] = ':3306';      
-$dbconfig['db_username'] = 'vtigercrmuser';
-$dbconfig['db_password'] = 'DebPBX2009';   
-$dbconfig['db_name'] = 'vtigercrm';        
-$dbconfig['db_type'] = 'mysql';            
-$dbconfig['db_status'] = 'true';           
+$dbconfig['db_port'] = ':3306';
+$dbconfig['db_username'] = 'USER_CRM';
+$dbconfig['db_password'] = 'PASS_CRM';
+$dbconfig['db_name'] = 'BASE_CRM';
+$dbconfig['db_type'] = 'mysql';
+$dbconfig['db_status'] = 'true';
 
 // TODO: test if port is empty
 // TODO: set db_hostname dependending on db_type
 $dbconfig['db_hostname'] = $dbconfig['db_server'].$dbconfig['db_port'];
 
 // log_sql default value = false
-$dbconfig['log_sql'] = false;   
+$dbconfig['log_sql'] = false;
 
 // persistent default value = true
 $dbconfigoption['persistent'] = true;
@@ -108,24 +108,24 @@ $root_directory = '/var/www/html/vtigercrm/';
 $cache_dir = 'cache/';
 
 // tmp_dir default value prepended by cache_dir = images/
-$tmp_dir = 'cache/images/';                              
+$tmp_dir = 'cache/images/';
 
 // import_dir default value prepended by cache_dir = import/
-$import_dir = 'cache/import/';                              
+$import_dir = 'cache/import/';
 
 // upload_dir default value prepended by cache_dir = upload/
-$upload_dir = 'cache/upload/';                              
+$upload_dir = 'cache/upload/';
 
 // maximum file size for uploaded files in bytes also used when uploading import files
-// upload_maxsize default value = 3000000                                             
-$upload_maxsize = 3000000;                                                            
+// upload_maxsize default value = 3000000
+$upload_maxsize = 3000000;
 
 // flag to allow export functionality
-// 'all' to allow anyone to use exports 
-// 'admin' to only allow admins to export 
-// 'none' to block exports completely     
-// allow_exports default value = all      
-$allow_exports = 'all';                   
+// 'all' to allow anyone to use exports
+// 'admin' to only allow admins to export
+// 'none' to block exports completely
+// allow_exports default value = all
+$allow_exports = 'all';
 
 // files with one of these extensions will have '.txt' appended to their filename on upload
 // upload_badext default value = php, php3, php4, php5, pl, cgi, py, asp, cfm, js, vbs, html, htm
@@ -133,16 +133,16 @@ $upload_badext = array('php', 'php3', 'php4', 'php5', 'pl', 'cgi', 'py', 'asp', 
 
 // full path to include directory including the trailing slash
 // includeDirectory default value = $root_directory..'include/
-$includeDirectory = $root_directory.'include/';               
+$includeDirectory = $root_directory.'include/';
 
 // list_max_entries_per_page default value = 20
-$list_max_entries_per_page = '20';             
+$list_max_entries_per_page = '20';
 
 // limitpage_navigation default value = 5
-$limitpage_navigation = '5';             
+$limitpage_navigation = '5';
 
 // history_max_viewed default value = 5
-$history_max_viewed = '5';             
+$history_max_viewed = '5';
 
 // define list of menu tabs
 //$moduleList = Array('Home', 'Dashboard', 'Contacts', 'Accounts', 'Opportunities', 'Cases', 'Notes', 'Calls', 'Emails', 'Meetings', 'Tasks','MessageBoard');
@@ -152,40 +152,40 @@ $history_max_viewed = '5';
 // $cal_codes = array('en_us'=>'en','es_es'=>'es','ja'=>'jp', 'sp_ve'=>'sp', 'it_it'=>'it', 'tw_zh'=>'zh', 'pt_br'=>'pt', 'se'=>'sv', 'cn_zh'=>'zh', 'ge_ge'=>'de', 'ge_ch'=>'de', 'fr'=>'fr');
 
 // default_module default value = Home
-$default_module = 'Home';             
+$default_module = 'Home';
 
 // default_action default value = index
-$default_action = 'index';             
+$default_action = 'index';
 
 // set default theme
 // default_theme default value = blue
-$default_theme = 'softed';           
+$default_theme = 'softed';
 
 // show or hide time to compose each page
 // calculate_response_time default value = true
-$calculate_response_time = true;               
+$calculate_response_time = true;
 
 // default text that is placed initially in the login form for user name
-// no default_user_name default value                                   
-$default_user_name = '';                                                
+// no default_user_name default value
+$default_user_name = '';
 
 // default text that is placed initially in the login form for password
-// no default_password default value                                   
-$default_password = '';                                                
+// no default_password default value
+$default_password = '';
 
 // create user with default username and password
-// create_default_user default value = false     
-$create_default_user = false;                    
-// default_user_is_admin default value = false   
-$default_user_is_admin = false;                  
+// create_default_user default value = false
+$create_default_user = false;
+// default_user_is_admin default value = false
+$default_user_is_admin = false;
 
 // if your MySQL/PHP configuration does not support persistent connections set this to true to avoid a large performance slowdown
-// disable_persistent_connections default value = false                                                                          
-$disable_persistent_connections = false;                                                                                         
+// disable_persistent_connections default value = false
+$disable_persistent_connections = false;
 
 // defined languages available. the key must be the language file prefix. (Example 'en_us' is the prefix for every 'en_us.lang.php' file)
-// languages default value = en_us=>US English                                                                                           
-//$languages = Array('en_us'=>'US English',);                                                                                              
+// languages default value = en_us=>US English
+//$languages = Array('en_us'=>'US English',);
 $languages = Array('es_es'=>'ES Spanish','en_us'=>'US English');
 
 //Master currency name
