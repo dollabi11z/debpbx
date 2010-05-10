@@ -1511,6 +1511,8 @@ CREATE TABLE IF NOT EXISTS `vtiger_contactdetails` (
 --
 -- Volcar la base de datos para la tabla `vtiger_contactdetails`
 --
+INSERT INTO `vtiger_contactdetails` (`contactid`, `contact_no`, `accountid`, `salutation`, `firstname`, `lastname`, `email`, `phone`, `mobile`, `title`, `department`, `fax`, `reportsto`, `training`, `usertype`, `contacttype`, `otheremail`, `yahooid`, `donotcall`, `emailoptout`, `imagename`, `reference`, `notify_owner`) VALUES
+(2, 'CON1', 0, 'Mr.', 'Federico', 'Pereira', 'fpereira@debpbx.org', 'OpenTecnologic & DebPBX', '5491164803155', 'Project Manager', '', '', '0', NULL, NULL, NULL, NULL, '', '0', '0', '', '0', '0');
 
 
 -- --------------------------------------------------------
