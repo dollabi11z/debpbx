@@ -1,4 +1,4 @@
-<?php                                                                                                                                           
+<?php
 #
 #   HMMMMI              MI       MMMMI    MMMMM.  MMI    MM
 #   HM: IMMM            MI       MM IMMM  MM  MMM  MM.  MMI
@@ -19,49 +19,49 @@
 # Content-Type: text/plain; charset=UTF-8
 # This script is licensed under GNU GPL version 2.0
 #
-/*********************************************************************************                                                              
- * The contents of this file are subject to the SugarCRM Public License Version 1.1.2                                                           
- * ("License"); You may not use this file except in compliance with the                                                                         
- * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL                                                                 
- * Software distributed under the License is distributed on an  "AS IS"  basis,                                                                 
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for                                                                 
- * the specific language governing rights and limitations under the License.                                                                    
- * The Original Code is:  SugarCRM Open Source                                                                                                  
- * The Initial Developer of the Original Code is SugarCRM, Inc.                                                                                 
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;                                                                               
- * All Rights Reserved.                                                                                                                         
- * Contributor(s): ______________________________________.                                                                                      
-********************************************************************************/                                                               
+/*********************************************************************************
+ * The contents of this file are subject to the SugarCRM Public License Version 1.1.2
+ * ("License"); You may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at http://www.sugarcrm.com/SPL
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * The Original Code is:  SugarCRM Open Source
+ * The Initial Developer of the Original Code is SugarCRM, Inc.
+ * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.;
+ * All Rights Reserved.
+ * Contributor(s): ______________________________________.
+********************************************************************************/
 
 include('vtigerversion.php');
 
 // more than 8MB memory needed for graphics
-// memory limit default value = 64M        
-ini_set('memory_limit','64M');             
+// memory limit default value = 64M
+ini_set('memory_limit','64M');
 
-// show or hide calendar, world clock, calculator, chat and FCKEditor 
-// Do NOT remove the quotes if you set these to false!                
-$CALENDAR_DISPLAY = 'true';                                           
-$WORLD_CLOCK_DISPLAY = 'true';                                        
-$CALCULATOR_DISPLAY = 'true';                                         
-$CHAT_DISPLAY = 'true';                                               
-$FCKEDITOR_DISPLAY = 'true';                                          
+// show or hide calendar, world clock, calculator, chat and FCKEditor
+// Do NOT remove the quotes if you set these to false!
+$CALENDAR_DISPLAY = 'true';
+$WORLD_CLOCK_DISPLAY = 'true';
+$CALCULATOR_DISPLAY = 'true';
+$CHAT_DISPLAY = 'true';
+$FCKEDITOR_DISPLAY = 'true';
 
 // url for customer portal (Example: http://vtiger.com/portal)
-$PORTAL_URL = 'http://vtiger.com/customerportal';             
+$PORTAL_URL = 'http://vtiger.com/customerportal';
 
 // helpdesk support email id and support name (Example: 'support@vtiger.com' and 'vtiger support')
-$HELPDESK_SUPPORT_EMAIL_ID = 'demo@debpbx.org';                                                   
-$HELPDESK_SUPPORT_NAME = 'your-support name';                                                     
-$HELPDESK_SUPPORT_EMAIL_REPLY_ID = $HELPDESK_SUPPORT_EMAIL_ID;                                    
+$HELPDESK_SUPPORT_EMAIL_ID = 'demo@debpbx.org';
+$HELPDESK_SUPPORT_NAME = 'your-support name';
+$HELPDESK_SUPPORT_EMAIL_REPLY_ID = $HELPDESK_SUPPORT_EMAIL_ID;
 
 /* database configuration
-      db_server          
-      db_port            
-      db_hostname        
-      db_username        
-      db_password        
-      db_name            
+      db_server
+      db_port
+      db_hostname
+      db_username
+      db_password
+      db_name
 */
 
 $dbconfig['db_server'] = 'localhost';
