@@ -67,5 +67,5 @@ UPDATE `asterisk_db`.`globals` SET `value` =  'ar' WHERE CONVERT( `globals`.`var
 UPDATE `asterisk_db`.`globals` SET `value` =  'yes' WHERE CONVERT( `globals`.`variable` USING utf8 ) = 'ALLOW_SIP_ANON' LIMIT 1 ;
 UPDATE `asterisk_db`.`admin` SET `value` =  'E_MAIL'  WHERE CONVERT( `admin`.`variable` USING utf8 ) = 'email' LIMIT 1 ;
 
-#FEATURE CODES
+-- FEATURE CODES
 UPDATE `asterisk_db`.`featurecodes` SET `enabled` =  '1' WHERE CONVERT( `featurecodes`.`modulename` USING utf8 ) = 'core' AND CONVERT( `featurecodes`.`featurename` USING utf8 ) =  'chanspy' LIMIT 1 
