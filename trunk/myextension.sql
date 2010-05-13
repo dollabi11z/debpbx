@@ -27,6 +27,10 @@
 --
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
+-- MODIFYING DEFAULT PASSWORD
+UPDATE `asterisk_db`.`ampusers` SET `username` =  'FREEPBX_ADMIN',`password_sha1` = 'SHA1_PASS' WHERE CONVERT( `ampusers`.`username` USING utf8 ) = 'admin' LIMIT 1;
+
+-- CREATING IAX EXTENSION
 INSERT INTO `users` (`extension`, `password`, `name`, `voicemail`, `ringtimer`, `noanswer`, `recording`, `outboundcid`, `sipname`, `mohclass`) VALUES
 ('400', '', 'FAX', 'novm', 0, '', 'out=Never|in=Never', '', '', 'default');
 
@@ -55,3 +59,13 @@ INSERT INTO `iax` (`id`, `keyword`, `data`, `flags`) VALUES
 ('400', 'record_in', 'Never', 20),
 ('400', 'record_out', 'Never', 21);
 
+-- CONFIGURATION GENERAL SETTINGS
+UPDATE `asterisk_db`.`globals` SET `value` =  'trwW' WHERE CONVERT( `globals`.`variable` USING utf8 ) = 'DIAL_OPTIONS' LIMIT 1 ;
+UPDATE `asterisk_db`.`globals` SET `value` =  '30' WHERE CONVERT( `globals`.`variable` USING utf8 ) = 'RINGTIMER' LIMIT 1 ;
+UPDATE `asterisk_db`.`globals` SET `value` =  'DISABLED' WHERE CONVERT( `globals`.`variable` USING utf8 ) = 'RECORDING_STATE' LIMIT 1 ;
+UPDATE `asterisk_db`.`globals` SET `value` =  'ar' WHERE CONVERT( `globals`.`variable` USING utf8 ) = 'TONEZONE' LIMIT 1 ;
+UPDATE `asterisk_db`.`globals` SET `value` =  'yes' WHERE CONVERT( `globals`.`variable` USING utf8 ) = 'ALLOW_SIP_ANON' LIMIT 1 ;
+UPDATE `asterisk_db`.`admin` SET `value` =  'E_MAIL'  WHERE CONVERT( `admin`.`variable` USING utf8 ) = 'email' LIMIT 1 ;
+
+#FEATURE CODES
+UPDATE `asterisk_db`.`featurecodes` SET `enabled` =  '1' WHERE CONVERT( `featurecodes`.`modulename` USING utf8 ) = 'core' AND CONVERT( `featurecodes`.`featurename` USING utf8 ) =  'chanspy' LIMIT 1 
