@@ -1,5 +1,4 @@
 #!/bin/bash
-IP_ADRESS=`ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
 clear
 cat debpbx
 echo "Author: Federico Pereira <fpereira@opentecnologic.com>"
