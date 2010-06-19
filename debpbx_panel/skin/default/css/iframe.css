@@ -1,0 +1,90 @@
+/*********************************************************************************
+ * $ID: iframe.css
+ *
+ * DebPBX Panel Control v0.1
+ *
+ * DebPBX is a platform of free software (under GPL license) based on Asterisk that
+ * provides functionality of a telephone exchange (PBX).
+ * Like any PBX, you can connect a number of phones to make calls to each other
+ * and even connect to a VoIP provider or to an ISDN (ISDN) basic and primary.
+ *
+ * @author Federico Pereira
+ * @copyright  Copyright (c) 2008-2010 OpenTecnologic & DebPBX
+ * @content-type: text/plain; charset=UTF-8
+ * @license    http://www.gnu.org/licenses/gpl-2.0.html
+ ********************************************************************************/
+#banner_iframe {
+        margin:-5px auto;
+        padding:10px;
+        padding: relative;
+        float:right;
+}
+
+#freepbx_iframe {
+        top:-83px;
+        left: -112px;
+        margin:-5px 0px -180px;
+        padding:10px;
+        position:relative;
+}
+
+#fop_iframe {
+        top:-20px;
+        left: -111px;
+        margin:-5px 0px -51px;
+        padding:10px; 
+        position:relative;
+}
+#vtigercrm_iframe {
+        top:-25px;
+        left: -111px;
+        margin:-5px auto;
+        padding:10px;
+        position:relative;
+}
+#avantfax_iframe {
+        top:-20px;
+        left: -111px;
+	margin:-5px 0px -45px;
+        padding:10px;
+        position:relative;
+}
+#recordings_iframe {
+        top:-109px;
+        left: -111px;
+        margin:-5px 0px -200px;
+        padding:10px;
+        position:relative;
+}
+#calllog_iframe {
+        top:-99px;
+        left: -122px;
+	margin:-5px 0px -125px; 
+        padding:10px;
+        position:relative;
+}
+
+#wiki_iframe {
+        top:-28px;
+        left: -111px;
+        margin:-5px 0px -60px;
+        padding:10px;
+        position:relative;
+}
+
+#chat {
+        width: 978px;
+        height: 500px;
+        top:-15px;
+        left: -101px;
+        margin:-5px 0px -30px;
+        position:relative;
+}
+
+#forum_iframe {
+	top:-220px; 
+	left: -100px;
+        margin:-5px -0px -242px; 
+        padding:-10px;
+        position:relative;
+}

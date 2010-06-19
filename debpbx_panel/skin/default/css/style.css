@@ -1,0 +1,180 @@
+/*********************************************************************************
+ * $ID: style.css
+ *
+ * DebPBX Panel Control v0.1
+ *
+ * DebPBX is a platform of free software (under GPL license) based on Asterisk that
+ * provides functionality of a telephone exchange (PBX).
+ * Like any PBX, you can connect a number of phones to make calls to each other
+ * and even connect to a VoIP provider or to an ISDN (ISDN) basic and primary.
+ *
+ * @author Federico Pereira
+ * @copyright  Copyright (c) 2008-2010 OpenTecnologic & DebPBX
+ * @content-type: text/plain; charset=UTF-8
+ * @license    http://www.gnu.org/licenses/gpl-2.0.html
+ ********************************************************************************/
+
+@charset "utf-8";
+
+body {
+	background-image: url(../bg.png);
+	background-repeat: repeat-x;
+        margin:0;
+        padding:0;
+}
+
+#header {
+        margin-left:auto;
+        margin-right:auto;
+        height: 85px;
+	width: 997px;
+}
+
+
+#logo {
+        top: 5px;
+        margin:-5px auto;
+        padding:10px;
+        position:relative;
+
+}
+
+
+#box {
+	margin-left:auto;
+	margin-right:auto;
+	width:  997px;
+	height: 100%;
+}
+
+#upper_left {
+	background-image:url(../upper_left.png);
+	background-repeat:no-repeat;
+	float:left;
+	width:9px;
+	height:33px;
+}
+
+#upper_top {
+	background-image:url(../top.png);
+	width:100%;
+	height:33px;
+}
+
+#upper_right {
+	background-image:url(../upper_right.png);
+	background-repeat:no-repeat;
+	float:right;
+	width:9px;
+	height:33px;
+}
+
+#lower_left {
+	background-image:url(../lower_left.png);
+	background-repeat:no-repeat;
+	float:left;
+	width:9px;
+	height:10px;
+}
+
+#lower_bot {
+	background-image:url(../bot.png);
+	width:100%;
+	height:10px;
+}
+
+#lower_right {
+	background-image:url(../lower_right.png);
+	background-repeat:no-repeat;
+	float:right;
+	width:9px;
+	height:10px;
+}
+
+#container {
+	background-image: url(../container.png);
+        background-repeat: repeat-y;
+        background-position: center top;
+        padding: 20px 110px;
+        height: 100%;
+        width: auto;
+        overflow: hidden;
+}
+
+#container_left {
+        background-image: url(../container_left.png);
+        background-repeat: repeat-y;
+        background-position: center top;
+        padding: 20px 110px;
+        height: 100%;
+        width: auto;
+        overflow: hidden;
+}
+
+#container_right {
+        background-image: url(../container_right.png);
+        background-repeat: repeat-y;
+        background-position: center top;
+        padding: 20px 110px;
+        height: 100%;
+        width: auto;
+        overflow: hidden;
+}
+
+#mbox {
+	height: 280px;
+        width: 281px;
+        top: 0px; left: -101px;
+        position:relative; 
+}
+
+#mbox_top {
+        background-image: url(../mbox_top.png);
+	margin-top: -30px;	
+	margin-left:auto;
+        margin-right:auto;        
+	height: 32px;
+        width: 272px;
+}
+
+#mbox_container {
+        background-image: url(../mbox_container.png);
+	margin-top: -13px; 
+        margin-left:auto;
+        margin-right:auto;
+        height: 100%;
+        width: 272px;
+}
+#mbox_bot {
+        background-image: url(../mbox_bot.png);
+        margin-left:auto;
+        margin-right:auto;
+        height: 3px;
+        width: 272px;
+}
+
+#footer {
+        margin-left:auto;
+        margin-right:auto;
+        height: 100%;
+        width: 997px;
+        position:relative; 
+	top:0px; left: 7px;
+}
+
+#audioplayer {
+	position:relative;
+	padding: 10px 10px;
+}
+
+
+#opentecnologic {
+}
+
+#smoothgallery {
+        top:-284px;
+        left: 175px;
+	margin:-5px 0px -250px;
+ 	padding:10px;
+        position:relative;
+}
