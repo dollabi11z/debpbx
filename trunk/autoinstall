@@ -1118,6 +1118,14 @@ cp /var/www/pub/debpbx/script/debpbx-chanskype /usr/local/sbin/debpbx-chanskype
 cp /var/www/pub/debpbx/script/debpbx-password /usr/local/sbin/debpbx-password
 cp /var/www/pub/debpbx/script/debpbx-update /usr/local/sbin/debpbx-update
 
+chmod +x /usr/local/sbin/debpbx-help
+chmod +x /usr/local/sbin/debpbx-pstn
+chmod +x /usr/local/sbin/debpbx-a2billing
+chmod +x /usr/local/sbin/debpbx-siptosis
+chmod +x /usr/local/sbin/debpbx-chanskype
+chmod +x /usr/local/sbin/debpbx-password
+chmod +x /usr/local/sbin/debpbx-update
+
 echo "+----------------------------------------------------------------+"
 echo "| RECONFIGURATION OPEN-SSH-SERVER                                |"
 echo "+----------------------------------------------------------------+"
