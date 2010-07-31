@@ -1,0 +1,68 @@
+#!/bin/bash             
+#                       
+# isocreate - 31/07/2010 
+#                       
+# DebPBX-1.3.0        
+# Author: Federico Pereira <info@opentecnologic.com> & <fpereira@debpbx.org>
+# Copyright 2008 Federico Pereira (LordBaseX)       
+# This script is licensed under GNU GPL version 2.0 
+#                                                   
+   
+rm -fr /mnt/cd/isolinux/
+cp -R /mnt/cd/debpbx/pub/debpbx/isolinux.amd/ /mnt/cd/isolinux
+cd /mnt/cd/install.amd
+mkdir auto advance normal test
+
+
+#preseed auto
+mkdir /mnt/irmod1
+cd /mnt/irmod1
+gzip -d < ../cd/install.amd/initrd.gz | cpio --extract --verbose --make-directories --no-absolute-filenames
+cp /mnt/cd/debpbx/pub/debpbx/preseed.cfg /mnt/irmod1/preseed.cfg
+find . | cpio -H newc --create --verbose |  gzip -9 > ../cd/install.amd/auto/initrd.gz
+cd ../
+rm -fr irmod1/
+
+#preseed advance
+mkdir /mnt/irmod2
+cd /mnt/irmod2
+gzip -d < ../cd/install.amd/initrd.gz | cpio --extract --verbose --make-directories --no-absolute-filenames
+cp /mnt/cd/debpbx/pub/debpbx/preseed-adv.cfg /mnt/irmod2/preseed.cfg
+find . | cpio -H newc --create --verbose |  gzip -9 > ../cd/install.amd/advance/initrd.gz
+cd ../
+rm -fr irmod2/
+
+#preseed nornal
+mkdir /mnt/irmod3
+cd /mnt/irmod3
+gzip -d < ../cd/install.amd/initrd.gz | cpio --extract --verbose --make-directories --no-absolute-filenames
+cp /mnt/cd/debpbx/pub/debpbx/preseed-normal.cfg /mnt/irmod3/preseed.cfg
+find . | cpio -H newc --create --verbose |  gzip -9 > ../cd/install.amd/normal/initrd.gz
+cd ../
+rm -fr irmod3/
+
+#preseed test
+mkdir /mnt/irmod4
+cd /mnt/irmod4
+gzip -d < ../cd/install.amd/initrd.gz | cpio --extract --verbose --make-directories --no-absolute-filenames
+cp /mnt/cd/debpbx/pub/debpbx/preseed-test.cfg /mnt/irmod4/preseed.cfg
+find . | cpio -H newc --create --verbose |  gzip -9 > ../cd/install.amd/test/initrd.gz
+cd ../
+rm -fr irmod4/
+
+cd /mnt/cd
+md5sum `find -follow -type f` > md5sum.txt
+cd /mnt
+mkisofs -o debpbx-13-amd64-netinst.iso -r -J -no-emul-boot -boot-load-size 4 -boot-info-table -b isolinux/isolinux.bin -c isolinux/boot.cat ./cd
+
+echo ""
+echo "Felicitaciones el ISO se a creado con éxito"
+echo "/mnt/debpbx-13-amd64-netinst.iso"
+echo ""
+
+echo "+----------------------------------------------------------------+"
+echo "| Done, enjoy                                                    |"
+echo "+----------------------------------------------------------------+"
+exit 0
+
+
