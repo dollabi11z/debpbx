@@ -1,136 +1,265 @@
 #!/bin/bash             
 #                       
-# autoinstall - 2/10/09 
+# autoinstall - 31/07/2010 
 #                       
-# DebPBX-1.2.10         
-# Author: Federico Pereira <info@opentecnologic.com>
+# DebPBX-1.3.0        
+# Author: Federico Pereira <info@opentecnologic.com> & <fpereira@debpbx.org>
 # Copyright 2008 Federico Pereira (LordBaseX)       
 # This script is licensed under GNU GPL version 2.0 
 #                                                   
 #                                                   
-VER_VERSION=99991
-VER_ASTERISK=99992
-VER_ADDONS=99993
-VER_DAHDI_LINUX=99994
-VER_DAHDI_TOOLS=99995
-VER_LIBPRI=99996
+############################### START VARIABLES #######################################
+#
+clear
+cat /var/www/pub/debpbx/debpbx
+echo "Author: Federico Pereira <fpereira@opentecnologic.com>"
+echo "Copyright 2009 - Federico Pereira (LordBasex)"
+echo "This Distro is licensed under GNU/GPL version 2.0"
+echo "Web Site: www.debpbx.org"
+echo ""
+echo ""
+sleep 8;
 
-VER_FREEPBX=99997
-VER_A2BILLING=99998
-VER_VTIGERCRM=99999
-VER_AVANTFAX=11111
+#VER_VERSION=99991
+#VER_ASTERISK=99992
+#VER_ADDONS=99993
+#VER_DAHDI_COMPLETE=99994
+#VER_LIBPRI=99995
+#VER_FREEPBX=99996
+#VER_A2BILLING=99997
+#VER_VTIGERCRM=99998
+#VER_AVANTFAX=99999
+
+#VARIABLES
+VER_VERSION="1.3";                                                                                                                                                               
+VER_ASTERISK="1.4.29";                                                                                                                                                              
+VER_ADDONS="1.4.10";                                                                                                                                                                                                                                                                                                                                                    
+VER_DAHDI_COMPLETE="2.2.1.1+2.2.1.1"
+VER_LIBPRI="1.4.10.2";                                                                                                                                                              
+VER_FREEPBX="2.7.0";                                                                                                                                                                
+VER_SPANDSP="0.0.6pre12";
+VER_AVANTFAX="3.1.6";
+VER_VTIGERCRM="5.1.0";  
+VER_A2BILLING="1.7.0"; 
+                                                                                                                                                            
+#DATA_BASE
+ASTERISK_DB="asterisk_db";
+AVANTFAX_DB="avantfax_db";
+VTIGERCRM_DB="vtigercrm_db";
+A2BILLING_DB="a2billing_db";
+
+#USER_DATA
+ASTERISK_USER="asterisk_us";
+AVANTFAX_USER="avantfax_us";
+VTIGERCRM_USER="vtigercrm_us";
+A2BILLING_USER="a2billing_us";
+
+#MANAGER
+AMPMGR_USER="admin_mgr";
+A2BILLING_MGR="a2billing_mgr";
+
+#HOST
+HOSTS="pbx";
+HOSTNAME="debpbx.org";
+HOST_AND_HOSTNAME="${HOSTS}.${HOSTNAME}";
+
+#MAIL
+MAIL="info@debpbx.org";
+
+#PORT
+SSHPORT="22";
+#SSH KEY EXAMPLE
+SSHKEY="ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAtg4dxW75wCIKQapIavrbd8//KxXVq4TorWTkKjdpt+tA0aykaTw8hXxWrm1rHQ1jS7h5/5cqe/hT7qg59CvQVU/XyaANd2cuh2wgWyX/qp7q+nY+KaWdZob0t0RceASY+HQ3w6C1DYismFUfSBEBKvYrzRZlaZDM5VFqf641kLy36R7D7kUrAt1AqjbYVO3oK5k7AHaHJ0PSOnpr9neHZiiV4g1ENpBCcsbzLvWMH7a7lNqGh5zuQ3zOX02tONc4W4Xv7d+HASAnX6u2gXeAby70czs5ubHaCj6Nv+wGvTeU1YUT5w7dSRsQWbyEKzDzuHUFnxHtXx7beTfSupeVFw== federico@atila";
+
+#USERS_DEFOUT_WU
+ARI_ADMIN_USERNAME="debpbx";
+FREEPBX_USER_WU="admin";
+AVANTFAX_USER_WU="admin";
+VTIGERCRM_USER_WU="admin";
 
 export DEBIAN_FRONTEND="noninteractive";
 
+#AUTO_DETECT_KERNEL
 KERNEL_VERSION=`uname -r`
 KERNEL_VERSION=`echo ${KERNEL_VERSION} | sed -e "s/\-\(.*\)//"`
 KERNEL_UP_VERSION=`echo ${KERNEL_VERSION} | sed -e "s/\(2\.[4,6]\)\(.*\)/\1/"`
 
+#IP_ADRESS
+IP_ADRESS=`ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
+
+#VERSION
+echo "${VER_VERSION}" > /etc/debpbx_version
+
+#RANDOMLY_GENERATED_PASSWORDS
 MYSQL_ROOT_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20`
 ASTERISK_DB_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20`
 ASTERISK_MGR_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20` 
+FREEPBX_ADMIN_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20`
+FREEPBX_ADMIN_PW_SHA1=`echo -n "${FREEPBX_ADMIN_PW}" | sha1sum | awk '{ print $1 }'`
 ARI_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20` 
 FOP_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20`
+AVANTFAX_DB_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20`
+AVANTFAX_IAX_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20`
+AVANTFAX_ADMIN_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 8`
+AVANTFAX_ADMIN_PW_MD5=`echo -n "${AVANTFAX_ADMIN_PW}" | md5sum | awk '{ print $1 }'`
+VTIGERCRM_DB_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20`
+VTIGERCRM_MGR_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20`
+VTIGERCRM_GENKEY=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 32`
+
+
 A2BILLING_DB_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20`
+A2BILLING_MGR_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20`
+############################### END VARIABLES #######################################
 
-IP_ADRESS=`ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
-
-HOSTS="srv1"
-HOSTNAME="debpbx.org"
-HOST_AND_HOSTNAME="${HOSTS}.${HOSTNAME}"
-
-echo "#Asegúrese de mantener estos en un lugar seguro!" > /root/passwords
-echo "MySQL root password : $MYSQL_ROOT_PW" >> /root/passwords
-echo "Asterisk database password : $ASTERISK_DB_PW" >> /root/passwords
-echo "Asterisk manager portal password : $ASTERISK_MGR_PW" >> /root/passwords
-echo "Flash Operator Panel : ${FOP_PW}" >> /root/passwords
-echo "ARI password : ${ARI_PW}" >> /root/passwords
-echo "A2billing : ${A2BILLING_DB_PW}" >> /root/passwords
-echo "Contraseñas generadas al azar ..."
-
+#INSTALATION LOG
+LOG=/var/log/dp-install
+#
+echo -e "#\n# autoinstall - 10/04/2010\n#\n# DebPBX-$VER_VERSION\n# Author: Federico Pereira <info@opentecnologic.com> & <fpereira@debpbx.org>\n# Copyright 2008 Federico Pereira (LordBaseX)\n# This script is licensed under GNU GPL version 2.0\n#\n#" >> $LOG
+echo "# VARIABLES" >> $LOG 
+echo "# DebPBX VERSION: ${VER_VERSION}"  >> $LOG
+echo "# ASTERISK VERSION: ${VER_ASTERISK}" >> $LOG 
+echo "# ASTERISK ADDONS VERSION: ${VER_ADDONS}" >> $LOG
+echo "# DAHDI_COMPLETE VERSION: ${VER_DAHDI_COMPLETE}" >> $LOG
+echo "# LIBPRI VERSION: ${VER_LIBPRI}" >> $LOG
+echo "# FREEPBX VERSION: ${VER_FREEPBX}" >> $LOG
+echo "# SPANDSP VERSION: ${VER_SPANDSP}" >> $LOG
+echo "# AVANTFAX VERSION: ${VER_AVANTFAX}" >> $LOG
+echo "# VTIGERCRM VERSION: ${VER_VTIGERCRM}" >> $LOG
+echo "# A2BILLING VERSION: ${VER_A2BILLING}" >> $LOG
+echo "" >> $LOG
+echo "# PBX HOSTNAME" >> $LOG
+echo "# HOSTNAME: ${HOST_AND_HOSTNAME}" >> $LOG
+echo "" >> $LOG
+echo "# SSH PORT" >> $LOG
+echo "# PORT: ${SSHPORT}" >> $LOG
+echo "" >> $LOG
+echo "# INTERFACE ETHERNET" >> $LOG
+for INTERFACES in `/sbin/ifconfig | grep -i "eth" |  cut -c1-4` ;
+do
+    CON=$(($CON+1))
+    ARRAY_IP_ADRESS[$CON]=`ifconfig $INTERFACES | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
+    echo "# $INTERFACES: ${ARRAY_IP_ADRESS[$CON]}" >> $LOG
+done
+echo "" >> $LOG
+echo "# KERNEL" >> $LOG
+echo "# KERNEL: `uname -r`" >> $LOG
+echo "" >> $LOG
+echo "# CREATING PASSWORKS FILE WITH THE SYSTEM... FILE=/root/passwords" >> $LOG
+echo "# RANDOMLY GENERATED PASSWORDS" > /root/passwords 
+echo "" >> /root/passwords | tail -n 1 /root/passwords >> $LOG
+echo "# MYSQL ROOT PASSWORD" >> /root/passwords
+echo "MYSQL_ROOT_PW=\"${MYSQL_ROOT_PW}\";" >> /root/passwords 
+echo "" >> /root/passwords
+echo "# ASTERISK" >> /root/passwords
+echo "ASTERISK_USER=\"${ASTERISK_USER}\";" >> /root/passwords
+echo "ASTERISK_DB=\"${ASTERISK_DB}\";" >> /root/passwords
+echo "ASTERISK_DB_PW=\"${ASTERISK_DB_PW}\";" >> /root/passwords 
+echo "" >> /root/passwords
+echo "# ASTERISK MANAGER INTERFACE (AMI)" >> /root/passwords
+echo "AMPMGR_USER=\"${AMPMGR_USER}\";" >> /root/passwords
+echo "ASTERISK_MGR_PW=\"${ASTERISK_MGR_PW}\";" >> /root/passwords 
+echo "" >> /root/passwords
+echo "# FLASH OPERATOR PANEL" >> /root/passwords
+echo "FOP_PW=\"${FOP_PW}\";" >> /root/passwords 
+echo "" >> /root/passwords
+echo "# ARI" >> /root/passwords
+echo "ARI_ADMIN_USERNAME=\"${ARI_ADMIN_USERNAME}\";" >> /root/passwords
+echo "ARI_ADMIN_PASSWORD=\"${ARI_PW}\";" >> /root/passwords
+echo "" >> /root/passwords
+echo "# FREEPBX" >> /root/passwords
+echo "FREEPBX_USER_WU=\"${FREEPBX_USER_WU}\";" >> /root/passwords
+echo "FREEPBX_ADMIN_PW=\"${FREEPBX_ADMIN_PW}\";" >> /root/passwords
+echo "FREEPBX_ADMIN_PW_SHA1=\"${FREEPBX_ADMIN_PW_SHA1}\";" >> /root/passwords
+echo "" >> /root/passwords
+echo "# AVANTFAX" >> /root/passwords
+echo "AVANTFAX_USER=\"${AVANTFAX_USER}\";" >> /root/passwords
+echo "AVANTFAX_DB=\"${AVANTFAX_DB}\";" >> /root/passwords
+echo "AVANTFAX_DB_PW=\"${AVANTFAX_DB_PW}\";" >> /root/passwords
+echo "AVANTFAX_IAX_PW=\"${AVANTFAX_IAX_PW}\";" >> /root/passwords
+echo "AVANTFAX_USER_WU=\"${AVANTFAX_USER_WU}\";" >> /root/passwords
+echo "AVANTFAX_ADMIN_PW=\"${AVANTFAX_ADMIN_PW}\";" >> /root/passwords
+echo "AVANTFAX_ADMIN_PW_MD5=\"${AVANTFAX_ADMIN_PW_MD5}\";" >> /root/passwords
+echo "" >> /root/passwords
+echo "# VTIGERCRM" >> /root/passwords
+echo "VTIGERCRM_USER=\"${VTIGERCRM_USER}\";" >> /root/passwords
+echo "VTIGERCRM_DB=\"${VTIGERCRM_DB}\";" >> /root/passwords
+echo "VTIGERCRM_DB_PW=\"${VTIGERCRM_DB_PW}\";" >> /root/passwords
+echo "VTIGERCRM_MGR_PW=\"${VTIGERCRM_MGR_PW}\";" >> /root/passwords
+echo "VTIGERCRM_GENKEY=\"${VTIGERCRM_GENKEY}\";" >> /root/passwords
+echo "" >> /root/passwords
+echo "# A2BILLING" >> /root/passwords
+echo "A2BILLING_USER=\"${A2BILLING_USER}\";" >> /root/passwords
+echo "A2BILLING_DB=\"${A2BILLING_DB}\";" >> /root/passwords
+echo "A2BILLING_DB_PW=\"${A2BILLING_DB_PW}\";" >> /root/passwords 
+echo "" >> $LOG
 clear
-echo "##################################################################"
-echo "# PARTE 1 - Preparando instalación                               #"
-echo "##################################################################"
+echo "##################################################################" 
+echo "# PARTE 1 - PREPARING INSTALLATION                               #" 
+echo "##################################################################" 
 
 rm /etc/apt/sources.list
 touch /etc/apt/sources.list
 
 echo "
-deb file:///usr/local/debpbx/ sarge main non-free
-" >> /etc/apt/sources.list                       
-cd /                                             
-tar -xpf /var/www/pub/tools/repositorio.tar.gz   
-apt-key add /var/www/pub/debpbx/debpbx_key_pub.gpg 
+deb http://ftp.us.debian.org/debian/ lenny main non-free contrib
+deb-src http://ftp.us.debian.org/debian/ lenny main non-free contrib
+
+deb http://security.debian.org/ lenny/updates main contrib non-free
+deb-src http://security.debian.org/ lenny/updates main contrib non-free
+
+deb http://volatile.debian.org/debian-volatile lenny/volatile main contrib non-free
+deb-src http://volatile.debian.org/debian-volatile lenny/volatile main contrib non-free
+
+deb http://oktan.ls.fi.upm.es/debian-multimedia/ stable main
+deb-src http://oktan.ls.fi.upm.es/debian-multimedia/ stable main
+" >> /etc/apt/sources.list             
+
+wget http://oktan.ls.fi.upm.es/debian-multimedia/pool/main/d/debian-multimedia-keyring/debian-multimedia-keyring_2008.10.16_all.deb -O  /var/cache/apt/archives/debian-multimedia-keyring_2008.10.16_all.deb    
+
+dpkg -i /var/cache/apt/archives/debian-multimedia-keyring_2008.10.16_all.deb 
 
 aptitude update
-aptitude -y install grub2 startupmanager grub2-splashimages desktop-base
-upgrade-from-grub-legacy                                                
-update-grub                                                             
-#cp /var/www/pub/debpbx/debpbx.tga /boot/grub/debpbx.tga                
-#cp /boot/grub/debpbx.tga /usr/share/images/grub                        
-#cp /boot/grub/debpbx.tga /usr/share/images/desktop-base/               
-sed -i s/moreblue-orbit-grub/debpbx/g /etc/grub.d/05_debian_theme      
-sed -i "s/\(color_normal*= *\)\(.*\)/\1white\/black/" /etc/grub.d/05_debian_theme
-sed -i "s/\(color_highlight*= *\)\(.*\)/\1black\/white/" /etc/grub.d/05_debian_theme
-sed -i s/OS=\"${GRUB_DISTRIBUTOR}/OS=\"DebPBX\ debpbx-${VER_VERSION}\ -\ ${GRUB_DISTRIBUTOR}/g /etc/grub.d/10_linux
-update-grub                                                                                                        
-cp /var/www/pub/debpbx/.bash_login /root/.bash_login                                                                
-cp /var/www/pub/debpbx/dpsecurity /usr/local/sbin/dpsecurity                                                        
-chmod +x /usr/local/sbin/dpsecurity                                                                                 
-cp /var/www/pub/debpbx/debpbx /etc/debpbx                                                                           
-echo "Banner /etc/debpbx" >> /etc/ssh/sshd_config                                                                   
-cp /var/www/pub/debpbx/.bashrc /root/.bashrc                                                                        
+aptitude -y safe-upgrade
 
 aptitude update
-aptitude -y install linux-source-$KERNEL_VERSION kernel-package g++ libncurses5-dev linux-libc-dev sqlite libnewt-dev libusb-dev zlib1g-dev libmysqlclient15-dev libsqlite0-dev loco mc unzip zip iptraf nmap screen subversion libqt4-core libqt4-gui ntpdate tcpdump libiksemel-dev libtiff4-dev cmake libxml2-dev bison libaudiofile-dev                   
+aptitude -y install dpkg-dev grub2 startupmanager grub2-splashimages desktop-base 
+upgrade-from-grub-legacy                                              
+update-grub                                                            
+                                                                     
+aptitude -y install linux-source-$KERNEL_VERSION kernel-package g++ libncurses5-dev linux-libc-dev sqlite libnewt-dev libusb-dev zlib1g-dev libmysqlclient15-dev libsqlite0-dev loco mc unzip zip iptraf nmap screen subversion libqt4-core libqt4-gui ntpdate tcpdump libiksemel-dev libtiff4-dev libxml2-dev bison libaudiofile-dev                 
 
-aptitude update
-aptitude install -y linux-headers-`uname -r` build-essential hylafax-server iaxmodem bind9 postfix ghostscript netpbm libungif4-dev sudo cups expect libmagic-dev
+aptitude install -y linux-headers-`uname -r` build-essential hylafax-server iaxmodem bind9 postfix ghostscript netpbm libungif4-dev sudo cups expect libmagic-dev cmake
 
-aptitude update
-aptitude install -y apache2 php5 php5-common php5-cli mysql-server-5.0 php-pear php5-mysql php-db libapache2-mod-php5 php5-gd php5-curl libapache2-mod-perl2 php5-dev php5-ldap php5-mhash php5-odbc php5-mcrypt curl libwww-perl php5-imap python-setuptools python-mysqldb python-sqlalchemy python-psycopg2 imagemagick phpmyadmin                                   
+aptitude install -y apache2 php5 php5-common php5-cli mysql-server-5.0 php-pear php5-mysql php-db libapache2-mod-php5 php5-gd php5-curl libapache2-mod-perl2 php5-dev php5-ldap php5-mhash php5-odbc php5-mcrypt curl libwww-perl php5-imap python-setuptools python-mysqldb python-sqlalchemy python-psycopg2 imagemagick phpmyadmin mpg123 sox lame libmad0 libmad0-dev munin munin-node  
 
-echo "+----------------------------------------------------------------+"
-echo "| Descargando sources kernel                                     |"
-echo "+----------------------------------------------------------------+"
+aptitude install -y apache2-mpm-prefork apache2-utils apache2.2-common libapr1 libaprutil1 libsqlite3-0 libnetpbm10-dev libungif-bin php-mail php-mail-mime php-file psutils wdiff rsync atftpd                             
 
-cd /usr/src/
+echo ""
+echo "# DECOMPRESSING SOURCES KERNEL..."
+cd /usr/src/ 
 tar xjf linux-source-${KERNEL_VERSION}.tar.bz2
-ln -s /usr/src/linux-source-${KERNEL_VERSION} /usr/src/linux
+ln -s /usr/src/linux-source-${KERNEL_VERSION} /usr/src/linux 
 ln -s /lib/modules/${KERNEL_VERSION}/ /lib/modules/`uname -r`/asterisk
 
-
-echo "+----------------------------------------------------------------+"
-echo "| Reconfiguración locale                                         |"
-echo "+----------------------------------------------------------------+"
-
+echo ""
+echo "RECONFIGURATION LOCALE"
 sed -i "s/# es_AR.UTF-8 UTF-8/es_AR.UTF-8 UTF-8/g" "/etc/locale.gen"
 sed -i "s/# es_AR ISO-8859-1/es_AR ISO-8859-1/g" "/etc/locale.gen"  
-
 sed -i "s/# es_ES ISO-8859-1/es_ES ISO-8859-1/g" "/etc/locale.gen"
 sed -i "s/# es_ES.UTF-8 UTF-8/es_ES.UTF-8 UTF-8/g" "/etc/locale.gen"
 sed -i "s/# es_ES@euro ISO-8859-15/es_ES@euro ISO-8859-15/g" "/etc/locale.gen"
-
 sed -i "s/# en_US ISO-8859-1/en_US ISO-8859-1/g" "/etc/locale.gen"
 sed -i "s/# en_US.ISO-8859-15 ISO-8859-15/en_US.ISO-8859-15 ISO-8859-15/g" "/etc/locale.gen"
 sed -i "s/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g" "/etc/locale.gen"                        
-
-#default Locale = es_ES@euro
 sed -i "s/\(^\LANG=\)\(.*\)/\1es_AR.UTF-8 UTF-8/" /etc/default/locale
-dpkg-reconfigure -f noninteractive locales                    
+dpkg-reconfigure -f noninteractive locales                 
 
-echo "+----------------------------------------------------------------+"
-echo "| Reconfiguración mysql                                          |"
-echo "+----------------------------------------------------------------+"
-
+echo ""
+echo "RECONFIGURATION MYSQL"
 echo "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('${MYSQL_ROOT_PW}');" | mysql -u root
-                                                  
 
-echo "+----------------------------------------------------------------+"
-echo "| Reconfiguración hosts                                          |"
-echo "+----------------------------------------------------------------+"
-
+echo ""
+echo "RECONFIGURATION HOSTS"
 rm /etc/hosts
 echo "
 127.0.0.1 localhost.localdomain localhost
@@ -143,250 +272,259 @@ ff00::0 ip6-mcastprefix
 ff02::1 ip6-allnodes                                      
 ff02::2 ip6-allrouters                                    
 ff02::3 ip6-allhosts                                      
-
-127.0.0.1 downloads.asterisk.org
-127.0.0.1 downloads.digium.com  
 " >> /etc/hosts                 
 
-echo srv1.debpbx.org > /etc/hostname
+echo ${HOST_AND_HOSTNAME} > /etc/hostname
 /etc/init.d/hostname.sh start       
 
-echo "+----------------------------------------------------------------+"
-echo "| Reconfiguración postfix                                        |"
-echo "+----------------------------------------------------------------+"
+echo ""
+echo "RECONFIGURATION ALIASES"
+echo "root: $MAIL" >> /etc/aliases
+/usr/bin/newaliases
 
-postconf -e 'myhostname = ${HOST_AND_HOSTNAME}'
-postconf -e 'mydestination = ${HOST_AND_HOSTNAME}, localhost.${HOSTNAME}, localhost.localdomain, localhost'
-postconf -e 'inet_protocols = all'                                                                   
-postconf -e 'mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128'                              
-echo ${HOST_AND_HOSTNAME} > /etc/mailname                                                                 
-/etc/init.d/postfix restart                                                                          
+echo ""
+echo "RECONFIGURATION POASTERISK_DBSTFIX"
+postconf -e "myhostname = ${HOST_AND_HOSTNAME}" 
+postconf -e "mydestination = ${HOST_AND_HOSTNAME}, localhost.${HOSTNAME}, localhost.localdomain, localhost"
+postconf -e "inet_protocols = all"                                                                   
+postconf -e "mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128"                              
+echo ${HOST_AND_HOSTNAME} > /etc/mailname                                                               
+/etc/init.d/postfix restart                                                                
 
-echo "+----------------------------------------------------------------+"
-echo "| Reconfiguración bind9                                          |"
-echo "+----------------------------------------------------------------+"
+echo "RECONFIGURATION BIND9"
+echo ""
+#/etc/init.d/bind9 stop
+#sed -i "s/\(^\OPTIONS=\)\(.*\)/\1\"-u bind -t \/var\/lib\/named\"/" /etc/default/bind9
+#mkdir -p /var/lib/named/etc                                                           
+#mkdir /var/lib/named/dev                                                              
+#mkdir -p /var/lib/named/var/cache/bind                                                
+#mkdir -p /var/lib/named/var/run/bind/run                                              
+#mv /etc/bind /var/lib/named/etc                                                       
+#ln -s /var/lib/named/etc/bind /etc/bind                                               
+#mknod /var/lib/named/dev/null c 1 3                                                   
+#mknod /var/lib/named/dev/random c 1 8                                                 
+#chmod 666 /var/lib/named/dev/null /var/lib/named/dev/random                           
+#chown -R bind:bind /var/lib/named/var/*                                               
+#chown -R bind:bind /var/lib/named/etc/bind                                            
 
-/etc/init.d/bind9 stop
-sed -i "s/\(^\OPTIONS=\)\(.*\)/\1\"-u bind -t \/var\/lib\/named\"/" /etc/default/bind9
-mkdir -p /var/lib/named/etc                                                           
-mkdir /var/lib/named/dev                                                              
-mkdir -p /var/lib/named/var/cache/bind                                                
-mkdir -p /var/lib/named/var/run/bind/run                                              
-mv /etc/bind /var/lib/named/etc                                                       
-ln -s /var/lib/named/etc/bind /etc/bind                                               
-mknod /var/lib/named/dev/null c 1 3                                                   
-mknod /var/lib/named/dev/random c 1 8                                                 
-chmod 666 /var/lib/named/dev/null /var/lib/named/dev/random                           
-chown -R bind:bind /var/lib/named/var/*                                               
-chown -R bind:bind /var/lib/named/etc/bind                                            
+#echo "
+#$AddUnixListenSocket /var/lib/named/dev/log
+#">> /etc/rsyslog.d/bind-chroot.conf        
 
-echo "
-$AddUnixListenSocket /var/lib/named/dev/log
-">> /etc/rsyslog.d/bind-chroot.conf        
+#sed -i "s/auth-nxdomain no/\/\/auth-nxdomain no/g" "/var/lib/named/etc/bind/named.conf.options"
+#sed -i "s/listen-on-v6/\/\/listen-on-v6/g" "/var/lib/named/etc/bind/named.conf.options"        
+#sed -i 's/listen-on-v6 { any; };/listen-on-v6 { any; };\n# linea1/' /var/lib/named/etc/bind/named.conf.options
+#sed -i 's/# linea1/# linea1\n# linea2/' /var/lib/named/etc/bind/named.conf.options                            
+#sed -i "s/# linea1/ listen-on-v6 { any; };/g" "/var/lib/named/etc/bind/named.conf.options"                    
+#sed -i "s/# linea2/ listen-on { 127.0.0.1; };/g" "/var/lib/named/etc/bind/named.conf.options"                 
 
-sed -i "s/auth-nxdomain no/\/\/auth-nxdomain no/g" "/var/lib/named/etc/bind/named.conf.options"
-sed -i "s/listen-on-v6/\/\/listen-on-v6/g" "/var/lib/named/etc/bind/named.conf.options"        
-sed -i 's/listen-on-v6 { any; };/listen-on-v6 { any; };\n# linea1/' /var/lib/named/etc/bind/named.conf.options
-sed -i 's/# linea1/# linea1\n# linea2/' /var/lib/named/etc/bind/named.conf.options                            
-sed -i "s/# linea1/ listen-on-v6 { any; };/g" "/var/lib/named/etc/bind/named.conf.options"                    
-sed -i "s/# linea2/ listen-on { 127.0.0.1; };/g" "/var/lib/named/etc/bind/named.conf.options"                 
+#rm /etc/resolv.conf
+#touch /etc/resolv.conf
+#echo nameserver 127.0.0.1 > /etc/resolv.conf
+#/etc/init.d/bind9 start                     
 
-rm /etc/resolv.conf
-touch /etc/resolv.conf
-echo nameserver 127.0.0.1 > /etc/resolv.conf
-/etc/init.d/bind9 start                     
+#sed -i "s/#prepend domain-name-servers 127.0.0.1;/prepend domain-name-servers 127.0.0.1;/g" "/etc/dhcp3/dhclient.conf"
+#sed -i "s/domain-name-servers,//g" "/etc/dhcp3/dhclient.conf"                                                         
 
-sed -i "s/#prepend domain-name-servers 127.0.0.1;/prepend domain-name-servers 127.0.0.1;/g" "/etc/dhcp3/dhclient.conf"
-sed -i "s/domain-name-servers,//g" "/etc/dhcp3/dhclient.conf"                                                         
-
-
-clear
-echo "##################################################################"
-echo "# PARTE 1 - Instalando Asterisk                                  #"
-echo "##################################################################"
-
-echo "+----------------------------------------------------------------+"
-echo "| Descomprimiendo archivos temporales /usr/src/                  |"
-echo "+----------------------------------------------------------------+"
-
+echo ""
+echo "EXTRACTING TEMPORARY FILES..."
 cd /usr/src/
+tar zxf /var/www/pub/tools/cmake-2.6.4.tar.gz
 tar zxf /var/www/pub/telephony/asterisk/asterisk-${VER_ASTERISK}.tar.gz
 tar zxf /var/www/pub/telephony/asterisk/asterisk-addons-${VER_ADDONS}.tar.gz
 tar zxf /var/www/pub/telephony/libpri/libpri-${VER_LIBPRI}.tar.gz           
-tar zxf /var/www/pub/telephony/dahdi-linux/dahdi-linux-${VER_DAHDI_LINUX}.tar.gz
-tar zxf /var/www/pub/telephony/dahdi-tools/dahdi-tools-${VER_DAHDI_TOOLS}.tar.gz
+tar zxf /var/www/pub/telephony/dahdi-linux-complete/dahdi-linux-complete-${VER_DAHDI_COMPLETE}.tar.gz
 tar zxf /var/www/pub/tools/freepbx-${VER_FREEPBX}.tar.gz                        
+tar zxf /var/www/pub/tools/spandsp-${VER_SPANDSP}.tgz
 tar zxf /var/www/pub/tools/avantfax-${VER_AVANTFAX}.tgz                         
 
-echo "+----------------------------------------------------------------+"
-echo "| Compilando Dahdi-Linux                                         |"
-echo "+----------------------------------------------------------------+"
+echo ""
+echo "##################################################################"
+echo "# PARTE 2 - ASTERISK INSTALLATION                                #"
+echo "##################################################################"
 
-cd /usr/src/dahdi-linux-${VER_DAHDI_LINUX}
-make                                      
-make install                              
+echo ""
+echo "COMPILER CMAKE"
+# download, make and install XML library for Google Talk
+apt-get -y install libgnutls-dev
+wget http://iksemel.googlecode.com/files/iksemel-1.4.tar.gz
+tar xfvz iksemel-1.4.tar.gz
+cd iksemel-1.4
+./configure
+make
+make install
+cd ..
 
-echo "+----------------------------------------------------------------+"
-echo "| Compilando Dahdi-Tools                                         |"
-echo "+----------------------------------------------------------------+"
+# download, make and install Speex codec
+apt-get -y install libogg-dev
+wget http://downloads.xiph.org/releases/speex/speex-1.2rc1.tar.gz
+tar xfvz speex-1.2rc1.tar.gz
+cd speex-1.2rc1
+./configure
+make
+make install
+cd ..
 
-cd /usr/src/dahdi-tools-${VER_DAHDI_TOOLS}
-./configure                               
-make                                      
-make install                              
-make config                               
 
-echo "+----------------------------------------------------------------+"
-echo "| Compilando libpri                                              |"
-echo "+----------------------------------------------------------------+"
+echo ""
+echo "COMPILER DAHDI-LINUX-COMPLETE"
+cd /usr/src/dahdi-linux-complete-${VER_DAHDI_COMPLETE}
+make all && make install && make config
+
+echo ""
+echo "COMPILER LIBPRI"
 cd /usr/src/libpri-${VER_LIBPRI}                                         
-make                                                                     
-make install                                                             
+make && make install
 
-echo "+----------------------------------------------------------------+"
-echo "| Compilando Asterisk linux                                      |"
-echo "+----------------------------------------------------------------+"
-
+echo ""
+echo "COMPILER ASTERISK"
 cd /usr/src/asterisk-${VER_ASTERISK}
-sed -i "s/\(chmod(template*\)\(.*\)/\/* \1\2 *\//" /usr/src/asterisk-${VER_ASTERISK}/apps/app_voicemail.c
-sed -i "s/\(chmod(newtmp*\)\(.*\)/\/* \1\2 *\//" /usr/src/asterisk-${VER_ASTERISK}/apps/app_voicemail.c  
-sed -i "s/\(chmod(tmptxtfile*\)\(.*\)/\/* \1\2 *\//" /usr/src/asterisk-${VER_ASTERISK}/apps/app_voicemail.c
-sed -i "s/\(res = ast_play_and_wait(chan, \"vm-no\");\)/res = say_and_wait(chan, 0 , chan->language);/" /usr/src/asterisk-${VER_ASTERISK}/apps/app_voicemail.c
+./configure
+make && make install && make samples 
 
-echo "MENUSELECT_DEPENDS_app_adsiprog=RES_ADSI                         
-MENUSELECT_DEPENDS_app_dahdibarge=DAHDI                                
-MENUSELECT_DEPENDS_app_dahdiras=DAHDI WORKING_FORK                     
-MENUSELECT_DEPENDS_app_dahdiscan=DAHDI                                 
-MENUSELECT_DEPENDS_app_dial=CHAN_LOCAL                                 
-MENUSELECT_DEPENDS_app_externalivr=WORKING_FORK                        
-MENUSELECT_DEPENDS_app_festival=WORKING_FORK                           
-MENUSELECT_DEPENDS_app_flash=DAHDI                                     
-MENUSELECT_DEPENDS_app_followme=CHAN_LOCAL                             
-MENUSELECT_DEPENDS_app_ices=WORKING_FORK                               
-MENUSELECT_DEPENDS_app_meetme=DAHDI                                    
-MENUSELECT_DEPENDS_app_milliwatt=RES_INDICATIONS                       
-MENUSELECT_DEPENDS_app_mp3=WORKING_FORK                                
-MENUSELECT_DEPENDS_app_nbscat=WORKING_FORK                             
-MENUSELECT_DEPENDS_app_osplookup=OSPTK SSL                             
-MENUSELECT_DEPENDS_app_page=DAHDI APP_MEETME                           
-MENUSELECT_DEPENDS_app_queue=RES_MONITOR                               
-MENUSELECT_DEPENDS_app_rpt=DAHDI TONEZONE                              
-MENUSELECT_DEPENDS_app_voicemail=RES_ADSI RES_SMDI                     
-MENUSELECT_DEPENDS_cdr_odbc=UNIXODBC LTDL                              
-MENUSELECT_DEPENDS_cdr_pgsql=PGSQL                                     
-MENUSELECT_DEPENDS_cdr_radius=RADIUS                                   
-MENUSELECT_DEPENDS_cdr_sqlite=SQLITE                                   
-MENUSELECT_DEPENDS_cdr_tds=FREETDS                                     
-MENUSELECT_DEPENDS_chan_agent=CHAN_LOCAL                               
-MENUSELECT_DEPENDS_chan_alsa=ASOUND                                    
-MENUSELECT_DEPENDS_chan_dahdi=RES_SMDI DAHDI TONEZONE RES_FEATURES PRI 
-MENUSELECT_DEPENDS_chan_gtalk=IKSEMEL RES_JABBER GNUTLS                
-MENUSELECT_DEPENDS_chan_h323=OPENH323                                  
-MENUSELECT_DEPENDS_chan_iax2=RES_FEATURES DAHDI                        
-MENUSELECT_DEPENDS_chan_mgcp=RES_FEATURES                              
-MENUSELECT_DEPENDS_chan_misdn=ISDNNET MISDN SUPPSERV                   
-MENUSELECT_DEPENDS_chan_nbs=NBS                                        
-MENUSELECT_DEPENDS_chan_oss=OSSAUDIO                                   
-MENUSELECT_DEPENDS_chan_phone=IXJUSER                                  
-MENUSELECT_DEPENDS_chan_sip=RES_FEATURES                               
-MENUSELECT_DEPENDS_chan_vpb=VPBAPI                                     
-MENUSELECT_DEPENDS_codec_dahdi=DAHDI_TRANSCODE DAHDI                   
-MENUSELECT_DEPENDS_codec_gsm=GSM                                       
-MENUSELECT_DEPENDS_codec_speex=SPEEX SPEEX_PREPROCESS SPEEXDSP         
-MENUSELECT_DEPENDS_format_ogg_vorbis=VORBIS OGG                        
-MENUSELECT_DEPENDS_func_curl=CURL                                      
-MENUSELECT_DEPENDS_func_odbc=UNIXODBC LTDL RES_ODBC                    
-MENUSELECT_DEPENDS_pbx_dundi=ZLIB                                      
-MENUSELECT_DEPENDS_pbx_gtkconsole=GTK                                  
-MENUSELECT_DEPENDS_res_agi=WORKING_FORK                                
-MENUSELECT_DEPENDS_res_config_odbc=UNIXODBC LTDL RES_ODBC              
-MENUSELECT_DEPENDS_res_config_pgsql=PGSQL                              
-MENUSELECT_DEPENDS_res_crypto=SSL                                      
-MENUSELECT_DEPENDS_res_features=CHAN_LOCAL                             
-MENUSELECT_DEPENDS_res_jabber=IKSEMEL GNUTLS                           
-MENUSELECT_DEPENDS_res_musiconhold=WORKING_FORK DAHDI                  
-MENUSELECT_DEPENDS_res_odbc=UNIXODBC LTDL                              
-MENUSELECT_DEPENDS_res_snmp=NETSNMP                                    
-MENUSELECT_DEPENDS_ODBC_STORAGE=UNIXODBC LTDL                          
-MENUSELECT_DEPENDS_IMAP_STORAGE=IMAP_TK SSL                            
-MENUSELECT_DEPENDS_apps=GNU_LD                                         
-MENUSELECT_DEPENDS_cdr=GNU_LD                                          
-MENUSELECT_DEPENDS_channels=GNU_LD
-MENUSELECT_DEPENDS_codecs=GNU_LD
-MENUSELECT_DEPENDS_formats=GNU_LD
-MENUSELECT_DEPENDS_funcs=GNU_LD
-MENUSELECT_DEPENDS_pbx=GNU_LD
-MENUSELECT_DEPENDS_res=GNU_LD
-" >> /usr/src/asterisk-${VER_ASTERISK}/menuselect.makedeps
-     
-echo "MENUSELECT_APPS=app_ivrdemo app_osplookup app_rpt app_skel
-MENUSELECT_CDR=cdr_odbc cdr_pgsql cdr_radius cdr_tds
-MENUSELECT_CHANNELS=chan_alsa chan_features chan_h323 chan_misdn chan_nbs chan_vpb
-MENUSELECT_CODECS=codec_ilbc codec_speex
-MENUSELECT_FORMATS=format_ogg_vorbis
-MENUSELECT_FUNCS=func_curl func_odbc
-MENUSELECT_PBX=pbx_gtkconsole
-MENUSELECT_RES=res_config_odbc res_config_pgsql res_odbc res_snmp
-MENUSELECT_OPTS_app_voicemail=
-MENUSELECT_CFLAGS=LOADABLE_MODULES
-MENUSELECT_EMBED=
-MENUSELECT_CORE_SOUNDS=CORE-SOUNDS-EN-ULAW CORE-SOUNDS-EN-ALAW CORE-SOUNDS-EN-G729
-MENUSELECT_MOH=MOH-OPSOUND-ULAW MOH-OPSOUND-ALAW MOH-OPSOUND-G729
-MENUSELECT_EXTRA_SOUNDS=EXTRA-SOUNDS-EN-ULAW EXTRA-SOUNDS-EN-ALAW EXTRA-SOUNDS-EN-G729
-MENUSELECT_BUILD_DEPS=res_adsi chan_local res_indications app_meetme res_monitor res_smdi res_features res_jabber
-MENUSELECT_DEPSFAILED=MENUSELECT_APPS=app_osplookup
-MENUSELECT_DEPSFAILED=MENUSELECT_CDR=cdr_odbc
-MENUSELECT_DEPSFAILED=MENUSELECT_CDR=cdr_pgsql
-MENUSELECT_DEPSFAILED=MENUSELECT_CDR=cdr_radius
-MENUSELECT_DEPSFAILED=MENUSELECT_CDR=cdr_tds
-MENUSELECT_DEPSFAILED=MENUSELECT_CHANNELS=chan_alsa
-MENUSELECT_DEPSFAILED=MENUSELECT_CHANNELS=chan_h323
-MENUSELECT_DEPSFAILED=MENUSELECT_CHANNELS=chan_misdn
-MENUSELECT_DEPSFAILED=MENUSELECT_CHANNELS=chan_nbs
-MENUSELECT_DEPSFAILED=MENUSELECT_CHANNELS=chan_vpb
-MENUSELECT_DEPSFAILED=MENUSELECT_CODECS=codec_speex
-MENUSELECT_DEPSFAILED=MENUSELECT_FORMATS=format_ogg_vorbis
-MENUSELECT_DEPSFAILED=MENUSELECT_FUNCS=func_curl
-MENUSELECT_DEPSFAILED=MENUSELECT_FUNCS=func_odbc
-MENUSELECT_DEPSFAILED=MENUSELECT_RES=res_config_odbc
-MENUSELECT_DEPSFAILED=MENUSELECT_RES=res_config_pgsql
-MENUSELECT_DEPSFAILED=MENUSELECT_RES=res_odbc
-MENUSELECT_DEPSFAILED=MENUSELECT_RES=res_snmp
-" >> /usr/src/asterisk-${VER_ASTERISK}/menuselect.makeopts
-
-./configure                                                                                                                                                   
-make                                                                                                                                                                                
-make install                                                                                                                                                                        
-make samples                                                                                                                                                                        
-
-echo "+----------------------------------------------------------------+"
-echo "| Compilando Addons Asterisk                                     |"
-echo "+----------------------------------------------------------------+"
-
+echo ""
+echo "COMPILER ASTERISK ADDONS"
 cd /usr/src/asterisk-addons-${VER_ADDONS}
 ./configure                              
-make                                     
-make install                             
-make samples                             
+make && make install && make samples                             
 
-###################################################################################################
-###################################################################################################
-###################################################################################################
+echo ""
+echo "COMPILER SPANDSP"
+cd /usr/src/spandsp-*
+./configure
+make && make install
 
+echo ""
+echo "COMPILER AGX-AST-ADDONS"
+cd /usr/src
+#BUG FIX
+#REMOVE APP_CONFCALL FROM BUILD
+echo "project (agx-ast-addons-zaptel)" >  agx-ast-addon/app-dahdi/CMakeLists.txt
+echo >> agx-ast-addon/app-dahdi/CMakeLists.txt
+cd /usr/src/agx-ast-addon
+./configure.sh
+./build.sh
+cp /usr/src/agx-ast-addon/dist/*.so /usr/lib/asterisk/modules
+chown -R root:root /usr/lib/asterisk/modules
+
+echo ""
+echo "PREPARING ASTERISK INSTALLATION"
+#CREATE USER ASTERISK & GROUP
+adduser asterisk --disabled-password --no-create-home --gecos "asterisk PBX user"
+adduser www-data asterisk
+
+#MODIFICATION ASTERISK                                                                                
+cp /etc/asterisk/asterisk.conf /etc/asterisk/asterisk.conf.orig
+sed -i "s/\(astrundir *=> *\)\(.*\)/\1\/var\/run\/asterisk/" /etc/asterisk/asterisk.conf
+sed -i "s/\[directories\](!) .*/[directories]/" /etc/asterisk/asterisk.conf
+sed -i '1 {s/\<sh\>/bash/}' /usr/sbin/safe_asterisk
+mkdir /var/run/asterisk
+chown asterisk:asterisk -R /var/run/asterisk
+chown asterisk:asterisk -R /etc/asterisk
+chown asterisk:asterisk -R /var/lib/asterisk
+chown asterisk:asterisk -R /var/log/asterisk
+chown asterisk:asterisk -R /var/spool/asterisk
+chown asterisk:asterisk -R /var/www
+chmod 770 /etc/asterisk/                
+chmod 770 /var/lib/asterisk/  
+
+echo ""
+echo "SCRIPT INITIATION ASTERISK FILE=/etc/init.d/asterisk {start|stop|restart|force-reload}"
+cat > /etc/init.d/asterisk <<-END_STARTUP
+#!/bin/bash
+### BEGIN INIT INFO
+# Provides:          asterisk
+# Required-Start:    \$network \$syslog
+# Required-Stop:     \$network \$syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Asterisk daemon.
+# Description:       This script handles start/stop states of asterisk.
+### END INIT INFO
+
+set -e
+set -a
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DESC="Asterisk"
+NAME=amportal
+DAEMON=/usr/sbin/\$NAME
+
+test -x \$DAEMON || exit 0
+
+d_start() {
+    amportal start
+}
+
+d_stop() {
+    amportal stop
+}
+
+d_reload() {
+    amportal restart
+}
+
+case "\$1" in
+
+start)
+    echo -n "Starting \$DESC: \$NAME"
+    d_start
+    echo "."
+;;
+
+stop)
+    echo -n "Stopping \$DESC: \$NAME"
+    d_stop
+    echo "."
+;;
+
+restart|force-reload)
+    echo -n "Restarting \$DESC: \$NAME"
+    d_stop
+    sleep 10
+    d_start
+    echo "."
+;;
+
+*)
+
+    echo "Usage: \$SCRIPTNAME {start|stop|restart|force-reload}" >&2
+    exit 3
+;;
+
+esac
+
+exit 0
+END_STARTUP
+
+echo ""
+echo "UPDATE SERVICES LOADING AT BOOT TIME..."
+chmod 755 /etc/init.d/asterisk
+update-rc.d asterisk defaults 90 10
+###################################################################################################
+###################################################################################################
+###################################################################################################
 clear
 echo "##################################################################"
-echo "# PARTE 2 - Instalando FreePBX                                   #"
+echo "# PARTE 2 - INSTALATION FREEPBX                                  #"
 echo "##################################################################"
 
 echo "CREATE DATABASE IF NOT EXISTS asteriskcdrdb;" | mysql -u root -p${MYSQL_ROOT_PW}
-echo "CREATE DATABASE IF NOT EXISTS asterisk;" | mysql -u root -p${MYSQL_ROOT_PW} 
-echo "GRANT ALL PRIVILEGES ON asteriskcdrdb.* TO asteriskuser@localhost IDENTIFIED BY '${ASTERISK_DB_PW}';" | mysql -u root -p${MYSQL_ROOT_PW}
-echo "GRANT ALL PRIVILEGES ON asterisk.* TO asteriskuser@localhost IDENTIFIED BY '${ASTERISK_DB_PW}';" | mysql -u root -p${MYSQL_ROOT_PW}  
+echo "CREATE DATABASE IF NOT EXISTS ${ASTERISK_DB};" | mysql -u root -p${MYSQL_ROOT_PW} 
+echo "GRANT ALL PRIVILEGES ON asteriskcdrdb.* TO ${ASTERISK_USER}@localhost IDENTIFIED BY '${ASTERISK_DB_PW}';" | mysql -u root -p${MYSQL_ROOT_PW}
+echo "GRANT ALL PRIVILEGES ON ${ASTERISK_DB}.* TO ${ASTERISK_USER}@localhost IDENTIFIED BY '${ASTERISK_DB_PW}';" | mysql -u root -p${MYSQL_ROOT_PW}  
 
 sed -i "s/\(CREATE TABLE cdr\)/DROP TABLE IF EXISTS \`cdr\`;\n\1/" /usr/src/freepbx-${VER_FREEPBX}/SQL/cdr_mysql_table.sql
-mysql -u asteriskuser -p${ASTERISK_DB_PW} asteriskcdrdb < /usr/src/freepbx-${VER_FREEPBX}/SQL/cdr_mysql_table.sql                    
-mysql -u asteriskuser -p${ASTERISK_DB_PW} asterisk < /usr/src/freepbx-${VER_FREEPBX}/SQL/newinstall.sql                              
+mysql -u${ASTERISK_USER} -p${ASTERISK_DB_PW} asteriskcdrdb < /usr/src/freepbx-${VER_FREEPBX}/SQL/cdr_mysql_table.sql                    
+mysql -u${ASTERISK_USER} -p${ASTERISK_DB_PW} ${ASTERISK_DB} < /usr/src/freepbx-${VER_FREEPBX}/SQL/newinstall.sql                              
 
+echo ""
+echo "FIX APACHE2"
+cp /etc/apache2/apache2.conf /etc/apache2/apache2.conf-orig
+sed -i "s/\(^User *\)\(.*\)/\1asterisk/" /etc/apache2/apache2.conf
+sed -i "s/\(^Group *\)\(.*\)/\1asterisk/" /etc/apache2/apache2.conf
+
+echo ""
+echo "FIX PHP5"
 cp /etc/php5/apache2/php.ini /etc/php5/apache2/php.ini-orig
 sed -e 's/upload_max_filesize = .*/upload_max_filesize = 128M/' /etc/php5/apache2/php.ini > /tmp/php.ini
 cat /tmp/php.ini > /etc/php5/apache2/php.ini                                                            
@@ -394,455 +532,261 @@ sed -e 's/memory_limit = .*/memory_limit = 1100M/' /etc/php5/apache2/php.ini > /
 cat /tmp/php.ini > /etc/php5/apache2/php.ini                                                            
 sed -i "s/\(magic_quotes_gpc *= *\)\(.*\)/\1Off/" /etc/php5/apache2/php.ini                             
 
-cp /etc/apache2/apache2.conf /etc/apache2/apache2.conf-orig
-sed -i "s/\(^User *\)\(.*\)/\1asterisk/" /etc/apache2/apache2.conf
-sed -i "s/\(^Group *\)\(.*\)/\1asterisk/" /etc/apache2/apache2.conf
+echo ""
+echo "CONFIGURE FREEPBX"
+cp /usr/src/freepbx-${VER_FREEPBX}/install_amp /usr/src/freepbx-${VER_FREEPBX}/install_amp-orig
+sed -i "s/\(^\$webroot*\)\(.*\)/\1 = \"\/var\/www\/html\";/" /usr/src/freepbx-${VER_FREEPBX}/install_amp
+sed -i "s/xx.xx.xx.xx/${IP_ADRESS}/g" "/usr/src/freepbx-${VER_FREEPBX}/install_amp"                                          
+chmod 755 /usr/src/freepbx-${VER_FREEPBX}/install_amp                                                                       
+cd /usr/src/freepbx-${VER_FREEPBX}/   
 
-adduser asterisk --quiet --no-create-home --disabled-password --gecos "asterisk PBX" --home /var/lib/asterisk
-adduser www-data asterisk                                                                                    
-
-cp /etc/asterisk/asterisk.conf /etc/asterisk/asterisk.conf.orig
-sed -i "s/\(astrundir *=> *\)\(.*\)/\1\/var\/run\/asterisk/" /etc/asterisk/asterisk.conf
-
-mkdir /var/run/asterisk
-chown -R asterisk:asterisk /var/run/asterisk
-
-/usr/sbin/asterisk
-
-# patch safe_asterisk script to use bash
-sed -i "s|#!/bin/sh|#!/bin/bash|" /usr/sbin/safe_asterisk
-
-echo "+----------------------------------------------------------------+"
-echo "| Automatizando instalacion FreePBX                              |"
-echo "+----------------------------------------------------------------+"
-
-cd /usr/src/freepbx-${VER_FREEPBX}/  
-# start asterisk
-#./start_asterisk start
-cp amportal.conf /etc/amportal.conf        
-sed -i "s/# \(AMPDBUSER=asteriskuser\) */\1/" /etc/amportal.conf
-sed -i "s/# \(AMPDBPASS=\).*/\1${ASTERISK_DB_PW}/" /etc/amportal.conf
+echo ""
+echo "CONFIGURE AMPORTAL"
+cp /usr/src/freepbx-${VER_FREEPBX}/amportal.conf /etc/amportal.conf
+chown asterisk:asterisk /etc/amportal.conf
+sed -i "s/\(AMPDBHOST= *\)\(.*\)/\1localhost/" /etc/amportal.conf 
+sed -i "s/# AMPDBUSER=asteriskuser/AMPDBUSER=${ASTERISK_USER} /g" "/etc/amportal.conf"
+sed -i "s/# AMPDBPASS=amp109/AMPDBPASS=${ASTERISK_DB_PW}/g" "/etc/amportal.conf"
+sed -i "s/\(AMPMGRUSER= *\)\(.*\)/\1${AMPMGR_USER}/" /etc/amportal.conf 
 sed -i "s/\(AMPMGRPASS= *\)\(.*\)/\1${ASTERISK_MGR_PW}/" /etc/amportal.conf 
-sed -i "s/\(FOPPASSWORD= *\)\(.*\)/\1${FOP_PW}/" /etc/amportal.conf
-sed -i "/#AMPWEBADDRESS=192.168.1.101/d" /etc/amportal.conf
 sed -i "s/AMPWEBADDRESS=/AMPWEBADDRESS=${IP_ADDRESS}/" /etc/amportal.conf
-
-./install_amp
-/usr/src/freepbx-${VER_FREEPBX}/apply_conf.sh
-
-asteriskPID=$(cat /var/run/asterisk/asterisk.pid)
-kill -9 $(cat /var/run/asterisk/asterisk.pid)    
-echo "un momento ..."                            
-sleep 8;                                         
-
-chown -R asterisk:asterisk /etc/asterisk
-chmod 770 /etc/asterisk/                
-chown -R asterisk:asterisk /var/lib/asterisk/
-chmod 770 /var/lib/asterisk/                 
-chown -R asterisk:asterisk /var/www/         
-cp /var/www/html/admin/modules/dashboard/images/notify_* /var/www/html/admin/images/
-ln -s /var/lib/asterisk/moh /var/lib/asterisk/mohmp3                                
-
-echo "+----------------------------------------------------------------+"
-echo "| Startup script (Asterisk+FrePBX)                               |"
-echo "| /etc/init.d/freepbx [start|stop|restart]                       |"
-echo "+----------------------------------------------------------------+"
-
-STARTUP_SCRIPT="/etc/init.d/freepbx";
-echo "Creating file ${STARTUP_SCRIPT} ...";
-
-echo '#!/bin/bash' > ${STARTUP_SCRIPT}
-echo '' >> ${STARTUP_SCRIPT}          
-echo 'AMPORTAL_BIN=/usr/local/sbin/amportal' >> ${STARTUP_SCRIPT}
-echo '' >> ${STARTUP_SCRIPT}                                     
-echo 'if [ ! -x ${AMPORTAL_BIN} ]; then' >> ${STARTUP_SCRIPT}    
-echo ' echo "error : amportal binary can not be found (${AMPORTAL_BIN})"' >> ${STARTUP_SCRIPT}
-echo ' exit 0' >> ${STARTUP_SCRIPT}                                                           
-echo 'fi' >> ${STARTUP_SCRIPT}                                                                
-echo '' >> ${STARTUP_SCRIPT}                                                                  
-echo '' >> ${STARTUP_SCRIPT}                                                                  
-echo 'start() {' >> ${STARTUP_SCRIPT}                                                         
-echo ' echo "Starting FreePBX ..."' >> ${STARTUP_SCRIPT}                                      
-echo ' ${AMPORTAL_BIN} start' >> ${STARTUP_SCRIPT}                                            
-echo '}' >> ${STARTUP_SCRIPT}                                                                 
-echo '' >> ${STARTUP_SCRIPT}                                                                  
-echo 'stop() {' >> ${STARTUP_SCRIPT}                                                          
-echo ' echo "Stopping FreePBX ..."' >> ${STARTUP_SCRIPT}                                      
-echo ' ${AMPORTAL_BIN} stop' >> ${STARTUP_SCRIPT}                                             
-echo '}' >> ${STARTUP_SCRIPT}                                                                 
-echo '' >> ${STARTUP_SCRIPT}                                                                  
-echo 'case "$1" in' >> ${STARTUP_SCRIPT}                                                      
-echo ' start)' >> ${STARTUP_SCRIPT}                                                           
-echo ' start' >> ${STARTUP_SCRIPT}                                                            
-echo ' ;;' >> ${STARTUP_SCRIPT}                                                               
-echo '' >> ${STARTUP_SCRIPT}                                                                  
-echo ' stop)' >> ${STARTUP_SCRIPT}                                                            
-echo ' stop' >> ${STARTUP_SCRIPT}                                                             
-echo ' ;;' >> ${STARTUP_SCRIPT}                                                               
-echo '' >> ${STARTUP_SCRIPT}                                                                  
-echo ' restart)' >> ${STARTUP_SCRIPT}                                                         
-echo ' stop' >> ${STARTUP_SCRIPT}                                                             
-echo ' start' >> ${STARTUP_SCRIPT}                                                            
-echo ' ;;' >> ${STARTUP_SCRIPT}                                                               
-echo '' >> ${STARTUP_SCRIPT}                                                                  
-echo ' *)' >> ${STARTUP_SCRIPT}                                                               
-echo ' echo $"Usage: $0 {start|stop|restart}"' >> ${STARTUP_SCRIPT}                           
-echo ' exit 1' >> ${STARTUP_SCRIPT}                                                           
-echo 'esac' >> ${STARTUP_SCRIPT}                                                              
-echo '' >> ${STARTUP_SCRIPT}                                                                  
-echo 'exit 0' >> ${STARTUP_SCRIPT}                                                            
-chmod 755 ${STARTUP_SCRIPT}                                                                   
-
-
-echo "Update services loading at boot time..."
-update-rc.d freepbx defaults                  
-
+sed -i "s/\(FOPPASSWORD= *\)\(.*\)/\1${FOP_PW}/" /etc/amportal.conf
+sed -i "s/\(ARI_ADMIN_USERNAME= *\)\(.*\)/\1${ARI_ADMIN_USERNAME}/" /etc/amportal.conf
+sed -i "s/\(ARI_ADMIN_PASSWORD= *\)\(.*\)/\1${ARI_PW}/" /etc/amportal.conf
 sed -i "s/\(AUTHTYPE *= *\)\(.*\)/\1database/" /etc/amportal.conf
-amportal restart                                                 
+sed -i "s/# ZAP2DAHDICOMPAT=true|false/ZAP2DAHDICOMPAT=true/g" "/etc/amportal.conf"
+echo "AMPDBNAME=${ASTERISK_DB}" >> /etc/amportal.conf
+echo "ASTETCDIR=/etc/asterisk" >> /etc/amportal.conf
+echo "ASTMODDIR=/usr/lib/asterisk/modules" >> /etc/amportal.conf 
+echo "ASTVARLIBDIR=/var/lib/asterisk" >> /etc/amportal.conf
+echo "ASTAGIDIR=/var/lib/asterisk/agi-bin" >> /etc/amportal.conf
+echo "ASTSPOOLDIR=/var/spool/asterisk" >> /etc/amportal.conf
+echo "ASTRUNDIR=/var/run/asterisk" >> /etc/amportal.conf
+echo "ASTLOGDIR=/var/log/asterisk" >> /etc/amportal.conf
+echo "AMPDEVUSER=asterisk" >> /etc/amportal.conf
+echo "AMPDEVGROUP=asterisk" >> /etc/amportal.conf
+echo "AMPASTERISKUSER=asterisk" >> /etc/amportal.conf
+echo "AMPASTERISKGROUP=asterisk" >> /etc/amportal.conf
+echo "AMPASTERISKWEBUSER=asterisk" >> /etc/amportal.conf
+echo "AMPASTERISKWEBGROUP=asterisk" >> /etc/amportal.conf
+echo "SSHPORT=${SSHPORT}" >> /etc/amportal.conf
 
-echo "Cambiando el lenguaje del panel"
+echo ""
+echo "INSTALATION FREEPBX"
+./start_asterisk start
+./install_amp --username=${ASTERISK_USER} --password=$ASTERISK_DB_PW  
+./apply_conf.sh
+
+echo ""
+echo "CONFIGURE DAHDI"
+cp /var/www/pub/debpbx/chan_dahdi.conf /etc/asterisk/chan_dahdi.conf
+mv /etc/dahdi/genconf_parameters /etc/dahdi/genconf_parameters.bak
+echo "context_lines          from-zaptel" > /etc/dahdi/genconf_parameters
+modprobe dahdi_dummy
+
+echo ""
+echo "CONFIGURE FOP LANGUAGE SPANISH"
 sed -i 's/language=en/language=es/' /var/www/html/panel/op_server.cfg
+cp /var/www/html/admin/modules/dashboard/images/notify_* /var/www/html/admin/images/
+ln -s /var/lib/asterisk/moh /var/lib/asterisk/mohmp3  
 
+echo ""
+echo "FREEPBX CUSTOMIZING SETTINGS & EXTENSION"
+sed -i "s/FREEPBX_ADMIN/${FREEPBX_USER_WU}/g" "/var/www/pub/debpbx/myextension.sql"
+sed -i "s/SHA1_PASS/${FREEPBX_ADMIN_PW_SHA1}/g" "/var/www/pub/debpbx/myextension.sql"
+sed -i "s/IAX2_SECRET/${AVANTFAX_IAX_PW}/g" "/var/www/pub/debpbx/myextension.sql"
+sed -i "s/E_MAIL/${MAIL}/g" "/var/www/pub/debpbx/myextension.sql"
+
+mysql -u${ASTERISK_USER} -p${ASTERISK_DB_PW}  ${ASTERISK_DB} < /var/www/pub/debpbx/myextension.sql
 ###################################################################################################
 ###################################################################################################
 ###################################################################################################
-
-
 clear
+echo ""
 echo "##################################################################"
-echo "# PARTE 3 - Instalando AvantFAX                                  #"
+echo "# PARTE 3 - AVANTFAX INSTALLATION                                #"
 echo "##################################################################"
 
-touch /etc/asterisk/iax_custom.conf
 touch /etc/iaxmodem/ttyIAX         
 touch /etc/hylafax/config.ttyIAX   
 touch /etc/hylafax/FaxDispatch     
 touch /etc/hylafax/config          
-
-echo "
-[401] 
-username=401
-type=friend 
-secret=401iw2oekiwS
-qualify=no         
-notransfer=yes     
-host=dynamic       
-context=from-internal
-callerid="Fax" <401> 
-allow=all            
-" >> /etc/asterisk/iax_custom.conf
-
+echo "calltokenoptional = 0.0.0.0/0.0.0.0" >> /etc/asterisk/iax_custom.conf
 
 echo "
 device /dev/ttyIAX
 owner asterisk:asterisk
-mode 660               
-port 45699             
-refresh 300            
-server 127.0.0.1       
-peername 401           
-secret 401iw2oekiwS    
-cidname IAX Modem 1    
-cidnumber 401          
-codec slinear          
+mode 660
+port 45699
+refresh 300
+server 127.0.0.1
+peername 400
+secret ${AVANTFAX_IAX_PW}
+cidname IAX Modem 1
+cidnumber 400
+codec slinear
 " >> /etc/iaxmodem/ttyIAX
 
 cp /var/www/pub/debpbx/config.ttyIAX /etc/hylafax/config.ttyIAX
+                                   
 
-
+mkdir -p /var/log/iaxmodem
 echo "
-iax:2345:respawn:/usr/bin/iaxmodem ttyIAX&> /var/log/iaxmodem-ttyIAX
-T0:2345:respawn:/usr/sbin/faxgetty ttyIAX&> /var/log/faxgetty-ttyIAX
-" >> /etc/inittab                                                   
+iax0:2345:respawn:/usr/bin/iaxmodem ttyIAX&> /var/log/iaxmodem-ttyIAX
+fax0:2345:respawn:/usr/sbin/faxgetty ttyIAX&> /var/log/faxgetty-ttyIAX
+" >> /etc/inittab
 
 echo "
 FILETYPE=pdf;
-SENDTO=tumail@tudominio.com;
+SENDTO="$MAIL";
 " >> /etc/hylafax/FaxDispatch
 
-echo "
-#     
+#configuracion
+echo "#     
 ## AvantFAX configuration
 #                        
 NotifyCmd: bin/notify.php
-" >> /etc/hylafax/config 
+#" >> /etc/hylafax/config 
 
+echo "CoverCmd:		/var/www/html/avantfax/includes/faxcover.php" >> /etc/hylafax/sendfax.conf
 
-kill -HUP 1
-
-/etc/init.d/hylafax restart
-
-cd /usr/src/avantfax-${VER_AVANTFAX}
-
-FAXDOMAIN="fax.mydomain.com";
-INSTDIR="/var/www/html/avantfax";
-HYLADIR="/usr";                  
-SPOOL="/var/spool/hylafax";      
-HTTPDUSER="asterisk";            
-HTTPDGROUP="asterisk";           
-
-aptitude -y install apache2-mpm-prefork apache2-utils apache2.2-common libapr1 libaprutil1 libsqlite3-0 libnetpbm10-dev libungif-bin php-mail php-mail-mime php-file psutils rsync
-
-echo "+----------------------------------------------------------------+"
-echo "| Pear                                                           |"
-echo "+----------------------------------------------------------------+"
-
-pear channel-update pear.php.net
-pear install db Mail Net_SMTP Mail_mime MDB2_driver_mysql fileinfo
-
-cd /usr/src/avantfax-${VER_AVANTFAX}
-
-## SETUP SMARTY
-chmod 0770 avantfax/includes/templates/admin_theme/templates_c/ avantfax/includes/templates/admin_theme/cache/ avantfax/includes/templates/main_theme/templates_c/ avantfax/includes/templates/main_theme/cache/                                                                                                                                                        
-chown $HTTPDUSER:$HTTPDGROUP avantfax/includes/templates/admin_theme/templates_c/ avantfax/includes/templates/admin_theme/cache/ avantfax/includes/templates/main_theme/templates_c/ avantfax/includes/templates/main_theme/cache/                                                                                                                                      
-
-chmod 0755 avantfax/includes/faxcover.php avantfax/includes/faxrcvd.php avantfax/includes/notify.php avantfax/tools/update_contacts.php avantfax/tools/faxcover.php avantfax/includes/avantfaxcron.php avantfax/includes/dynconf.php                                                                                                                                    
-
-cp avantfax/includes/local_config-example.php avantfax/includes/local_config.php
-
-# SETUP HYLAFAX USERS
-
-/usr/sbin/faxadduser -f newhosts -a pwd $HTTPDUSER
-/usr/sbin/faxdeluser localhost                    
-/usr/sbin/faxdeluser 127.0.0.1                    
-echo 127.0.0.1 >> newhosts                        
-echo localhost >> newhosts                        
-cat /etc/hylafax/hosts.hfaxd >> newhosts          
-cat newhosts > /etc/hylafax/hosts.hfaxd           
-rm -f newhosts                                    
-
-# echo "AdminGroup: apache" >> /etc/hylafax/hfaxd.conf
-
-# SETUP AVANTFAX JOBFMT
-
-cat >> /etc/hylafax/hyla.conf << EOF
-
+#configuracion
+echo "#
 #
 ## JobFmt for AvantFAX
-#                     
+#
 JobFmt: "%-3j %3i %1a %15o %40M %-12.12e %5P %5D %7z %.25s"
+" >> /etc/hylafax/hyla.conf
 
-EOF
+#configuracion 
+echo "#
+## AvantFAX
+#
+FaxRcvdCmd:     bin/faxrcvd.php
+DynamicConfig:  bin/dynconf.php
+UseJobTSI:      true
+" >> /etc/hylafax/config.ttyIAX
 
-# INSTALL AVANTFAX
+#SYNCING DIRECTORIES & FILE
+/etc/init.d/hylafax restart
 
-mv avantfax $INSTDIR
-chown -R $HTTPDUSER.$HTTPDGROUP $INSTDIR
-chmod -R 0770 $INSTDIR/tmp $INSTDIR/faxes
-chown -R $HTTPDUSER.uucp $INSTDIR/tmp $INSTDIR/faxes
+#RESET INITTAB
+kill -HUP 1
 
-echo "## Creating AvantFAX MySQL database ##"
-echo "CREATE DATABASE IF NOT EXISTS avantfax;" | mysql -u root ${SQL_ROOT_PASSWORD}
-echo "GRANT ALL PRIVILEGES ON avantfax.* TO avantfax@localhost IDENTIFIED BY 'd58fe49';" | mysql -u root ${SQL_ROOT_PASSWORD}  
-mysql -uavantfax -pd58fe49 avantfax < /usr/src/avantfax-${VER_AVANTFAX}/create_tables.sql  
+#CONFIGURATION HOSTS.HFAXD
+rm /etc/hylafax/hosts.hfaxd
+echo "
+# hosts.hfaxd
+# This file contains permissions and password for every user in
+# the system.
+#
+# For more information on this biject, please see its man page
+# and the commands faxadduser and faxdeluser.
+localhost:21:: 
+127.0.0.1
+" >> /etc/hylafax/hosts.hfaxd
+/usr/sbin/faxadduser -a ${ASTERISK_DB_PW} asterisk
+/etc/init.d/hylafax restart
 
-# SYMLINK AVANTFAX SCRIPTS
+#INSTALATION PACKAGES PEAR freepbx
+pear channel-update pear.php.net
+pear upgrade-all
+pear install Mail Net_SMTP Mail_mime MDB2_driver_mysql fileinfo
 
-ln -s $INSTDIR/includes/faxrcvd.php $SPOOL/bin/faxrcvd.php
-ln -s $INSTDIR/includes/dynconf.php $SPOOL/bin/dynconf.php
-ln -s $INSTDIR/includes/notify.php $SPOOL/bin/notify.php  
+cd /usr/src/avantfax-${VER_AVANTFAX}/
+mv avantfax /var/www/html/avantfax
+chown -R asterisk:asterisk /var/www/html/avantfax
+chown -R asterisk.uucp /var/www/html/avantfax/tmp 
+chown -R asterisk.uucp /var/www/html/avantfax/faxes
 
-mv $HYLADIR/bin/faxcover $HYLADIR/bin/faxcover.old
-ln -s $INSTDIR/includes/faxcover.php $HYLADIR/bin/faxcover
+# CAMBIO DE PERMISOS A DIRECTORIOS
+chmod -R 0770 /var/www/html/avantfax/tmp 
+chmod -R 0770 /var/www/html/avantfax/faxes
+chmod -R 0770 /var/www/html/avantfax/includes/templates/admin_theme/templates_c/
+chmod -R 0770 /var/www/html/avantfax/includes/templates/admin_theme/cache/
+chmod -R 0770 /var/www/html/avantfax/includes/templates/main_theme/templates_c/
+chmod -R 0770 /var/www/html/avantfax/includes/templates/main_theme/cache/
 
-# FIX FILEINFO
+# CAMBIO DE PERMISOS A ARCHIVOS
+chmod 0755 /var/www/html/avantfax/includes/faxcover.php
+chmod 0755 /var/www/html/avantfax/includes/faxrcvd.php
+chmod 0755 /var/www/html/avantfax/includes/notify.php
+chmod 0755 /var/www/html/avantfax/tools/update_contacts.php
+chmod 0755 /var/www/html/avantfax/tools/faxcover.php
+chmod 0755 /var/www/html/avantfax/includes/avantfaxcron.php
+chmod 0755 /var/www/html/avantfax/includes/dynconf.php
 
-ln -s /usr/share/file/magic* /usr/share/misc/
+# CAMBIO DE DUEÑO Y GRUPO
+chown asterisk:asterisk /var/www/html/avantfax/includes/templates/admin_theme/templates_c/
+chown asterisk:asterisk /var/www/html/avantfax/includes/templates/admin_theme/cache/
+chown asterisk:asterisk /var/www/html/avantfax/includes/templates/main_theme/templates_c/
+chown asterisk:asterisk /var/www/html/avantfax/includes/templates/main_theme/cache/
 
-# SETUP SUDO PERMISSIONS
+#CREATE USER MYSQL
+echo "CREATE DATABASE IF NOT EXISTS ${AVANTFAX_DB};" | mysql -u root -p${MYSQL_ROOT_PW}
+echo "GRANT ALL PRIVILEGES ON ${AVANTFAX_DB}.* TO ${AVANTFAX_USER}@localhost IDENTIFIED BY '${AVANTFAX_DB_PW}';" | mysql -u root -p${MYSQL_ROOT_PW}
 
-echo "Setting up sudo"
+sed -i "s/'admin'/'${AVANTFAX_USER_WU}'/g" "/usr/src/avantfax-${VER_AVANTFAX}/create_tables.sql"
+sed -i "s/5f4dcc3b5aa765d61d8327deb882cf99/${AVANTFAX_ADMIN_PW_MD5}/g" "/usr/src/avantfax-${VER_AVANTFAX}/create_tables.sql"
+sed -i "s/root@localhost/${MAIL}/g" "/usr/src/avantfax-${VER_AVANTFAX}/create_tables.sql"
+mysql -u${AVANTFAX_USER} -p${AVANTFAX_DB_PW} ${AVANTFAX_DB} < /usr/src/avantfax-${VER_AVANTFAX}/create_tables.sql
 
+#MOD
+mv /usr/bin/faxcover /usr/bin/faxcover.old
+ln -s /var/www/html/avantfax/includes/faxcover.php /usr/bin/faxcover
+     
+#SYMLINK AVANTFAX SCRIPTS
+ln -s /var/www/html/avantfax/includes/faxrcvd.php /var/spool/hylafax/bin/faxrcvd.php
+ln -s /var/www/html/avantfax/includes/dynconf.php /var/spool/hylafax/bin/dynconf.php
+ln -s /var/www/html/avantfax/includes/notify.php  /var/spool/hylafax/bin/notify.php
+
+#SETUP SUDO PERMISSIONS
 cat /etc/sudoers | grep -v requiretty > /tmp/sudoers
-echo "$HTTPDUSER ALL= NOPASSWD: /sbin/reboot, /sbin/halt, /usr/sbin/faxdeluser, /usr/sbin/faxadduser -u * -p * *" >> /tmp/sudoers
-mv /etc/sudoers /etc/sudoers.orig                                                                                                
-mv /tmp/sudoers /etc/sudoers                                                                                                     
-chmod 0440 /etc/sudoers                                                                                                          
-chown root.root /etc/sudoers                                                                                                     
+echo "asterisk ALL= NOPASSWD: /sbin/reboot, /sbin/halt, /usr/sbin/faxdeluser, /usr/sbin/faxadduser -u * -p * *" >> /tmp/sudoers
+mv /etc/sudoers /etc/sudoers.orig
+mv /tmp/sudoers /etc/sudoers
+chmod 0440 /etc/sudoers
+chown root.root  /etc/sudoers
 
-# Make backup of HylaFAX configuration
-
+#MAKE BACKUP OF HYLAFAX CONFIGURATION
 mkdir /etc/hylafax/abackup
 cp /etc/hylafax/config* /etc/hylafax/abackup/
 
+#CONFIGURE MODEMS TO USE AVANTFAX
+echo "INSERT INTO \`FaxCategory\` (\`catid\`, \`name\`) VALUES(1, 'debpbx');
+INSERT INTO \`Modems\` (\`devid\`, \`device\`, \`alias\`, \`contact\`, \`printer\`, \`faxcatid\`) VALUES(1, 'ttyIAX', 'Ventas', '', '', 1);
+" >> /tmp/avantfax
+mysql -u${AVANTFAX_USER} -p${AVANTFAX_DB_PW} ${AVANTFAX_DB} < /tmp/avantfax
 
-# ADD CRONTAB ENTRIES
-
+#ADD CRONTAB ENTRIES
 echo "Setting up /etc/cron.d/avantfax"
-printf "0 0 * * *\t$INSTDIR/includes/avantfaxcron.php -t 2\n" > /etc/cron.d/avantfax
+printf "0 * * * *\t/var/www/html/avantfax/includes/phb\n" >> /etc/cron.d/avantfax
+printf "0 0 * * *\t/var/www/html/avantfax/includes/avantfaxcron.php -t 2\n" > /etc/cron.d/avantfax
 
-touch /etc/cron.d/avantfax
-echo "                    
-0 * * * * /var/www/html/avantfax/includes/phb.php
-# Una vez al día para borrar temporales/etc/sudoers
-0 0 * * * /var/www/html/avantfax/includes/avantfaxcron.php -t 2
-" >> /etc/cron.d/avantfax                                      
-
-
+#CONFIGURE LOCAL_CONFIG
+cp /var/www/html/avantfax/includes/local_config-example.php /var/www/html/avantfax/includes/local_config.php
+sed -i "s/\(AFDB_USER', *\)\(.*\)/\1'${AVANTFAX_USER}');/" /var/www/html/avantfax/includes/local_config.php
+sed -i "s/\(AFDB_PASS', *\)\(.*\)/\1'${AVANTFAX_DB_PW}');/" /var/www/html/avantfax/includes/local_config.php
+sed -i "s/\(AFDB_NAME', *\)\(.*\)/\1'${AVANTFAX_DB}');/" /var/www/html/avantfax/includes/local_config.php
+sed -i "s/\(FAXRMPWD *\)\(.*\)/\1 = \"${ASTERISK_DB_PW}\";/" /var/www/html/avantfax/includes/local_config.php
+sed -i "s/\(FAXMAILUSER *\)\(.*\)/\1 = 'faxmaster';/" /var/www/html/avantfax/includes/local_config.php
+sed -i "s/\(WWWUSER *\)\(.*\)/\1 = 'asterisk';/" /var/www/html/avantfax/includes/local_config.php
+sed -i "s/\(ADMIN_EMAIL', *\)\(.*\)/\1'${MAIL}');/" /var/www/html/avantfax/includes/local_config.php
+sed -i "s/\(dft_config_lang *\)\(.*\)/\1 = 'es';/" /var/www/html/avantfax/includes/local_config.php
+chmod 444 /var/www/html/avantfax/includes/local_config.php
 ###################################################################################################
 ###################################################################################################
 ###################################################################################################
-
-clear
-echo "##################################################################"
-echo "# PARTE 4 - Instalando A2Billing                                 #"
-echo "##################################################################"
-
-mkdir -p /usr/src/a2billing/
-cd /usr/src/a2billing/      
-cp /var/www/pub/tools/A2Billing_${VER_A2BILLING}.tar.gz /usr/src/a2billing/A2Billing_${VER_A2BILLING}.tar.gz
-tar xzf A2Billing_${VER_A2BILLING}.tar.gz                                                                   
-
-echo "create database mya2billing;" | mysql -u root ${SQL_ROOT_PASSWORD}
-echo "GRANT ALL PRIVILEGES ON mya2billing.* TO a2billinguser@localhost IDENTIFIED BY 'a2billing';" | mysql -u root ${SQL_ROOT_PASSWORD}
-mysql -uroot $SQL_ROOT_PASSWORD mya2billing </usr/src/a2billing/DataBase/mysql-5.x/a2billing-schema-v1.4.0.sql                         
-
-echo "+----------------------------------------------------------------+"
-echo "| Configurando archivo a2billing.conf                            |"
-echo "+----------------------------------------------------------------+"
-
-cp /usr/src/a2billing/a2billing.conf /etc/
-chown asterisk:asterisk /etc/a2billing.conf
-sed -i "s/\(user *= *\)\(.*\)/\1a2billinguser/" /etc/a2billing.conf
-sed -i "s/\(password *= *\)\(.*\)/\1a2billing/" /etc/a2billing.conf
-sed -i "s/\(dbname *= *\)\(.*\)/\1mya2billing/" /etc/a2billing.conf
-
-echo "+----------------------------------------------------------------+"
-echo "| web-based Graphical interfaces                                 |"
-echo "+----------------------------------------------------------------+"
-chmod 777 /etc/asterisk                                                  
-
-mkdir /var/www/html/a2billing
-touch /var/www/html/a2billing/index.html
-chown asterisk:asterisk /var/www/html/a2billing
-
-cp -rf /usr/src/a2billing/admin /var/www/html/a2billing
-cp -rf /usr/src/a2billing/agent /var/www/html/a2billing
-cp -rf /usr/src/a2billing/customer /var/www/html/a2billing
-cp -rf /usr/src/a2billing/common /var/www/html/a2billing  
-
-chmod 755 /var/www/html/a2billing/admin/templates_c
-chmod 755 /var/www/html/a2billing/customer/templates_c
-chmod 755 /var/www/html/a2billing/agent/templates_c   
-
-chown -Rf asterisk:asterisk /var/www/html/a2billing/admin/templates_c
-chown -Rf asterisk:asterisk /var/www/html/a2billing/customer/templates_c
-chown -Rf asterisk:asterisk /var/www/html/a2billing/agent/templates_c   
-
-echo "+----------------------------------------------------------------+"
-echo "| creando archivos SIP y IAX                                     |"
-echo "+----------------------------------------------------------------+"
-
-cd /etc/asterisk/
-touch additional_a2billing_iax.conf
-touch additional_a2billing_sip.conf
-touch extensions_a2billing.conf    
-
-chown asterisk:asterisk additional_a2billing_iax.conf
-chown asterisk:asterisk additional_a2billing_sip.conf
-chown asterisk:asterisk extensions_a2billing.conf    
-
-echo "#include additional_a2billing_sip.conf" >> /etc/asterisk/sip_custom.conf
-echo "#include additional_a2billing_iax.conf" >> /etc/asterisk/iax_custom.conf
-echo "#include extensions_a2billing.conf" >> /etc/asterisk/extensions_custom.conf
-
-
-echo "
-[a2billing]
-; CallingCard application
-exten => _X.,1,Answer    
-exten => _X.,2,Wait,2    
-exten => _X.,3,DeadAGI,a2billing.php
-exten => _X.,4,Wait,2               
-exten => _X.,5,Hangup               
-
-[did]
-; CallingCard application
-exten => _X.,1,DeadAGI(a2billing.php|1|did)
-" >> /etc/asterisk/extensions_a2billing.conf
-
-echo "+----------------------------------------------------------------+"
-echo "| Configurando Asterisk Manager                                  |"
-echo "+----------------------------------------------------------------+"
-
-echo "
-[myasterisk]
-secret = mycode
-deny=0.0.0.0/0.0.0.0
-permit=127.0.0.1/255.255.255.0
-read = system,call,log,verbose,command,agent,user
-write = system,call,log,verbose,command,agent,user
-" >> /etc/asterisk/manager_custom.conf            
-
-echo "+----------------------------------------------------------------+"
-echo "| Instalación de Sound                                           |"
-echo "+----------------------------------------------------------------+"
-
-sed -i "s/\(ast_sound=*\)\(.*\)/\1\/var\/lib\/asterisk\/sounds/" /usr/src/a2billing/addons/sounds/install_a2b_sounds_deb.sh
-/usr/src/a2billing/addons/sounds/install_a2b_sounds_deb.sh                                                                 
-chown -R asterisk:asterisk /var/lib/asterisk/sounds/                                                                       
-
-mkdir -p /var/lib/asterisk/mohmp3/acc_1
-mkdir -p /var/lib/asterisk/mohmp3/acc_2
-mkdir -p /var/lib/asterisk/mohmp3/acc_3
-mkdir -p /var/lib/asterisk/mohmp3/acc_4
-mkdir -p /var/lib/asterisk/mohmp3/acc_5
-mkdir -p /var/lib/asterisk/mohmp3/acc_6
-mkdir -p /var/lib/asterisk/mohmp3/acc_7
-mkdir -p /var/lib/asterisk/mohmp3/acc_8
-mkdir -p /var/lib/asterisk/mohmp3/acc_9
-mkdir -p /var/lib/asterisk/mohmp3/acc_10
-chmod -R 777 /var/lib/asterisk/mohmp3/acc_*
-chown -R asterisk:asterisk /var/lib/asterisk/mohmp3/
-
-echo "
-; class definitions for a2billing
-acc_1 => mp3:/var/lib/asterisk/mohmp3/acc_1
-acc_2 => mp3:/var/lib/asterisk/mohmp3/acc_2
-acc_3 => mp3:/var/lib/asterisk/mohmp3/acc_3
-acc_4 => mp3:/var/lib/asterisk/mohmp3/acc_4
-acc_5 => mp3:/var/lib/asterisk/mohmp3/acc_5
-acc_6 => mp3:/var/lib/asterisk/mohmp3/acc_6
-acc_7 => mp3:/var/lib/asterisk/mohmp3/acc_7
-acc_8 => mp3:/var/lib/asterisk/mohmp3/acc_8
-acc_9 => mp3:/var/lib/asterisk/mohmp3/acc_9
-acc_10 => mp3:/var/lib/asterisk/mohmp3/acc_10
-" >> /etc/asterisk/musiconhold_custom.conf   
-
-echo "+----------------------------------------------------------------+"
-echo "| Instalando componentes AGI                                     |"
-echo "+----------------------------------------------------------------+"
-
-cp /usr/src/a2billing/AGI/a2billing.php /var/lib/asterisk/agi-bin/
-cp -rf /usr/src/a2billing/common/lib /var/lib/asterisk/agi-bin/   
-chmod +x /var/lib/asterisk/agi-bin/a2billing.php                  
-chown -R asterisk:asterisk /var/lib/asterisk/agi-bin              
-
-echo "+----------------------------------------------------------------+"
-echo "| Call back daemon (only for Call backs)                         |"
-echo "+----------------------------------------------------------------+"
-
-cd /usr/src/a2billing/CallBack
-easy_install callback-daemon-py/dist/callback_daemon-1.0.prod_r1527-py2.5.egg
-
-cd /usr/src/a2billing/CallBack/callback-daemon-py/callback_daemon/
-cp a2b-callback-daemon.debian /etc/init.d/a2b-callback-daemon     
-chmod +x /etc/init.d/a2b-callback-daemon                          
-
-update-rc.d a2b-callback-daemon defaults 40 60
-
-###################################################################################################
-###################################################################################################
-###################################################################################################
-
 clear
 echo "##################################################################"
 echo "# PARTE 5 - Instalando vtiger CRM                                #"
 echo "##################################################################"
 
-echo "CREATE DATABASE vtigercrm DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;" | mysql -u root ${SQL_ROOT_PASSWORD}
-echo "GRANT ALL PRIVILEGES ON vtigercrm.* TO vtigercrmuser@localhost IDENTIFIED BY 'DebPBX2009';" | mysql -u root ${SQL_ROOT_PASSWORD}
-mysql -u vtigercrmuser -pDebPBX2009 vtigercrm < /var/www/pub/debpbx/vtigercrm/vtigercrm.sql                                                     
+echo "CREATE DATABASE ${VTIGERCRM_DB} DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;" | mysql -u root -p${MYSQL_ROOT_PW}
+echo "GRANT ALL PRIVILEGES ON ${VTIGERCRM_DB}.* TO ${VTIGERCRM_USER}@localhost IDENTIFIED BY '${VTIGERCRM_DB_PW}';" | mysql -u root -p${MYSQL_ROOT_PW}
+
+sed -i "s/DebPBX2009/${VTIGERCRM_MGR_PW}/g" "/var/www/pub/debpbx/vtigercrm/vtigercrm.sql"
+mysql -u${VTIGERCRM_USER} -p${VTIGERCRM_DB_PW} ${VTIGERCRM_DB} < /var/www/pub/debpbx/vtigercrm/vtigercrm.sql 
 
 cd /var/www/html
 tar zxf /var/www/pub/tools/vtigercrm-${VER_VTIGERCRM}.tar.gz
@@ -864,7 +808,8 @@ chmod -Rv 777 Smarty/templates_c/
 chmod -Rv 777 modules/Emails/templates/
 chmod -Rv 777 modules/                 
 chmod -Rv 777 cron/                    
-chmod -Rv 777 test/vtlib/              
+chmod -Rv 777 test/contact/
+chmod -Rv 777 test/vtlib/
 chmod 777 backup/                      
 chmod -Rv 777 Smarty/templates/modules/
 chmod -Rv 777 test/wordtemplatedownload/
@@ -872,7 +817,7 @@ chmod -Rv 777 test/product/
 chmod -Rv 777 test/user/                
 chmod -Rv 777 test/logo/                
 chmod -Rv 777 logs/                     
-chmod -Rv 777 install/                  
+chmod -Rv 777 install/  
 
 sed -e 's/max_execution_time = .*/max_execution_time = 600/' /etc/php5/apache2/php.ini > /tmp/php.ini
 cat /tmp/php.ini > /etc/php5/apache2/php.ini                                                         
@@ -883,20 +828,26 @@ END_SED_SCRIPT
 
 echo "
 [crm] 
-secret=DebPBX2009
+secret=${VTIGERCRM_MGR_PW}
 deny=0.0.0.0/0.0.0.0
 permit=127.0.0.1/255.255.255.0
 read=system,call,log,verbose,command,agent,user
 write=system,call,log,verbose,command,agent,user
 " >> /etc/asterisk/manager_custom.conf          
 
-#autoinstall
+#REMOVE INSTALL
 rm -rf /var/www/html/vtigercrm/install
 rm /var/www/html/vtigercrm/install.php
 rm /var/www/html/vtigercrm/migrate.php
 
 cp /var/www/pub/debpbx/vtigercrm/config.inc.php /var/www/html/vtigercrm/config.inc.php
 chmod 777 /var/www/html/vtigercrm/config.inc.php
+
+#CONFIGURE CONFIG.INC.PHP
+sed -i "s/USER_CRM/${VTIGERCRM_USER}/g" "/var/www/html/vtigercrm/config.inc.php"
+sed -i "s/BASE_CRM/${VTIGERCRM_DB}/g" "/var/www/html/vtigercrm/config.inc.php"
+sed -i "s/PASS_CRM/${VTIGERCRM_DB_PW}/g" "/var/www/html/vtigercrm/config.inc.php"
+sed -i "s/dc66d1a8b837fd5771a6ce148834c0a6/${VTIGERCRM_GENKEY}/g" "/var/www/html/vtigercrm/config.inc.php"
 
 cp /var/www/pub/debpbx/vtigercrm/parent_tabdata.php /var/www/html/vtigercrm/parent_tabdata.php
 chmod 466 /var/www/html/vtigercrm/parent_tabdata.php
@@ -909,7 +860,7 @@ cp /var/www/pub/debpbx/vtigercrm/sharing_privileges_2.php /var/www/html/vtigercr
 cp /var/www/pub/debpbx/vtigercrm/user_privileges_1.php /var/www/html/vtigercrm/user_privileges/user_privileges_1.php
 cp /var/www/pub/debpbx/vtigercrm/user_privileges_2.php /var/www/html/vtigercrm/user_privileges/user_privileges_2.php
 
-#Modulos PBXManager################################################################################
+#INSTALATION MODULO PBXMANAGER
 mkdir -p /tmp/vtigercrm
 cd /tmp/vtigercrm      
 unzip -o /var/www/html/vtigercrm/packages/5.1.0/mandatory/PBXManager.zip
@@ -933,9 +884,11 @@ chmod -R 777 /var/www/html/vtigercrm/Smarty/templates/modules/PBXManager
 rm -fr /tmp/vtigercrm/cron
 rm -fr /tmp/vtigercrm/modules
 rm -fr /tmp/vtigercrm/templates
-rm -fr /tmp/vtigercrm/manifest.xml                       
-###################################################################################################
-#ServiceContracts##################################################################################
+rm -fr /tmp/vtigercrm/manifest.xml
+
+sed -i 's/"default"/"from-internal" /' /var/www/html/vtigercrm/modules/PBXManager/utils/AsteriskClass.php
+
+#INSTALATION MODULO SERVICECONTRACTS 
 cd /tmp/vtigercrm
 unzip -o /var/www/html/vtigercrm/packages/5.1.0/mandatory/ServiceContracts.zip
 
@@ -945,8 +898,8 @@ chmod -R 777 /var/www/html/vtigercrm/modules/ServiceContracts
 
 rm -fr /tmp/vtigercrm/modules
 rm -fr /tmp/vtigercrm/manifest.xml   
-###################################################################################################
-#Services##########################################################################################
+
+#INSTALATION MODULO SERVICES
 cd /tmp/vtigercrm
 unzip -o /var/www/html/vtigercrm/packages/5.1.0/mandatory/Services.zip
 
@@ -956,8 +909,8 @@ chmod -R 777 /var/www/html/vtigercrm/modules/Services
            
 rm -fr /tmp/vtigercrm/modules
 rm -fr /tmp/vtigercrm/manifest.xml   
-###################################################################################################
-#CustomerPortal####################################################################################  
+
+#INSTALATION MODULO CUSTOMERPORTAL  
 cd /tmp/vtigercrm
 unzip -o /var/www/html/vtigercrm/packages/5.1.0/optional/CustomerPortal.zip
 
@@ -976,8 +929,8 @@ chmod -R 777 /var/www/html/vtigercrm/Smarty/templates/modules/CustomerPortal
 rm -fr /tmp/vtigercrm/modules
 rm -fr /tmp/vtigercrm/templates
 rm -fr /tmp/vtigercrm/manifest.xml
-###################################################################################################
-#FieldFormulas#####################################################################################
+
+#INSTALATION MODULO FIELDFORMULAS
 cd /tmp/vtigercrm
 unzip -o /var/www/html/vtigercrm/packages/5.1.0/optional/FieldFormulas.zip
 
@@ -994,8 +947,8 @@ chmod -R 777 /var/www/html/vtigercrm/Smarty/templates/modules/FieldFormulas
 rm -fr /tmp/vtigercrm/modules
 rm -fr /tmp/vtigercrm/templates
 rm -fr /tmp/vtigercrm/manifest.xml
-###################################################################################################                                                
-#RecycleBin########################################################################################
+
+#INSTALATION MODULO RECYCLEBIN
 cd /tmp/vtigercrm
 unzip -o /var/www/html/vtigercrm/packages/5.1.0/optional/RecycleBin.zip
 
@@ -1012,8 +965,8 @@ chmod -R 777 /var/www/html/vtigercrm/Smarty/templates/modules/RecycleBin
 rm -fr /tmp/vtigercrm/modules
 rm -fr /tmp/vtigercrm/templates
 rm -fr /tmp/vtigercrm/manifest.xml
-###################################################################################################
-#Tooltip###########################################################################################
+
+#INSTALATION MODULO TOOLTIP
 cd /tmp/vtigercrm
 unzip -o /var/www/html/vtigercrm/packages/5.1.0/optional/Tooltip.zip
 
@@ -1032,8 +985,8 @@ chmod -R 777 /var/www/html/vtigercrm/Smarty/templates/modules/Tooltip
 rm -fr /tmp/vtigercrm/modules
 rm -fr /tmp/vtigercrm/templates
 rm -fr /tmp/vtigercrm/manifest.xml                                                            
-###################################################################################################
-#Webforms##########################################################################################
+
+#INSTALATION MODULO WEBFORMS
 cd /tmp/vtigercrm
 unzip -o /var/www/html/vtigercrm/packages/5.1.0/optional/Webforms.zip
 
@@ -1050,86 +1003,137 @@ chmod -R 777 /var/www/html/vtigercrm/Smarty/templates/modules/Webforms
 rm -fr /tmp/vtigercrm/modules
 rm -fr /tmp/vtigercrm/templates
 rm -fr /tmp/vtigercrm/manifest.xml                                                        
-###################################################################################################
 
+#RECONFIGURATION OWNER AND GROUP
 chown -R asterisk:asterisk /var/www/html/vtigercrm
-
-#################################################################################################################################################################################################################################################################################################################################################################################################################################
-
-
+###################################################################################################
+###################################################################################################
+###################################################################################################
+clear
 echo "+----------------------------------------------------------------+"
-echo "| Reconfigurando apache2                                         |"
+echo "| RECONFIGURATION APACHE2                                        |"
 echo "+----------------------------------------------------------------+"
-
-
-sed -i "s/\(RedirectMatch*\)\(.*\)//" /etc/apache2/sites-enabled/000-default
-sed -i "s/\(DocumentRoot *\)\(.*\)/\1\/var\/www\/html\//" /etc/apache2/sites-enabled/000-default
+a2enmod ssl
+a2enmod vhost_alias
+cp /var/www/pub/debpbx/dynamicvhosting /etc/apache2/sites-available
+cp -r /var/www/pub/debpbx/ssl /etc/apache2/
+mkdir -p /var/www/www-virtuales
+mkdir -p /var/www/www-virtualesssl
+for IPADRESS in ${ARRAY_IP_ADRESS[@]}
+do
+      ln -s /var/www/html/ /var/www/www-virtuales/${IPADRESS}                       
+      ln -s /var/www/html/ /var/www/www-virtualesssl/${IPADRESS}                                                                                   
+done
+chown asterisk:asterisk -R /var/www/www-virtuales
+chown asterisk:asterisk -R /var/www/www-virtualesssl
+a2dissite default
+a2ensite dynamicvhosting
 /etc/init.d/apache2 force-reload
 
-aptitude -y install munin munin-node mpg123 sox lame libmad0 libmad0-dev
-
-ln -s /usr/share/phpmyadmin/ /var/www/html/phpmyadmin
-ln -s /var/www/munin/ /var/www/html/munin
-cd /etc/phpmyadmin/
-sed '39a\$cfg['blowfish_secret'] ="asterisk";' config.inc.php > config.inc.tmp
-mv config.inc.tmp config.inc.php
-rm /etc/rc2.d/S99install
-
 echo "+----------------------------------------------------------------+"
-echo "| Instalando DebPBX Panel                                        |"
+echo "| INSTALATION PANEL DEBPBX                                       |"
 echo "+----------------------------------------------------------------+"
-
 cd /var/www/html/
 rm /var/www/html/index.html
 rm /var/www/html/mainstyle.css
-tar zxf /var/www/pub/debpbx/debpbx-panel.tar.gz
+
+cp -R /var/www/pub/debpbx/debpbx_panel/.svn/  /var/www/html/
+cp -R /var/www/pub/debpbx/debpbx_panel/admin/  /var/www/html/
+cp -R /var/www/pub/debpbx/debpbx_panel/includes/  /var/www/html/
+cp -R /var/www/pub/debpbx/debpbx_panel/panel/  /var/www/html/
+cp -R /var/www/pub/debpbx/debpbx_panel/skin/  /var/www/html/
+cp -R /var/www/pub/debpbx/debpbx_panel/*.*  /var/www/html/
 chown asterisk:asterisk -R /var/www/html/
 
+echo "+----------------------------------------------------------------+"
+echo "| RECONFIGURATION PHPMYADMIN                                     |"
+echo "+----------------------------------------------------------------+"
+ln -s /usr/share/phpmyadmin/ /var/www/html/phpmyadmin
+cd /etc/phpmyadmin/
+sed '39a\$cfg['blowfish_secret'] ="asterisk";' config.inc.php > config.inc.tmp
+mv config.inc.tmp config.inc.php
 
 echo "+----------------------------------------------------------------+"
-echo "| Reconfiguración repositorios                                   |"
+echo "| RECONFIGURATION MUNIN                                          |"
+echo "+----------------------------------------------------------------+"
+ln -s /var/www/munin/ /var/www/html/munin
+cd /usr/src
+wget http://rodolphe.quiedeville.org/hack/munin/asterisk-1.4/asterisk-munin.tar.gz
+tar xvfz asterisk-munin.tar.gz
+cd asterisk-munin
+cp asterisk* /usr/share/munin/plugins
+cd /usr/share/munin/plugins
+chmod 755 ./asterisk*
+ln -s /usr/share/munin/plugins/asterisk_channels /etc/munin/plugins/asterisk_channels
+ln -s /usr/share/munin/plugins/asterisk_channelstypes /etc/munin/plugins/asterisk_channelstypes
+ln -s /usr/share/munin/plugins/asterisk_codecs /etc/munin/plugins/asterisk_codecs
+ln -s /usr/share/munin/plugins/asterisk_console /etc/munin/plugins/asterisk_console
+ln -s /usr/share/munin/plugins/asterisk_iaxchannels /etc/munin/plugins/asterisk_iaxchannels
+ln -s /usr/share/munin/plugins/asterisk_iaxlag /etc/munin/plugins/asterisk_iaxlag
+ln -s /usr/share/munin/plugins/asterisk_iaxpeers /etc/munin/plugins/asterisk_iaxpeers
+ln -s /usr/share/munin/plugins/asterisk_meetme /etc/munin/plugins/asterisk_meetme
+ln -s /usr/share/munin/plugins/asterisk_meetmeusers /etc/munin/plugins/asterisk_meetmeusers
+ln -s /usr/share/munin/plugins/asterisk_modules /etc/munin/plugins/asterisk_modules
+ln -s /usr/share/munin/plugins/asterisk_sipchannels /etc/munin/plugins/asterisk_sipchannels
+ln -s /usr/share/munin/plugins/asterisk_sipobjects /etc/munin/plugins/asterisk_sipobjects
+ln -s /usr/share/munin/plugins/asterisk_sippeers /etc/munin/plugins/asterisk_sippeers
+ln -s /usr/share/munin/plugins/asterisk_voicemail /etc/munin/plugins/asterisk_voicemail
+
+echo "+----------------------------------------------------------------+"
+echo "| RECONFIGURATION GRUB                                           |"
+echo "+----------------------------------------------------------------+"
+#cp /var/www/pub/debpbx/debpbx.tga /boot/grub/debpbx.tga                
+#cp /boot/grub/debpbx.tga /usr/share/images/grub                        
+#cp /boot/grub/debpbx.tga /usr/share/images/desktop-base/               
+sed -i s/moreblue-orbit-grub/debpbx/g /etc/grub.d/05_debian_theme      
+sed -i "s/\(color_normal*= *\)\(.*\)/\1white\/black/" /etc/grub.d/05_debian_theme
+sed -i "s/\(color_highlight*= *\)\(.*\)/\1black\/white/" /etc/grub.d/05_debian_theme
+sed -i s/OS=\"${GRUB_DISTRIBUTOR}/OS=\"DebPBX\ debpbx-${VER_VERSION}\ -\ ${GRUB_DISTRIBUTOR}/g /etc/grub.d/10_linux
+update-grub                                                                                                        
+
+echo "+----------------------------------------------------------------+"
+echo "| RECONFIGURATION GRUB                                           |"
 echo "+----------------------------------------------------------------+"
 
-rm /etc/apt/sources.list
-touch /etc/apt/sources.list
+#:BOOT: TFTP service is provided primarily for booting.  Most sites
+#       run this only on machines acting as "boot servers."
+#tftp            dgram   udp     wait    nobody  /usr/sbin/tcpd  /usr/sbin/in.tftpd /tftpboot
+#
+echo " " >> /etc/inetd.conf
+mkdir /tftpboot
+chmod 777 /tftpboot
 
-echo "
-deb http://ftp.us.debian.org/debian/ lenny main non-free contrib
-deb-src http://ftp.us.debian.org/debian/ lenny main non-free contrib
-
-deb http://security.debian.org/ lenny/updates main contrib non-free
-deb-src http://security.debian.org/ lenny/updates main contrib non-free
-
-deb http://volatile.debian.org/debian-volatile lenny/volatile main contrib non-free
-deb-src http://volatile.debian.org/debian-volatile lenny/volatile main contrib non-free
-" >> /etc/apt/sources.list 
 
 echo "+----------------------------------------------------------------+"
-echo "| Reconfiguración hosts                                          |"
+echo "| RECONFIGURATION BASH_LOGIN & BASHRC                            |"
 echo "+----------------------------------------------------------------+"
+cp /var/www/pub/debpbx/.bash_login /root/.bash_login                                                                
+cp /var/www/pub/debpbx/.bashrc /root/.bashrc   
 
-rm /etc/hosts
-LOCAL_IP=`ifconfig eth0 | egrep -o '([0-9]{1,3}\.){3}[0-9]{1,3}' | egrep -v '255|(127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})'`
+cp /var/www/pub/debpbx/script/debpbx-help /usr/local/sbin/debpbx-help
+cp /var/www/pub/debpbx/script/debpbx-pstn /usr/local/sbin/debpbx-pstn
+cp /var/www/pub/debpbx/script/debpbx-a2billing /usr/local/sbin/debpbx-a2billing
+cp /var/www/pub/debpbx/script/debpbx-siptosis /usr/local/sbin/debpbx-siptosis
+cp /var/www/pub/debpbx/script/debpbx-chanskype /usr/local/sbin/debpbx-chanskype
+cp /var/www/pub/debpbx/script/debpbx-password /usr/local/sbin/debpbx-password
+cp /var/www/pub/debpbx/script/debpbx-update /usr/local/sbin/debpbx-update
 
-echo "
-127.0.0.1 localhost.localdomain localhost
-${IP_ADRESS} ${HOST_AND_HOSTNAME} ${HOSTS}         
-
-# The following lines are desirable for IPv6 capable hosts
-::1 localhost ip6-localhost ip6-loopback                  
-fe00::0 ip6-localnet                                      
-ff00::0 ip6-mcastprefix                                   
-ff02::1 ip6-allnodes                                      
-ff02::2 ip6-allrouters                                    
-ff02::3 ip6-allhosts                                      
-" >> /etc/hosts   
+echo "+----------------------------------------------------------------+"
+echo "| RECONFIGURATION OPEN-SSH-SERVER                                |"
+echo "+----------------------------------------------------------------+"
+mkdir /root/.ssh/
+touch /root/.ssh/authorized_keys
+echo $SSHKEY > /root/.ssh/authorized_keys
+sed -i "s/Port 22/Port ${SSHPORT}/" /etc/ssh/sshd_config
+echo "Banner /etc/debpbx" >> /etc/ssh/sshd_config                                                                   
+cp /var/www/pub/debpbx/debpbx /etc/debpbx                                                                           
+/etc/init.d/ssh restart
 
 clear
 echo "+----------------------------------------------------------------+"
 echo "|                   - Instalación Finalizada -                   |"
 echo "|                  visite http://www.debpbx.org                  |"
 echo "+----------------------------------------------------------------+"
-/etc/init.d/ssh restart
-/usr/local/sbin/amportal restart
+amportal restart
+rm /etc/rc2.d/S99install
 exit 0
-
