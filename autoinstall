@@ -20,16 +20,6 @@ echo ""
 echo ""
 sleep 8;
 
-#VER_VERSION=99991
-#VER_ASTERISK=99992
-#VER_ADDONS=99993
-#VER_DAHDI_COMPLETE=99994
-#VER_LIBPRI=99995
-#VER_FREEPBX=99996
-#VER_A2BILLING=99997
-#VER_VTIGERCRM=99998
-#VER_AVANTFAX=99999
-
 #VARIABLES
 VER_VERSION="1.3";                                                                                                                                                               
 VER_ASTERISK="1.4.29";                                                                                                                                                              
@@ -230,7 +220,7 @@ aptitude install -y linux-headers-`uname -r` build-essential hylafax-server iaxm
 
 aptitude install -y apache2 php5 php5-common php5-cli mysql-server-5.0 php-pear php5-mysql php-db libapache2-mod-php5 php5-gd php5-curl libapache2-mod-perl2 php5-dev php5-ldap php5-mhash php5-odbc php5-mcrypt curl libwww-perl php5-imap python-setuptools python-mysqldb python-sqlalchemy python-psycopg2 imagemagick phpmyadmin mpg123 sox lame libmad0 libmad0-dev munin munin-node  
 
-aptitude install -y apache2-mpm-prefork apache2-utils apache2.2-common libapr1 libaprutil1 libsqlite3-0 libnetpbm10-dev libungif-bin php-mail php-mail-mime php-file psutils wdiff rsync atftpd                             
+aptitude install -y apache2-mpm-prefork apache2-utils apache2.2-common libapr1 libaprutil1 libsqlite3-0 libnetpbm10-dev libungif-bin php-mail php-mail-mime php-file psutils wdiff rsync atftpd libgnutls-dev libogg-dev                           
 
 echo ""
 echo "# DECOMPRESSING SOURCES KERNEL..."
@@ -334,7 +324,8 @@ tar zxf /var/www/pub/telephony/dahdi-linux-complete/dahdi-linux-complete-${VER_D
 tar zxf /var/www/pub/tools/freepbx-${VER_FREEPBX}.tar.gz                        
 tar zxf /var/www/pub/tools/spandsp-${VER_SPANDSP}.tgz
 tar zxf /var/www/pub/tools/avantfax-${VER_AVANTFAX}.tgz
-                        
+tar zxf /var/www/pub/tools/iksemel-1.4.tar.gz
+tar zxf /var/www/pub/tools/speex-1.2rc1.tar.gz                        
 
 echo ""
 echo "##################################################################"
@@ -342,22 +333,18 @@ echo "# PARTE 2 - ASTERISK INSTALLATION                                #"
 echo "##################################################################"
 
 echo ""
-echo "COMPILER CMAKE"
+echo "COMPILER IKSEMEL"
 # download, make and install XML library for Google Talk
-apt-get -y install libgnutls-dev
-wget http://iksemel.googlecode.com/files/iksemel-1.4.tar.gz
-tar xfvz iksemel-1.4.tar.gz
-cd iksemel-1.4
+cd /usr/src/
+cd iksemel-*
 ./configure
 make
 make install
 cd ..
 
-# download, make and install Speex codec
-apt-get -y install libogg-dev
-wget http://downloads.xiph.org/releases/speex/speex-1.2rc1.tar.gz
-tar xfvz speex-1.2rc1.tar.gz
-cd speex-1.2rc1
+echo "COMPILER SPEEX CODEC"
+cd /usr/src/
+cd speex-*
 ./configure
 make
 make install
@@ -393,9 +380,8 @@ make && make install
 
 echo ""
 echo "COMPILER AGX-AST-ADDONS"
+cp -R /var/www/pub/tools/agx-ast-addon /usr/src
 cd /usr/src
-svn checkout http://agx-ast-addons.svn.sourceforge.net/svnroot/agx-ast-addons/trunk agx-ast-addon 
-
 #BUG FIX
 #REMOVE APP_CONFCALL FROM BUILD
 echo "project (agx-ast-addons-zaptel)" >  agx-ast-addon/app-dahdi/CMakeLists.txt
@@ -448,7 +434,7 @@ DESC="Asterisk"
 NAME=amportal
 DAEMON=/usr/sbin/\$NAME
 
-test -x \$DAEMON || exit 0
+test -x \configure$DAEMON || exit 0
 
 d_start() {
     amportal start
@@ -556,7 +542,7 @@ sed -i "s/\(AUTHTYPE *= *\)\(.*\)/\1database/" /etc/amportal.conf
 sed -i "s/# ZAP2DAHDICOMPAT=true|false/ZAP2DAHDICOMPAT=true/g" "/etc/amportal.conf"
 echo "AMPDBNAME=${ASTERISK_DB}" >> /etc/amportal.conf
 echo "ASTETCDIR=/etc/asterisk" >> /etc/amportal.conf
-echo "ASTMODDIR=/usr/lib/asterisk/modules" >> /etc/amportal.conf 
+echo "ASTMOconfigureDDIR=/usr/lib/asterisk/modules" >> /etc/amportal.conf 
 echo "ASTVARLIBDIR=/var/lib/asterisk" >> /etc/amportal.conf
 echo "ASTAGIDIR=/var/lib/asterisk/agi-bin" >> /etc/amportal.conf
 echo "ASTSPOOLDIR=/var/spool/asterisk" >> /etc/amportal.conf
@@ -643,7 +629,7 @@ SENDTO="$MAIL";
 #configuracion
 echo "#     
 ## AvantFAX configuration
-#                        
+#           configure             
 NotifyCmd: bin/notify.php
 #" >> /etc/hylafax/config 
 
