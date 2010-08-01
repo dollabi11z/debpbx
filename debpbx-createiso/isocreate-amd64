@@ -12,6 +12,7 @@ rm -fr /mnt/cd/isolinux/
 cp -R /mnt/cd/debpbx/pub/debpbx/isolinux.amd/ /mnt/cd/isolinux
 cd /mnt/cd/install.amd
 mkdir auto advance normal test
+cp /mnt/cd/debpbx/pub/debpbx/mt86plus /mnt/cd/install.amd/
 
 
 #preseed auto
