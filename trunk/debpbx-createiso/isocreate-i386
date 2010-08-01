@@ -12,6 +12,7 @@ rm -fr /mnt/cd/isolinux/
 cp -R /mnt/cd/debpbx/pub/debpbx/isolinux.386/ /mnt/cd/isolinux
 cd /mnt/cd/install.386
 mkdir auto advance normal test
+cp /mnt/cd/debpbx/pub/debpbx/mt86plus /mnt/cd/install.386/
 
 #preseed auto
 mkdir /mnt/irmod1
