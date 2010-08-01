@@ -105,8 +105,6 @@ AVANTFAX_ADMIN_PW_MD5=`echo -n "${AVANTFAX_ADMIN_PW}" | md5sum | awk '{ print $1
 VTIGERCRM_DB_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20`
 VTIGERCRM_MGR_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20`
 VTIGERCRM_GENKEY=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 32`
-
-
 A2BILLING_DB_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20`
 A2BILLING_MGR_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20`
 ############################### END VARIABLES #######################################
@@ -329,14 +327,14 @@ echo ""
 echo ""
 echo "EXTRACTING TEMPORARY FILES..."
 cd /usr/src/
-tar zxf /var/www/pub/tools/cmake-2.6.4.tar.gz
 tar zxf /var/www/pub/telephony/asterisk/asterisk-${VER_ASTERISK}.tar.gz
 tar zxf /var/www/pub/telephony/asterisk/asterisk-addons-${VER_ADDONS}.tar.gz
 tar zxf /var/www/pub/telephony/libpri/libpri-${VER_LIBPRI}.tar.gz           
 tar zxf /var/www/pub/telephony/dahdi-linux-complete/dahdi-linux-complete-${VER_DAHDI_COMPLETE}.tar.gz
 tar zxf /var/www/pub/tools/freepbx-${VER_FREEPBX}.tar.gz                        
 tar zxf /var/www/pub/tools/spandsp-${VER_SPANDSP}.tgz
-tar zxf /var/www/pub/tools/avantfax-${VER_AVANTFAX}.tgz                         
+tar zxf /var/www/pub/tools/avantfax-${VER_AVANTFAX}.tgz
+                        
 
 echo ""
 echo "##################################################################"
@@ -364,7 +362,6 @@ cd speex-1.2rc1
 make
 make install
 cd ..
-
 
 echo ""
 echo "COMPILER DAHDI-LINUX-COMPLETE"
@@ -397,6 +394,8 @@ make && make install
 echo ""
 echo "COMPILER AGX-AST-ADDONS"
 cd /usr/src
+svn checkout http://agx-ast-addons.svn.sourceforge.net/svnroot/agx-ast-addons/trunk agx-ast-addon 
+
 #BUG FIX
 #REMOVE APP_CONFCALL FROM BUILD
 echo "project (agx-ast-addons-zaptel)" >  agx-ast-addon/app-dahdi/CMakeLists.txt
@@ -1094,15 +1093,9 @@ update-grub
 echo "+----------------------------------------------------------------+"
 echo "| RECONFIGURATION GRUB                                           |"
 echo "+----------------------------------------------------------------+"
-
-#:BOOT: TFTP service is provided primarily for booting.  Most sites
-#       run this only on machines acting as "boot servers."
-#tftp            dgram   udp     wait    nobody  /usr/sbin/tcpd  /usr/sbin/in.tftpd /tftpboot
-#
-echo " " >> /etc/inetd.conf
+echo "tftp            dgram   udp     wait    nobody  /usr/sbin/tcpd  /usr/sbin/in.tftpd /tftpboot" > /etc/inetd.conf
 mkdir /tftpboot
 chmod 777 /tftpboot
-
 
 echo "+----------------------------------------------------------------+"
 echo "| RECONFIGURATION BASH_LOGIN & BASHRC                            |"
