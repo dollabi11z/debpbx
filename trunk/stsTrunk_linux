@@ -1,0 +1,451 @@
+#!/bin/bash
+#Copyright (C) 2009 Greg Dorfuss - MHSpot LLC <mhspot.com>
+#SipToSis is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 3 of the License, or
+#(at your option) any later version.
+#SipToSis is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+#You should have received a copy of the GNU General Public License
+#along with this source code; if not, write to the Free Software
+#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+#DO NOT RENAME THIS FILE OR IT WILL FAIL TO FUNCTION
+
+#Setup environment here if needed
+#export JAVA_HOME=/opt/java
+#export PATH=$PATH:/opt/java:/usr/bin
+export PATH=$PATH:/sbin
+
+#User to run skype and siptosis under
+runuser=stsuser
+
+#path where siptosis and this script are located - manually set if needed
+fullpath="$(cd "${0%/*}" 2>/dev/null; echo "$PWD"/"${0##*/}")"
+#scriptpath=`dirname "${fullpath}"`
+scriptpath=/home/stsuser/siptosis
+
+#*** some config settings ***
+
+#if want to use vnc, set to N - vncserver launches it by default
+usetwm=N
+#set to Y if using twm or vnc with twm
+testtwmconfig=N
+#if using twm or vnc with twm, edit /etc/X11/twm/system.twmrc and add 'RandomPlacement' above 'NoGrabServer' line
+twmrcfile=/etc/X11/twm/system.twmrc
+
+#can be set to XVFB, VNC or NORMAL (uppercase only) - if using vnc, run vncpasswd to set the password
+displayMethod=VNC
+
+#set for XVFB and VNC displayMethod
+displaynum=1
+
+#*** end of config settings ***
+
+
+
+#switch to siptosis folder
+cd ${scriptpath}
+
+#store mode argument
+mode=$1
+
+testconfig=0
+if [ "${mode}" == "start" ]
+then
+   testconfig=1
+fi
+if [ "${mode}" == "config" ]
+then
+   testconfig=1
+fi
+if [ "${mode}" == "boot" ]
+then
+   testconfig=1
+fi
+
+
+if [ "${testconfig}" == "1" ]
+then
+    if [ "${displayMethod}" == "XVFB" ]
+    then
+		#test if xvfb accessible
+		tstfile=tmp_testexists
+		which Xvfb >$tstfile
+		content=`cat $tstfile`
+		rm $tstfile
+		if [ "${content}" == "" ]
+		then
+		  echo Error: Xvfb not in path
+		  exit 1
+		fi
+		if [ ! -e ${content} ]
+		then
+		  echo Error: Xvfb not found
+		  exit 1
+		fi
+
+        #test for auth file
+    	if [ ! -e XauthXvfb ]
+        then
+           echo missing XauthXvfb - creating
+           echo localhost >> XauthXvfb
+        fi
+
+	fi
+	
+    if [ "${displayMethod}" == "VNC" ]
+    then
+		#test if vncserver accessible
+		tstfile=tmp_testexists
+		which vncserver >$tstfile
+		content=`cat $tstfile`
+		rm $tstfile
+		if [ "${content}" == "" ]
+		then
+		  echo Error: vncserver not in path
+		  exit 1
+		fi
+		if [ ! -e ${content} ]
+		then
+		  echo Error: vncserver not found
+		  exit 1
+		fi
+	fi
+	
+	
+    if [ "${testtwmconfig}" == "Y" ]
+    then
+	    #test if twm accessible
+	    tstfile=tmp_testexists
+	    which twm > /dev/null 2>${tstfile}
+	    content=`cat ${tstfile}`
+	    rm ${tstfile}
+ 	    if [ "${content}" != "" ]
+	    then
+	      echo Error: twm not in path
+	      exit 1
+	    fi
+    	#test .twmrc file for RandomPlacement
+    	if [ ! -e ${twmrcfile} ]
+        then
+           echo missing ${twmrcfile}
+           echo fix problem and Add RandomPlacement above NoGrabServer line
+           exit 1
+        fi
+        testtwmfile=log/tsttwmrc.out
+        grep RandomPlacement ${twmrcfile} > ${testtwmfile}
+    	twmconfigcontent=`cat ${testtwmfile}`
+        if [ "${twmconfigcontent}" != "RandomPlacement" ]
+        then
+           echo Missing RandomPlacement in ${twmrcfile}
+           echo Add RandomPlacement above NoGrabServer line
+           exit 1
+        fi
+        rm ${testtwmfile}
+    fi 
+ 
+    #check sound setup
+    sndtstfile=tmpsnd.out
+    lsmod | grep snd_pcm > ${sndtstfile}
+	content=`cat ${sndtstfile}`
+	rm ${sndtstfile}
+	if [ "${content}" == "" ]
+	then
+	  echo Error: Sound system configuration error
+	  exit 1
+	fi
+
+fi	
+
+runboot()
+{
+   #some stuff to do at boot up only
+   echo Waiting 20 seconds
+   sleep 20
+   chown -R ${runuser}:${runuser} *
+   env > log/boot_env.out
+   ps -ef > log/boot_processlist.out
+   
+   #test sound
+   #aplay -vv clips/dialing.wav 1> log/aplayTest.log 2>&1
+
+   #if sound device not found only at boot time, add user to audio group: adduser username audio  or edit /etc/group
+   #   Example: audio:blahblah:pulse,someuser
+   #if the sound errors from skype bug you, edit /usr/share/alsa/alsa.conf and comment out:
+   #"pcm.hdmi cards.pcm.hdmi", "/usr/share/alsa/pulse.conf" and "/usr/share/alsa/bluetooth.conf"
+   
+   snddevtestfile=log/boot_snddevtest.out
+   rm -f ${snddevtestfile}
+   havesnddev=""
+   echo Checking for sound device
+   aplay -l > ${snddevtestfile}
+   havesnddev=`cat ${snddevtestfile}`
+   if [ "${havesnddev}" == "" ]
+   then
+       echo Error: No sound devices
+       exit 1
+   fi
+   echo Sound device found
+
+   start
+}
+
+boot()
+{
+  echo starting boot process
+  rm -f log/boot_*.out
+  rm -f log/boot_*.log
+  nohup ./stsTrunk_linux runboot 1> log/boot_nohup.log 2>&1 &
+}
+
+start()
+{
+     nohup ./stsTrunk_linux startchannel 1> log/startchannel.log 2>&1 &
+}
+
+startChannel()
+{
+      stopChannel
+      stopDisplay
+      echo Starting in Run Mode
+
+	  unset SESSION_MANAGER	
+      unset DBUS_SESSION_BUS_ADDRESS
+
+	  if [ "${displayMethod}" != "NORMAL" ]
+      then
+         DISPLAY=:${displaynum}
+	     export DISPLAY
+      fi
+
+	  if [ "${displayMethod}" == "XVFB" ]
+	  then
+		  #launch virtual frame buffer
+		  pidfile=tmp_xvfb.pid
+		  ps -ef | grep -v ' awk ' | awk '/Xvfb.*${DISPLAY}/  { print $2}' > $pidfile
+		  pid=`cat $pidfile`
+		  if [ "$pid" == "" ]
+		  then
+		    echo start Xvfb on display ${DISPLAY}
+            #check /etc/dbus-1/system.d/xorg-server.conf if dbus error
+		    Xvfb ${DISPLAY} -render -auth XauthXvfb 1> log/xvfb.log 2>&1 &
+		  fi
+		  rm $pidfile
+		
+		  sleep 1
+	  fi	
+
+	  if [ "${displayMethod}" == "VNC" ]
+	  then
+		  #launch vncserver
+		  pidfile=tmp_vnc.pid
+		  ps -ef | grep -v ' awk ' | awk '/vnc.*${DISPLAY}/  { print $2}' > $pidfile
+		  pid=`cat $pidfile`
+		  if [ "$pid" == "" ]
+		  then
+		    echo start vncserver on display ${DISPLAY}
+            #check /etc/dbus-1/system.d/xorg-server.conf if dbus error
+Xtightvnc :1 -desktop X -auth /home/stsuser/.Xauthority -geometry 800x600 -depth 24 -rfbwait 1200 &
+	
+		  fi
+		  rm $pidfile
+		  sleep 1
+	  fi	
+
+      if [ "${usetwm}" == "Y" ]
+      then
+         echo Starting twm on display ${DISPLAY}
+         twm -display ${DISPLAY} -s -v -f ${twmrcfile} 1> log/twm.log 2>&1 &
+         sleep 1
+      fi
+
+      startSkype
+
+      echo Starting SipToSis on display ${DISPLAY}
+      #SipToSis should not be put in background to keep things running
+      ./SipToSis_linux > log/stsTrunk_console.log 2>&1
+}
+
+
+config()
+{
+    stopChannel
+    stopDisplay
+    echo Starting in Config Mode
+
+    startSkype
+
+    echo Starting SipToSis Config Mode
+    xterm -T "stsTrunk" -name stsTrunk -e bash -x ./SipToSis_linux &
+}
+
+
+startSkype()
+{
+	echo Starting Skype on display ${DISPLAY}
+
+	skypeoutFile="$PWD/log/skype.out"
+	if [ -e ${skypeoutFile} ]
+	then
+	  rm ${skypeoutFile}
+	fi
+
+	skype 1> ${skypeoutFile} 2>&1 &
+    sleep 8
+}
+
+stop()
+{
+      stopChannel
+      stopDisplay
+}
+
+
+
+stopChannel()
+{
+	echo Stopping stsTrunk
+	
+	pidfile=tmp_sts.pid
+	
+	ps -ef | grep -v ' awk ' | awk '/java.*siptosis.*/  { print $2}' > $pidfile
+	if [ -e $pidfile ]
+	then
+	    pid=`cat $pidfile`
+	    if [ "$pid" != "" ]
+	    then
+			echo killpidsts=`cat $pidfile`
+		    kill `cat $pidfile`
+		    sleep 6
+		fi
+	    rm $pidfile
+	fi
+	
+	
+	pidfile=tmp_skype.pid
+	ps -ef | grep -v ' awk ' | awk '/skype$/  { print $2}' > $pidfile
+	if [ -e $pidfile ]
+	then
+	    pid=`cat $pidfile`
+	    if [ "$pid" != "" ]
+	    then
+			echo killpidskype=`cat $pidfile`
+		    kill `cat $pidfile`
+		    sleep 2
+		fi
+	    rm $pidfile
+	fi
+
+}
+
+stopDisplay()
+{
+    if [ "${displayMethod}" == "XVFB" ]
+    then
+		sleep 1
+		pidfile=tmp_xdsp.pid
+		ps -ef | grep -v ' awk ' | awk '/Xvfb.*:'${displaynum}'/  { print $2}' > $pidfile
+		if [ -e $pidfile ]
+		then
+		    pid=`cat $pidfile`
+		    if [ "$pid" != "" ]
+		    then
+				echo killpidxdsp=`cat $pidfile`
+			    kill `cat $pidfile`
+			fi
+		    rm $pidfile
+		fi
+	fi
+
+    if [ "${displayMethod}" == "VNC" ]
+    then
+		sleep 1
+
+		pidfile=tmp_xtightvnc.pid
+		ps -ef | grep -v ' awk ' | awk '/Xtightvnc :'${displaynum}'/  { print $2}' > $pidfile
+		if [ -e $pidfile ]
+		then
+	    		pid=`cat $pidfile`
+	    	if [ "$pid" != "" ]
+	    	then
+			echo killpidxtightvnc=`cat $pidfile`
+		    	kill `cat $pidfile`
+		    	sleep 2
+		fi
+	    	rm $pidfile
+		fi
+
+	fi
+
+}
+
+
+status()
+{
+     if [ "${displayMethod}" == "XVFB" ]
+     then
+		    ps -ef | grep -v ' awk ' | awk '/Xvfb.*:'${displaynum}'/  { print $0}'
+     fi
+     if [ "${displayMethod}" == "VNC" ]
+     then
+		    ps -ef | grep -v ' awk ' | awk '/vnc.*:'${displaynum}'/  { print $0}'
+     fi
+     ps -ef | grep -v ' awk ' | awk '/skype$/  { print $0}'
+     ps -ef | grep -v ' awk ' | awk '/siptosis/  { print $0}'
+}
+
+screengrab()
+{
+    tmphexidfile=tmp_skype.winhexid
+	rm -f ${tmphexidfile}
+        DISPLAY=:${displaynum}
+	#grab full display
+	xwininfo -root | grep 'Window id' | grep -v ' awk ' | awk ' { print $4}' > ${tmphexidfile}
+	hexid=`cat ${tmphexidfile}`
+	if [ "$hexid" != "" ]
+	then
+	    echo windowHexid=$hexid
+	    scrfile=snapscreen
+	    xwd -id $hexid > ${scrfile}.xwd
+	    #convert ${scrfile}.xwd ${scrfile}.png
+	    #echo Screen captured as ${scrfile}.png
+	    xwud -in ${scrfile}.xwd -display :0
+	else
+        echo failed to locate skype window
+    fi
+}
+
+
+case "${mode}" in
+   start)
+       start
+       ;;
+   startchannel)
+       startChannel
+       ;;
+   stop)
+       stop
+       ;;
+   config)
+       config
+       ;;
+   snapscreen)
+       screengrab
+       ;;    
+   status)
+       status
+       ;;
+   boot)
+       boot
+       ;;
+   runboot)
+       runboot
+       ;;
+   *)
+      echo $"Usage: $0 {start|stop|status|snapscreen|config|boot}"
+      exit 1
+esac
+exit 0
