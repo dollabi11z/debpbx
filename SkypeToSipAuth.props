@@ -33,7 +33,7 @@
 #Regular expression example
 #^undisclosed_pstn.*,play:clips/test.wav
 
-*,sip:123456789@127.0.0.1:5060;dtmf:1365;
+*,sip:123456789@xx.xx.xx.xx:5060;dtmf:1365
 
 
 #Default: all incoming skype callers get the invalid destination message
