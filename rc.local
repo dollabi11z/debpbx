@@ -11,5 +11,5 @@
 #
 # By default this script does nothing.
 
-su -l XXXXUSER -c "/home/stsuser/siptosis/stsTrunk_linux start"
+su -l XXXXUSER -c "/home/XXXXUSER/siptosis/stsTrunk_linux start"
 exit 0
