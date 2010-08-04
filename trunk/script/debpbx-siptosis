@@ -64,22 +64,26 @@ if [ $key == "y" ]; then
 	aptitude -y install sun-java6-jdk
 
 	#CREATE USER
-	adduser $USER --disabled-password --home /home/$USER/ --gecos "$USER SKYPE user" --force-badname
-	adduser $USER audio
-	echo "$USER:$PASS" | chpasswd --md5
+	adduser stsuser --disabled-password --home /home/stsuser/ --gecos "stsuser SKYPE user" --force-badname
+	adduser stsuser audio
+	echo "stsuser:$PASS" | chpasswd --md5
 	#SipToSis
 	wget http://debpbx.googlecode.com/svn/trunk/modules/SipToSis_20100720.zip -O /usr/src/SipToSis_20100720.zip
-	mkdir -p /home/$USER/siptosis/
-        cd /home/$USER/siptosis/
+	mkdir -p /home/stsuser/siptosis/
+        cd /home/stsuser/siptosis/
 	unzip /usr/src/SipToSis_20100720.zip
-	chown $USER:$USER -R /home/$USER/siptosis/
-	wget http://debpbx.googlecode.com/svn/trunk/SkypeToSipAuth.props -O  /home/$USER/siptosis/SkypeToSipAuth.props
-	wget http://debpbx.googlecode.com/svn/trunk/stsTrunk_linux -O  /home/$USER/siptosis/stsTrunk_linux
-	sed -i "s/XXXXrunuser=stsuser/runuser=$USER/g" "/home/$USER/siptosis/stsTrunk_linux"
-	cp /home/$USER/siptosis/samples/siptosis.cfg /home/$USER/siptosis/siptosis.cfg
-	chmod +x /home/$USER/siptosis/stsTrunk_linux
-	chmod +x /home/$USER/siptosis/SipToSis_linux
+	chown stsuser:stsuser -R /home/stsuser/siptosis/
+	wget http://debpbx.googlecode.com/svn/trunk/SkypeToSipAuth.props -O  /home/stsuser/siptosis/SkypeToSipAuth.props
+	sed -i "s/xx.xx.xx.xx/${IP_ADRESS}/g" "/home/stsuser/siptosis/SkypeToSipAuth.props"
+	wget http://debpbx.googlecode.com/svn/trunk/stsTrunk_linux -O  /home/stsuser/siptosis/stsTrunk_linux
+        cp /home/stsuser/siptosis/stsTrunk_linux  /etc/init.d/siptosis
+        chmod +x /etc/init.d/siptosis
+	cp /home/stsuser/siptosis/samples/siptosis.cfg /home/stsuser/siptosis/siptosis.cfg
+	chmod +x /home/stsuser/siptosis/stsTrunk_linux
+	chmod +x /home/stsuser/siptosis/SipToSis_linux
 	wget http://debpbx.googlecode.com/svn/trunk/rc.local -O  /etc/rc.local
+
+
 
 echo " 
 host_port=5070
@@ -88,11 +92,10 @@ from_url=\"${USER}\" <sip:${USER}@127.0.0.1:5070>
 username=${USER}
 passwd=${PASS}
 realm=127.0.0.1
-" >> /home/$USER/siptosis/siptosis.cfg
+" >> /home/stsuser/siptosis/siptosis.cfg
 
 	#RUN
-	sed -i "s/XXXXUSER/$USER/g" "/etc/rc.local"
-	su -l $USER -c "/home/$USER/siptosis/stsTrunk_linux start"
+	su -l stsuser -c "/home/stsuser/siptosis/stsTrunk_linux start"
 	echo ""
 	echo ""
 	echo "+----------------------------------------------------------------+"
