@@ -20,12 +20,12 @@
 export PATH=$PATH:/sbin
 
 #User to run skype and siptosis under
-XXXXrunuser=stsuser
+runuser=stsuser
 
 #path where siptosis and this script are located - manually set if needed
 fullpath="$(cd "${0%/*}" 2>/dev/null; echo "$PWD"/"${0##*/}")"
 #scriptpath=`dirname "${fullpath}"`
-scriptpath=/home/$runuser/siptosis
+scriptpath=/home/stsuser/siptosis
 
 #*** some config settings ***
 
@@ -248,7 +248,7 @@ startChannel()
 		  then
 		    echo start vncserver on display ${DISPLAY}
             #check /etc/dbus-1/system.d/xorg-server.conf if dbus error
-	    Xtightvnc :1 -desktop X -auth /home/$runuser/.Xauthority -geometry 800x600 -depth 24 -rfbwait 1200 &
+Xtightvnc :1 -desktop X -auth /home/stsuser/.Xauthority -geometry 800x600 -depth 24 -rfbwait 1200 &
 	
 		  fi
 		  rm $pidfile
