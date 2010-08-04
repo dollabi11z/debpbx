@@ -64,10 +64,9 @@ if [ $key == "y" ]; then
 	aptitude -y install sun-java6-jdk
 
 	#CREATE USER
-	adduser $USER --password PASSWORD
+	adduser $USER --disabled-password --home /home/$USER/ --gecos "$USER SKYPE user"
+	adduser $USER audio
 	echo "$USER:$PASS" | chpasswd --md5
- 	usermod -a -G audio $USER
-
 	#SipToSis
 	wget http://debpbx.googlecode.com/svn/trunk/modules/SipToSis_20100720.zip -O /usr/src/SipToSis_20100720.zip
 	mkdir -p /home/$USER/siptosis/
@@ -111,3 +110,6 @@ else
 	echo "Instalación abortada!!!"
 	exit 1
 fi
+
+
+
