@@ -64,7 +64,7 @@ if [ $key == "y" ]; then
 	aptitude -y install sun-java6-jdk
 
 	#CREATE USER
-	adduser $USER --disabled-password --home /home/$USER/ --gecos "$USER SKYPE user"
+	adduser $USER --disabled-password --home /home/$USER/ --gecos "$USER SKYPE user" --force-badname
 	adduser $USER audio
 	echo "$USER:$PASS" | chpasswd --md5
 	#SipToSis
@@ -110,6 +110,3 @@ else
 	echo "Instalación abortada!!!"
 	exit 1
 fi
-
-
-
