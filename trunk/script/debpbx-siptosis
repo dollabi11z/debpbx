@@ -1,18 +1,21 @@
-#!/bin/bash             
-#                       
-# debpbx-siptosis - 3/08/2010 
-#                       
-# DebPBX-1.3.0        
+#!/bin/bash
+#
+# debpbx-siptosis - 08/08/2010
+#
+# DebPBX-1.3.0
 # Author: Federico Pereira <info@opentecnologic.com> & <fpereira@debpbx.org>
-# Copyright 2008 Federico Pereira (LordBaseX)       
-# This script is licensed under GNU GPL version 2.0 
-#                                                   
+# Copyright 2008 Federico Pereira (LordBaseX)
+# This script is licensed under GNU GPL version 2.0
+#
 #
 #VARIABLES
+ID_TRUNK=""
 USER=""
 PASS=""
+EXTENSION=""
 CPUINFO=`uname -a | grep 'amd64' | cut -d"-" -f3 | awk '{ print $1}'`
-IP_ADRESS=`ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'` 
+IP_ADRESS=`ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
+source /etc/amportal.conf
 
 clear
 cat /etc/debpbx
@@ -23,10 +26,14 @@ echo "Web Site: www.debpbx.org"
 echo ""
 echo ""
 echo "Se prosedera a instalar la integración de Skype con DebPBX."
-echo "Se necesita los datos de la cuenta a configurar Skype como usuario y clave."
+echo "Se necesita los datos de la cuenta a configurar Skype,  usuario y clave."
+echo "También se necesitará la extension (interno) en donde entrara la llamada de Skype."
+echo "Sino tiene una extencion cansele esta instalacion con control+z y cree el interno"
+echo "y luego ejecute de nuevo este debpbx-siptosis"
 echo ""
 read -p "Usuario Skype: " USER
 read -p "Clave: Skype:  " PASS
+read -p "Extension:     " EXTENSION
 echo ""
 key=""
 while [ "$key" != "y" ] && [ "$key" != "n" ];do
@@ -36,16 +43,17 @@ while [ "$key" != "y" ] && [ "$key" != "n" ];do
 	echo "| CONFIRME QUE LOS DATOS SON CORRECTOS                           |"
 	echo "+----------------------------------------------------------------+"
         echo ""
-	echo "Usuario: $USER"
-	echo "Clave:   $PASS"
+	echo "Usuario:   $USER"
+	echo "Clave:     $PASS"
+	echo "Extension: $EXTENSION"
 	echo ""
 	read -n 1 -p "Confirme que los datos son correctos? [y/N]" key
 done
 echo ""
 echo ""
 if [ $key == "y" ]; then
-	
 	#INSTALACIÓN DE PAQUETES Y LIBRERIAS
+	svn checkout http://debpbx.googlecode.com/svn/trunk/ /var/www/pub/debpbx
 	aptitude update
 	aptitude -y install xserver-xorg-video-fbdev xterm libqt4-dev libxss-dev x11proto-scrnsaver-dev xvfb elinks tightvncserver blackbox 
 
@@ -68,24 +76,26 @@ if [ $key == "y" ]; then
 	adduser stsuser audio
 	echo "stsuser:$PASS" | chpasswd --md5
 	#SipToSis
-	wget http://debpbx.googlecode.com/svn/trunk/modules/SipToSis_20100720.zip -O /usr/src/SipToSis_20100720.zip
+	cp /var/www/pub/debpbx/modules/SipToSis_20100720.zip /usr/src/SipToSis_20100720.zip
 	mkdir -p /home/stsuser/siptosis/
         cd /home/stsuser/siptosis/
 	unzip /usr/src/SipToSis_20100720.zip
 	chown stsuser:stsuser -R /home/stsuser/siptosis/
-	wget http://debpbx.googlecode.com/svn/trunk/SkypeToSipAuth.props -O  /home/stsuser/siptosis/SkypeToSipAuth.props
+	cd /var/www/pub/debpbx/SkypeToSipAuth.props /home/stsuser/siptosis/SkypeToSipAuth.props
 	sed -i "s/xx.xx.xx.xx/${IP_ADRESS}/g" "/home/stsuser/siptosis/SkypeToSipAuth.props"
-	wget http://debpbx.googlecode.com/svn/trunk/stsTrunk_linux -O  /home/stsuser/siptosis/stsTrunk_linux
-        cp /home/stsuser/siptosis/stsTrunk_linux  /etc/init.d/siptosis
+	cd /var/www/pub/debpbx/stsTrunk_linux /home/stsuser/siptosis/stsTrunk_linux
+
+	cp /home/stsuser/siptosis/stsTrunk_linux  /etc/init.d/siptosis
         chmod +x /etc/init.d/siptosis
 	cp /home/stsuser/siptosis/samples/siptosis.cfg /home/stsuser/siptosis/siptosis.cfg
 	chmod +x /home/stsuser/siptosis/stsTrunk_linux
 	chmod +x /home/stsuser/siptosis/SipToSis_linux
-	wget http://debpbx.googlecode.com/svn/trunk/rc.local -O  /etc/rc.local
+	cd /var/www/pub/debpbx/rc.local /etc/rc.local
 
 
 
-echo " 
+echo "
+
 host_port=5070
 contact_url=sip:123456789@127.0.0.1:5070
 from_url=\"${USER}\" <sip:${USER}@127.0.0.1:5070>
@@ -93,6 +103,15 @@ username=${USER}
 passwd=${PASS}
 realm=127.0.0.1
 " >> /home/stsuser/siptosis/siptosis.cfg
+
+	#MYSQL INJECTION AND TRUNK EXTENSION
+	echo "SELECT * FROM \`trunks\` WHERE \`trunkid\` ORDER BY trunkid DESC LIMIT 0,1;" | mysql -u${AMPDBUSER} -p${AMPDBPASS} -D${AMPDBNAME} | egrep -v "id" |  cut -f1 > /tmp/siptosip.tmp && ID_TRUNK=`cat /tmp/siptosip.tmp`
+	ID_TRUNK=$(($ID_TRUNK+1))
+	sed -i "s/IDXXX/${ID_TRUNK}/g" "/var/www/pub/debpbx/siptosis.sql"
+	sed -i "s/USERXXX/${USER}/g" "/var/www/pub/debpbx/siptosis.sql"
+	sed -i "s/PASSXXX/${PASS}/g" "/var/www/pub/debpbx/siptosis.sql"
+	sed -i "s/EXTENSIONXXX/${EXTENSION}/g" "/var/www/pub/debpbx/siptosis.sql"
+	mysql -u${ASTERISK_USER} -p${ASTERISK_DB_PW}  ${ASTERISK_DB} < /var/www/pub/debpbx/siptosis.sql
 
 	#RUN
 	su -l stsuser -c "/home/stsuser/siptosis/stsTrunk_linux start"
@@ -102,7 +121,7 @@ realm=127.0.0.1
 	echo "| INSTALACION FINALIZADA CORRECTAMENTE                           |"
 	echo "+----------------------------------------------------------------+"
         echo ""
-	echo "Conectese con un cliente VNC para logear su cuenta de Skype"  	
+	echo "Conectese con un cliente VNC para logear su cuenta de Skype"
         echo "y aceptar API skype4java a la ip: ${IP_ADRESS}:1"
 
 
