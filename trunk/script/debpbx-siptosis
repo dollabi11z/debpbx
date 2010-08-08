@@ -121,8 +121,9 @@ realm=127.0.0.1
 	echo "| INSTALACION FINALIZADA CORRECTAMENTE                           |"
 	echo "+----------------------------------------------------------------+"
         echo ""
-	echo "Conectese con un cliente VNC para logear su cuenta de Skype"
-        echo "y aceptar API skype4java a la ip: ${IP_ADRESS}:1"
+        echo "Se requiere reinicar el servidor con el comando: shutdown -r now"
+	echo "Luego conectese con un cliente VNC para configurar su cuenta de Skype"
+        echo "y acepte API skype4java a la ip: ${IP_ADRESS}:1"
 
 
 else
