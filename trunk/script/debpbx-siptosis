@@ -55,7 +55,7 @@ if [ $key == "y" ]; then
 	#INSTALACIÓN DE PAQUETES Y LIBRERIAS
 	aptitude update
 	aptitude -y install xserver-xorg-video-fbdev xterm libqt4-dev libxss-dev x11proto-scrnsaver-dev xvfb elinks tightvncserver blackbox 
-
+        aptitude clean
 	#VERIFICADOR DE CPU
 	#architecture=$CPUINFO
 	if [ "$CPUINFO" == "amd64" ]; then
