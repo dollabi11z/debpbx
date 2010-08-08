@@ -25,15 +25,15 @@ echo "This Distro is licensed under GNU/GPL version 2.0"
 echo "Web Site: www.debpbx.org"
 echo ""
 echo ""
-echo "Se prosedera a instalar la integración de Skype con DebPBX."
-echo "Se necesita los datos de la cuenta a configurar Skype,  usuario y clave."
-echo "También se necesitará la extension (interno) en donde entrara la llamada de Skype."
-echo "Sino tiene una extencion cansele esta instalacion con control+z y cree el interno"
-echo "y luego ejecute de nuevo este debpbx-siptosis"
+echo "Se procederá a instalar la integración de Skype con DebPBX."
+echo "Se necesitan los datos de la cuenta a configurar Skype,  usuario y clave."
+echo "También se necesitará la extensión (interno) en donde entrará la llamada de Skype."
+echo "Sino tiene una extensión cancele ésta instalación con control+z y cree el interno"
+echo "y luego ejecute de nuevo éste comando: debpbx-siptosis"
 echo ""
 read -p "Usuario Skype: " USER
 read -p "Clave: Skype:  " PASS
-read -p "Extension:     " EXTENSION
+read -p "Extensión:     " EXTENSION
 echo ""
 key=""
 while [ "$key" != "y" ] && [ "$key" != "n" ];do
@@ -45,15 +45,14 @@ while [ "$key" != "y" ] && [ "$key" != "n" ];do
         echo ""
 	echo "Usuario:   $USER"
 	echo "Clave:     $PASS"
-	echo "Extension: $EXTENSION"
+	echo "Extensión: $EXTENSION"
 	echo ""
-	read -n 1 -p "Confirme que los datos son correctos? [y/N]" key
+	read -n 1 -p "Confirme que los datos sean correctos [y/N]" key
 done
 echo ""
 echo ""
 if [ $key == "y" ]; then
 	#INSTALACIÓN DE PAQUETES Y LIBRERIAS
-	svn checkout http://debpbx.googlecode.com/svn/trunk/ /var/www/pub/debpbx
 	aptitude update
 	aptitude -y install xserver-xorg-video-fbdev xterm libqt4-dev libxss-dev x11proto-scrnsaver-dev xvfb elinks tightvncserver blackbox 
 
@@ -81,16 +80,15 @@ if [ $key == "y" ]; then
         cd /home/stsuser/siptosis/
 	unzip /usr/src/SipToSis_20100720.zip
 	chown stsuser:stsuser -R /home/stsuser/siptosis/
-	cd /var/www/pub/debpbx/SkypeToSipAuth.props /home/stsuser/siptosis/SkypeToSipAuth.props
+	cp /var/www/pub/debpbx/SkypeToSipAuth.props /home/stsuser/siptosis/SkypeToSipAuth.props
 	sed -i "s/xx.xx.xx.xx/${IP_ADRESS}/g" "/home/stsuser/siptosis/SkypeToSipAuth.props"
-	cd /var/www/pub/debpbx/stsTrunk_linux /home/stsuser/siptosis/stsTrunk_linux
-
+	cp /var/www/pub/debpbx/stsTrunk_linux /home/stsuser/siptosis/stsTrunk_linux
 	cp /home/stsuser/siptosis/stsTrunk_linux  /etc/init.d/siptosis
         chmod +x /etc/init.d/siptosis
 	cp /home/stsuser/siptosis/samples/siptosis.cfg /home/stsuser/siptosis/siptosis.cfg
 	chmod +x /home/stsuser/siptosis/stsTrunk_linux
 	chmod +x /home/stsuser/siptosis/SipToSis_linux
-	cd /var/www/pub/debpbx/rc.local /etc/rc.local
+	cp /var/www/pub/debpbx/rc.local /etc/rc.local
 
 
 
@@ -111,21 +109,22 @@ realm=127.0.0.1
 	sed -i "s/USERXXX/${USER}/g" "/var/www/pub/debpbx/siptosis.sql"
 	sed -i "s/PASSXXX/${PASS}/g" "/var/www/pub/debpbx/siptosis.sql"
 	sed -i "s/EXTENSIONXXX/${EXTENSION}/g" "/var/www/pub/debpbx/siptosis.sql"
-	mysql -u${ASTERISK_USER} -p${ASTERISK_DB_PW}  ${ASTERISK_DB} < /var/www/pub/debpbx/siptosis.sql
-
-	#RUN
-	su -l stsuser -c "/home/stsuser/siptosis/stsTrunk_linux start"
+        mysql -u${AMPDBUSER} -p${AMPDBPASS} -D${AMPDBNAME} < /var/www/pub/debpbx/siptosis.sql
 	echo ""
 	echo ""
 	echo "+----------------------------------------------------------------+"
 	echo "| INSTALACION FINALIZADA CORRECTAMENTE                           |"
 	echo "+----------------------------------------------------------------+"
         echo ""
-        echo "Se requiere reinicar el servidor con el comando: shutdown -r now"
 	echo "Luego conectese con un cliente VNC para configurar su cuenta de Skype"
         echo "y acepte API skype4java a la ip: ${IP_ADRESS}:1"
-
-
+        echo ""
+        echo ""
+        echo "Se procederá a reinicar el servidor en ... 8 segundo."
+        echo "Si usted no quiere reiniciar presione control+z y reinícielo más tarde"
+        echo "con el comando: shutdown -r now"
+        sleep 8;
+        shutdown -r now
 else
 
 	echo ""
