@@ -55,17 +55,13 @@ if [ $key == "y" ]; then
 	#INSTALACIÓN DE PAQUETES Y LIBRERIAS
 	aptitude update
 	aptitude -y install xserver-xorg-video-fbdev xterm libqt4-dev libxss-dev x11proto-scrnsaver-dev xvfb elinks tightvncserver blackbox 
-        aptitude clean
 	#VERIFICADOR DE CPU
 	#architecture=$CPUINFO
 	if [ "$CPUINFO" == "amd64" ]; then
 		aptitude install ia32-libs ia32-libs-gtk libqt4-core libqt4-gui
-		wget http://debpbx.googlecode.com/svn/trunk/modules/skype_2.1.0.81-1_amd64.deb  -O /usr/src/skype_2.1.0.81-1_amd64.deb
-	dpkg -i /usr/src/skype_2.1.0.81-1_amd64.deb
+		dpkg -i  /var/www/pub/debpbx/modules/skype_2.1.0.81-1_amd64.deb
 	else
-    		echo "deb http://download.skype.com/linux/repos/debian/ stable non-free" >>  /etc/apt/sources.list
-    		apt-key adv --keyserver pgp.mit.edu --recv-keys 0xd66b746e
-    		aptitude update && aptitude install skype
+		dpkg -i  /var/www/pub/debpbx/modules/skype_2.1.0.81-1_i386.deb
 	fi
 
 	aptitude -y install sun-java6-jdk
