@@ -1,0 +1,92 @@
+#!/bin/bash             
+#                       
+# debpbx-festival - 31/07/2010 
+#                       
+# DebPBX-1.3.0        
+# Author: Federico Pereira <info@opentecnologic.com> & <fpereira@debpbx.org>
+# Copyright 2008 Federico Pereira (LordBaseX)       
+# This script is licensed under GNU GPL version 2.0 
+#                                                   
+#  
+cd /var/www/html/admin/modules
+tar zxf /var/www/pub/debpbx/modules/texttospeech-1.3.1.3.tgz
+rm texttospeech-1.3.1.3.tgz
+aptitude -y install festival festival-dev
+dpkg -i /var/www/pub/debpbx/modules/festvox-sflpc16k_1.0-1_all.deb
+sed -i "s/kal_diphone/JuntaDeAndalucia_es_sf_diphone/g" "/usr/share/festival/voices.scm"
+
+
+#MODIFICATION FILE FESTIVAL
+echo "host=localhost
+port=1314
+festivalcommand=(tts_textasterisk \"%s\" 'file)(quit)\n
+" >> /etc/asterisk/festival.conf
+
+rm /etc/festival.scm
+echo "
+;(language__spanish)
+(set! voice_default 'voice_JuntaDeAndalucia_es_sf_diphone)
+(define (tts_textasterisk string mode)
+\"(tts_textasterisk STRING MODE)
+Apply tts to STRING. This function is specifically designed for
+use in server mode so a single function call may synthesize the string.
+This function name may be added to the server safe functions.\"
+(let ((wholeutt (utt.synth (eval (list 'Utterance 'Text string)))))
+(utt.wave.resample wholeutt 8000)
+(utt.wave.rescale wholeutt 5)
+(utt.send.wave.client wholeutt)))" >> /etc/festival.scm
+
+asterisk -rx "module unload app_festival"
+asterisk -rx "module load app_festival"
+
+echo "#!/bin/sh
+#                       
+# festival - 31/07/2010 
+#                       
+# DebPBX-1.3.0        
+# Author: Federico Pereira <info@opentecnologic.com> & <fpereira@debpbx.org>
+# Copyright 2008 Federico Pereira (LordBaseX)       
+# This script is licensed under GNU GPL version 2.0 
+#                                                   
+# 
+
+case \"\$1\" in
+start)
+echo \"Starting Festival server\"
+/usr/bin/festival --server 2>/var/log/festival.err.log &
+;;
+
+stop)
+echo \"Stopping Festival\"
+ps -u root | grep \"festival\"
+fest_proc=\`ps -u root |\\
+grep \"festival\" |\\
+awk 'BEGIN { ORS = \" \"} {print \$1}'\`
+echo \"Killing processes \$fest_proc\"
+for x in \$fest_proc
+do
+kill -9 \$x
+done
+;;
+
+restart)
+\$0 stop
+sleep 1
+\$0 start
+;;
+
+status)
+ps aux | grep \"festival --server\" 
+;;
+
+*)
+echo \"Usage: \$0 {start|stop|restart|status}\"
+exit 1
+;;
+esac
+
+exit 0
+" >> /etc/init.d/festival
+
+chmod 755 /etc/init.d/festival
+update-rc.d festival defaults 90 10
