@@ -1,12 +1,27 @@
 #!/bin/bash             
 #                       
-# debpbx-update - 31/07/2010 
+# debpbx-update - 08/08/2010 
 #                       
 # DebPBX-1.3.0        
 # Author: Federico Pereira <info@opentecnologic.com> & <fpereira@debpbx.org>
 # Copyright 2008 Federico Pereira (LordBaseX)       
 # This script is licensed under GNU GPL version 2.0 
 #                                                   
-echo ""
-echo ""
-echo ""
+#
+
+if svn checkout http://debpbx.googlecode.com/svn/trunk/ /var/www/pub/debpbx 2>/dev/null
+then
+        cp /var/www/pub/debpbx/script/* /usr/local/sbin/
+        chmod -R 777 /usr/local/sbin/
+        cp -R /var/www/pub/debpbx/debpbx_panel/ /var/www/html/
+        chown asterisk:asterisk -R /var/www/html/
+        echo "ACTUALIZACION REALIZADA "
+
+else
+      	 rm -rf /var/www/pub/debpbx
+         svn checkout http://debpbx.googlecode.com/svn/trunk/ /var/www/pub/debpbx
+         cp /var/www/pub/debpbx/script/* /usr/local/sbin/
+         chmod -R 777 /usr/local/sbin/
+         cp -R /var/www/pub/debpbx/debpbx_panel/ /var/www/html/
+         chown asterisk:asterisk -R /var/www/html/
+fi
