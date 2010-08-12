@@ -1,6 +1,6 @@
 <?php
 /**
- * $ID: fags.php
+ * $ID: faqs.php
  * 
  * DebPBX Panel Control v0.1 
  *
@@ -16,13 +16,13 @@
  */
 include('includes/application_top.php');
 $language=idenLang();
-require(DIR_WS_LANGUAGES . $language . '/' . 'fags.php');
+require(DIR_WS_LANGUAGES . $language . '/' . 'faqs.php');
 require(DIR_WS_INCLUDES . 'header.php');
 ?>
 	<div id="container">
 	<div class="content">
- 		<div class="title_about"><h3><?php echo TITLE_FAGS; ?></h3></div>
- 		<div class="text gris about"><?php echo FAGS_TEXT; ?></div>
+ 		<div class="title_about"><h3><?php echo TITLE_FAQS; ?></h3></div>
+ 		<div class="text gris about"><?php echo FAQS_TEXT; ?></div>
 	</div>
 
 	</div>
