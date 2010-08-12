@@ -1,6 +1,6 @@
 <?php
 /**
- * $ID: admin.php
+ * $ID: freepbx.php
  *
  * DebPBX is a platform of free software (under GPL license) based on Asterisk that
  * provides functionality of a telephone exchange (PBX).
