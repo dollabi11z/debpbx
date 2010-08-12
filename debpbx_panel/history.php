@@ -1,6 +1,6 @@
 <?php
 /**
- * $ID: index.php
+ * $ID: history.php
  * 
  * DebPBX Panel Control v0.1 
  *
