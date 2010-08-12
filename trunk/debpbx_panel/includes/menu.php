@@ -45,7 +45,7 @@
 			<li><a href="./history.php"><?php echo HISTORY; ?></a></li>
 			<li><a href="./version.php"><?php echo VERSION; ?></a></li>
 			<li><a href="./team.php"><?php echo TEAM; ?></a></li>
-			<li><a href="./fags.php"><?php echo FAQS; ?></a></li>
+			<li><a href="./faqs.php"><?php echo FAQS; ?></a></li>
 		</ul>
 	</li>
 </ul>
