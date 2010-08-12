@@ -9,29 +9,14 @@
 #                                                   
 #
 
-if svn checkout http://debpbx.googlecode.com/svn/trunk/ /var/www/pub/debpbx 2>/dev/null
-then
-        cp /var/www/pub/debpbx/script/* /usr/local/sbin/
-        chmod -R 777 /usr/local/sbin/
-	cp -R /var/www/pub/debpbx/debpbx_panel/.svn/  /var/www/html/
-	cp -R /var/www/pub/debpbx/debpbx_panel/admin/  /var/www/html/
-	cp -R /var/www/pub/debpbx/debpbx_panel/includes/  /var/www/html/
-	cp -R /var/www/pub/debpbx/debpbx_panel/panel/  /var/www/html/
-	cp -R /var/www/pub/debpbx/debpbx_panel/skin/  /var/www/html/
-	cp -R /var/www/pub/debpbx/debpbx_panel/*.*  /var/www/html/
-	chown asterisk:asterisk -R /var/www/html/
-        echo "ACTUALIZACION REALIZADA "
-
-else
-      	 rm -rf /var/www/pub/debpbx
-         svn checkout http://debpbx.googlecode.com/svn/trunk/ /var/www/pub/debpbx
-         cp /var/www/pub/debpbx/script/* /usr/local/sbin/
-         chmod -R 777 /usr/local/sbin/
-         cp -R /var/www/pub/debpbx/debpbx_panel/.svn/  /var/www/html/
-         cp -R /var/www/pub/debpbx/debpbx_panel/admin/  /var/www/html/
-         cp -R /var/www/pub/debpbx/debpbx_panel/includes/  /var/www/html/
-         cp -R /var/www/pub/debpbx/debpbx_panel/panel/  /var/www/html/
-         cp -R /var/www/pub/debpbx/debpbx_panel/skin/  /var/www/html/
-         cp -R /var/www/pub/debpbx/debpbx_panel/*.*  /var/www/html/
-         chown asterisk:asterisk -R /var/www/html/
-fi
+svn update http://debpbx.googlecode.com/svn/trunk/ /var/www/pub/debpbx
+cp /var/www/pub/debpbx/script/* /usr/local/sbin/
+chmod -R 777 /usr/local/sbin/
+cp -R /var/www/pub/debpbx/debpbx_panel/.svn/  /var/www/html/
+cp -R /var/www/pub/debpbx/debpbx_panel/admin/  /var/www/html/
+cp -R /var/www/pub/debpbx/debpbx_panel/includes/  /var/www/html/
+cp -R /var/www/pub/debpbx/debpbx_panel/panel/  /var/www/html/
+cp -R /var/www/pub/debpbx/debpbx_panel/skin/  /var/www/html/
+cp -R /var/www/pub/debpbx/debpbx_panel/*.*  /var/www/html/
+chown asterisk:asterisk -R /var/www/html/
+echo "ACTUALIZACION REALIZADA"
