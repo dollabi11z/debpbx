@@ -8,11 +8,21 @@
 # This script is licensed under GNU GPL version 2.0 
 #                                                   
 clear
-echo "COMMAND TOOLS"
-echo ""
-echo "debpbx-a2billing - Autoinstall A2Bbilling."
-echo "debpbx-chanskype - Autoinstall chan_skype."
-echo "debpbx-pstn - Auto config pstn plates and clones such as Digium and Sangoma OpenVox."
-echo "debpbx-siptosis - Autoinstall SipToSis of Skype integration through X and Java. (option GNU)"
-echo "debpbx-password - Changer keys to the automated system. (Generates a new key file.)"
-echo "debpbx-update - Script update system and improvements."
+
+cat<<EOF
+
+DebPBX HELP
+
+Commands               Descriptions
+-----------------------------------------------------------------------
+passwd                 set root password for console login.
+debpbx-cisco           create a SIPDefault.cnf in /tftpboot.
+debpbx-pstn	       detect and setup supported PSTN interface cards.
+asterisk -r            Asterisk CLI.
+debpbx-update	       System to update debpbx.
+debpbx-password        Change all key system.
+debpbx-chan_skype      Official integration of Skype for asterisk.
+debpbx-siptosis        Autoinstall SipToSis of Skype integration through X and Java.
+debpbx-a2billing
+debpbx-festival
+EOF
