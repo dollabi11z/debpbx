@@ -1,0 +1,42 @@
+Changelog DebPBX 1.3.0 (Stable - Aug 1 2010)
+------------------------------------------------------------
+Ver 1.3.
+########
+
+-------------------
+2010-08-01 13:40:15
+-------------------
+
+-Se liberó la primera Versión estable de DebPBX 1.3
+
+ -Debian 5.0.5 Lenny - versión NetInst
+ -Asterisk Versión: 1.4.29
+ -Asterisk Addons Versión: 1.4.10
+ -Dahdi Complete Versión: 2.2.1.1+2.2.1.1
+ -Libpri Versión: 1.4.10.2
+ -Spandsp Versión: 0.0.6pre12
+ -AGX-AST-ADDONS Versión: 1.4.24.5
+ -FreePBX Versión: 2.7.0
+ -AvantFax Versión: 3.1.6
+ -AvantFax Versión: 3.3.1
+ -A2Billing Versión: 1.7.0
+
+-Se reescribió el script de instalación y se creó un log de la instalación, ésto puede verse con el comando:
+cat /var/log/dp-install
+
+-Se crea la interfaz web embebida de DebPBX, que trata de dar un acceso más rápido a distintos contenidos. 
+
+-Desarrollo de un script para la generación de claves únicas para cada PBX instalada mejorando la seguridad, 
+éstas pueden verse con el comando: cat /root/passwords
+
+-Se agrega el comando:
+           debpbx-help
+	   debpbx-update
+	   debpbx-a2billing
+           debpbx-festival
+           debpbx-password
+           debpbx-siptosis
+           debpbx-virtualhost
+           debpbx-chanskype
+           debpbx-pstn
+
