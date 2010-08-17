@@ -1,0 +1,79 @@
+#!/bin/bash             
+#                       
+# debpbx-fop2 - 16/08/2010 
+#                       
+# DebPBX-1.3.0        
+# Author: Federico Pereira <info@opentecnologic.com> & <fpereira@debpbx.org>
+# Copyright 2008 Federico Pereira (LordBaseX)       
+# This script is licensed under GNU GPL version 2.0 
+#                                                   
+#
+#VARIABLES
+FOP2_DB="fop2_db"; 
+FOP2_USER="fop2_us";                                                                                                                                                              
+FOP2_DB_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20`
+MYSQL_ROOT_PW="";
+
+#INSTALATION & CONFIGURATION FOP2
+echo "" >> /root/passwords 
+echo "# FOP2" >> /root/passwords 
+echo "FOP2_USER=\"${FOP2_USER}\";" >> /root/passwords 
+echo "FOP2_DB=\"${FOP2_DB}\";" >> /root/passwords 
+echo "FOP2_DB_PW=\"${FOP2_DB_PW}\";" >> /root/passwords 
+source /etc/amportal.conf
+
+clear
+cat /etc/debpbx
+echo "Author: Federico Pereira <fpereira@opentecnologic.com>"
+echo "Copyright 2009 - Federico Pereira (LordBasex)"
+echo "This Distro is licensed under GNU/GPL version 2.0"
+echo "Web Site: www.debpbx.org"
+echo ""
+echo ""
+if [ -x /root/passwords ]
+then                    
+    source /root/passwords
+else                                                     
+    echo "Se detectó que no existe el archivo /root/passwords donde está" 
+    echo "alojada la variable con la contraseña de root de MySQL"
+    echo "Por favor introduzca la clave manualmente o cancele con control+z y" 
+    echo "vuelva a copiar el archivo passwords dentro de la carpeta root"
+    echo "y luego ejecute de nuevo este debpbx-fop2"
+    echo ""
+    read -p "Clave de root MySQL: " MYSQL_ROOT_PW
+fi
+
+cd /usr/src
+if [ "$CPUINFO" == "amd64" ]; then
+	tar zxf /var/www/pub/debpbx/modules/fop2-2.11-debian-x86_64.tgz
+else
+	tar zxf /var/www/pub/debpbx/modules/fop2-2.11-debian-i386.tgz
+fi
+
+cd fop2
+make install
+cd /usr/local/fop2
+cat extensions_override_freepbx.conf >>/etc/asterisk/extensions_override_freepbx.conf
+echo "#extensions_override_freepbx.conf" >> /etc/asterisk/extensions_custom.conf
+
+#MANAGER
+sed -i "s/\(manager_user= *\)\(.*\)/\1$AMPMGRUSER/" /usr/local/fop2/fop2.cfg
+sed -i "s/\(manager_secret= *\)\(.*\)/\1$AMPMGRPASS/" /usr/local/fop2/fop2.cfg
+
+#MOD FOP1
+echo "" >> /var/www/html/panel/op_server.cfg
+echo "#MOD LISTEN_PORT" >> /var/www/html/panel/op_server.cfg
+echo "listen_port=4444" >> /var/www/html/panel/op_server.cfg
+
+# VISUAL PHONEBOOK
+sed -i "s/$DBNAME = 'fop2';/$DBNAME = '$FOP2_DB'; /" /var/www/html/fop2/config.php
+sed -i "s/$DBUSER = 'fop2';/$DBUSER = '$FOP2_USER'; /" /var/www/html/fop2/config.php
+sed -i "s/$DBPASS = 'myPassw0rd';/$DBPASS = '$FOP2_DB_PW'; /" /var/www/html/fop2/config.php
+
+echo "CREATE DATABASE IF NOT EXISTS $FOP2_DB;" | mysql -u root -p${MYSQL_ROOT_PW}
+echo "GRANT ALL PRIVILEGES ON $FOP2_DB.* TO $FOP2_USER@localhost IDENTIFIED BY '$FOP2_DB_PW';" | mysql -u root -p${MYSQL_ROOT_PW}
+mysql -u$FOP2_USER -p$FOP2_DB_PW $FOP2_DB < /var/www/html/fop2/mysql.db
+
+#RUM
+/usr/sbin/amportal restart
+/etc/init.d/fop2 start
