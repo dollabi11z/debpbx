@@ -106,6 +106,7 @@ realm=127.0.0.1
 	sed -i "s/PASSXXX/${PASS}/g" "/var/www/pub/debpbx/siptosis.sql"
 	sed -i "s/EXTENSIONXXX/${EXTENSION}/g" "/var/www/pub/debpbx/siptosis.sql"
         mysql -u${AMPDBUSER} -p${AMPDBPASS} -D${AMPDBNAME} < /var/www/pub/debpbx/siptosis.sql
+	/var/lib/asterisk/bin/module_admin reload
 	echo ""
 	echo ""
 	echo "+----------------------------------------------------------------+"
@@ -116,10 +117,10 @@ realm=127.0.0.1
         echo "y acepte API skype4java a la ip: ${IP_ADRESS}:1"
         echo ""
         echo ""
-        echo "Se procederá a reinicar el servidor en ... 8 segundo."
+        echo "Se procederá a reinicar el servidor en ... 10 segundo."
         echo "Si usted no quiere reiniciar presione control+z y reinícielo más tarde"
         echo "con el comando: shutdown -r now"
-        sleep 8;
+        sleep 10;
         shutdown -r now
 else
 
