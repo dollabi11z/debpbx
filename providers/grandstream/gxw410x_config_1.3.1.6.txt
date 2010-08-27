@@ -1,0 +1,796 @@
+################################################################################################
+## Configuration template for GXW410x version 1.3.1.6
+################################################################################################
+
+##############################################################################
+##  Advanced/System-wide Options
+##############################################################################
+
+# Password for configuration file authentication
+P1 = 
+
+# Admin password for web interface, max. length is 30
+P2 = admin
+
+# G.723 rate: 0 - 6.3kbps encoding rate,  1 - 5.3kbps encoding rate
+P49 = 0
+
+# Voice Frames per TX (up to 10/20/32/64 frames for G711/G726/G723/other codecs respectively)
+P37 = 2
+
+# Layer 3 QoS (IP Diff-Serv or Precedence value for RTP)
+P38 = 48
+
+# Layer 2 QoS. 802.1Q/VLAN Tag (VLAN classification for RTP)
+P51 = 0
+
+# Layer 2 QoS. 802.1p priority value (0 - 7)
+P87 = 0
+
+# Local RTP port (1024-65535, default 5004)
+P39 = 5004 
+
+# Use Random Port. 0 - no, 1 - yes
+P78 = 0
+
+# Keep-alive interval (in seconds. default 20 seconds)
+P84 = 20
+
+# Use NAT IP.  This will enable our SIP client to use this IP in the SIP message. Example 64.3.153.50.
+P101 =
+
+# STUN server
+P76 = stun.mycompany.com
+
+#-------------------------------------------------------------
+# Firmware Upgrade
+#-------------------------------------------------------------
+
+# Firmware Upgrade. 0 - TFTP Upgrade,  1 - HTTP Upgrade.
+P212 = 1
+
+# Firmware Server Path
+P192 = fm.grandstream.com/gs
+
+# Config Server Path
+P237 = fm.grandstream.com/gs
+
+# Firmware File Prefix
+P232 =
+
+# Firmware File Postfix
+P233 =
+
+# Config File Prefix
+P234 =
+
+# Config File Postfix
+P235 =
+
+# Allow DHCP Option 66 to override server. 0 - No, 1 - Yes. Default is Yes.
+# When set to Yes(1), it will override the configured provision path and method.
+P145 = 1
+
+# Automatic Upgrade. 0 - No, 1 - Yes. Default is No.
+P194 = 0
+
+# Check for new firmware every () minutes, unit is in minute, minimnu 60 minutes, default is 7 days.
+P193 = 10080
+
+# Use firmware pre/postfix to determine if f/w is required
+# 0 = Always Check for New Firmware 
+# 1 = Check New Firmware only when F/W pre/suffix changes
+# 2 = Always Skip the Firmware Check
+P238 = 0
+
+# Authenticate Conf File
+P240 = 0
+
+# DTMF Payload Type
+P79 = 101
+
+# Syslog Server (name of the server, max length is 64 charactors)
+P207 = 
+
+# Syslog Level (Default setting is NONE)
+# 0 - NONE, 1 - DEBUG, 2 - INFO, 3 - WARNING, 4 - ERROR
+P208 = 0
+
+# NTP Server
+P30 = us.pool.ntp.org
+
+# Allow DHCP Option 42 to override NTP server. 0 - No, 1 - Yes. Default is No.
+# When set to Yes(1), it will override the configured NTP server.
+P144 = 0
+
+# Enable Video Surveillance
+# 0 - No, 1 - Yes
+P928 = 0
+
+# RTSP Port
+P929 = 554
+
+####################################################################
+# Profile 1 Settings
+####################################################################
+
+# Activate Profile  0 - no, 1 - yes
+P271 = 1
+
+# Profile Name
+P270 =
+
+# SIP Server: max. length = 96
+P47 = sip.mycompany.com
+
+# Outbound Proxy
+P48 = proxy.mycompany.com
+
+# Use DNS SRV. 0 - No, 1 - Yes.
+P103 = 0
+
+# SIP User ID is phone number. 0 - no, 1 - yes
+P63 = 0
+
+# SIP Registration. 0 - no, 1 - yes
+P31 = 1
+
+# Unregister On Reboot. 0 - no, 1 - yes
+P81 = 0
+
+# Register Expiration (in minutes. default 1 hour, max 45 days)
+P32 = 60
+
+# Registration Failure Retry Wait Time (in seconds. Between 1-3600, default is 20)
+P138 = 20
+
+# SIP Transport. 1 - UDP, 2 - TCP , (default is UDP)
+P130 = 1
+
+# NAT Traversal. 0 - yes, 1 - no, 2 - No, but send keep-alive
+P52 = 0
+
+# Proxy-Require (A SIP extension to enable firewall penetration)
+P197 =
+
+# Early Dial (use "Yes" only if proxy supports 484 response). 0 - no, 1 - yes
+P29 = 0
+
+# Session Expiration (in seconds. default 180 seconds. Allowed value: 90-65535)
+P260 = 180
+
+# Minimum SE (in seconds. default 90 seconds, must be lower than or equal to P260)
+P261 = 90
+
+# Caller Request Timer (Request for timer when calling) 0 - no, 1 - yes
+P262 = 0
+
+# Callee Request Timer (Request for timer when called. i.e. if remote party supports timer but did not request for one) 0 - no, 1 - yes
+P263 = 0
+
+# Force Timer (Still use timer when remote party does not support timer) 0 - no, 1 - yes
+P264 = 0
+
+# Force INVITE (Always refresh with INVITE instead of UPDATE even when remote party supports UPDATE) 0 - no, 1 - yes
+P265 = 0
+
+# UAC Specify Refresher. 0 - omit, 1 - UAC, 2 - UAS
+P266 = 0
+
+# UAS Specify Refresher. 1 - UAC, 2 - UAS
+P267 = 1
+
+# Enable 100rel. 0 - no, 1 - yes
+P272 = 0
+
+# Refer to Uses Target Contact
+# 0 - No, 1 - Yes
+P135 = 0
+
+#INVITE Ring-no-anwser Timeout
+P3180 = 40
+
+#-----------------------------------------------------------------------------
+# Codec/Voice Quality settings
+#-----------------------------------------------------------------------------
+
+# First codec.   0 - PCMU, 3 - GSM, 4 - G.723.1, 8 - PCMA, 18 - G.729A/B
+P57 = 0
+
+# Second codec.  0 - PCMU, 3 - GSM, 4 - G.723.1, 8 - PCMA, 18 - G.729A/B
+P58 = 3
+
+# Third codec.   0 - PCMU, 3 - GSM, 4 - G.723.1, 8 - PCMA, 18 - G.729A/B
+P59 = 4
+
+# Forth codec.   0 - PCMU, 3 - GSM, 4 - G.723.1, 8 - PCMA, 18 - G.729A/B
+P60 = 8
+
+# Fifth codec.   0 - PCMU, 3 - GSM, 4 - G.723.1, 8 - PCMA, 18 - G.729A/B
+P61 = 18
+
+# Sixth codec.   0 - PCMU, 3 - GSM, 4 - G.723.1, 8 - PCMA, 18 - G.729A/B
+P62 = 0
+
+# Seventh codec. 0 - PCMU, 3 - GSM, 4 - G.723.1, 8 - PCMA, 18 - G.729A/B
+P46 = 0
+
+# Eighth codec.  0 - PCMU, 3 - GSM, 4 - G.723.1, 8 - PCMA, 18 - G.729A/B
+P98 = 0
+
+# Special Feature.    100 - Standard, 101 - Nortel MCS, 102 - BroadSoft, 104 - Sonus, 108 - CBCOM, 109 - RNK
+P198 = 100
+
+
+####################################################################
+# Profile 2 Settings
+####################################################################
+
+# Activate Profile  0 - no, 1 - yes
+P401 = 0
+
+# Profile Name
+P417 = 
+
+# SIP Server
+P402 =
+
+# Outbound Proxy Server
+P403 =
+
+# Use DNS SRV. 0 - No, 1 - Yes.
+P408 = 0
+
+# User ID is phone number; "user=phone". 0 - no, 1 - yes
+P409 = 0
+
+# SIP Registration. 0 - no, 1 - yes
+P410 = 1
+
+# Unregister on Reboot. 0 - no, 1 - yes
+P411 = 0
+
+# Register Expiration (in minutes. default 1 hour, max 45 days)
+P412 = 60
+
+# Registration Failure Retry Wait Time (in seconds. Between 1-3600, default is 20)
+P471 = 20
+
+# SIP Transport. 1 - UDP, 2 - TCP , (default is UDP)
+P448 = 1
+
+# NAT Traversal. 0 - yes, 1 - no, 2 - No, but send keep-alive
+P414 = 0
+
+# Proxy Require
+P418 =
+
+# Early Dial. 0 - no, 1 - yes
+P422 = 0
+
+# Session Expiration (in seconds. default 180 seconds. Allowed value: 90-65535)
+P434 = 180
+
+# Minimum SE (in seconds. default 90 seconds, must be lower than or equal to P260)
+P427 = 90
+
+# Caller Request Timer (Request for timer when calling) 0 - no, 1 - yes
+P428 = 0
+
+# Callee Request Timer (Request for timer when called. i.e. if remote party supports timer but did not request for one) 0 - no, 1 - yes
+P429 = 0
+
+# Force Timer (Still use timer when remote party does not support timer) 0 - no, 1 - yes
+P430 = 0
+
+# Force INVITE (Always refresh with INVITE instead of UPDATE even when remote party supports UPDATE) 0 - no, 1 - yes
+P431 = 0
+
+# UAC Specify Refresher. 0 - omit, 1 - UAC, 2 - UAS
+P432 = 0
+
+# UAS Specify Refresher. 1 - UAC, 2 - UAS
+P433 = 1
+
+# Enable 100rel. 0 - no, 1 - yes
+P435 = 0
+
+# Refer to Uses Target Contact
+# 0 - No, 1 - Yes
+P469 = 0
+
+# INVITE Ring-no-anwser Timeout
+P3181 = 40
+
+#--------------------------------------------------------------
+Codec/Voice Quality settings
+#--------------------------------------------------------------
+
+# First codec.   0 - PCMU, 3 - GSM, 4 - G.723.1, 8 - PCMA, 18 - G.729A/B
+P451 = 0
+
+# Second codec.  0 - PCMU, 3 - GSM, 4 - G.723.1, 8 - PCMA, 18 - G.729A/B
+P452 = 3
+
+# Third codec.   0 - PCMU, 3 - GSM, 4 - G.723.1, 8 - PCMA, 18 - G.729A/B
+P453 = 4
+
+# Forth codec.   0 - PCMU, 3 - GSM, 4 - G.723.1, 8 - PCMA, 18 - G.729A/B
+P454 = 8
+
+# Fifth codec.   0 - PCMU, 3 - GSM, 4 - G.723.1, 8 - PCMA, 18 - G.729A/B
+P455 = 18
+
+# Sixth codec.   0 - PCMU, 3 - GSM, 4 - G.723.1, 8 - PCMA, 18 - G.729A/B
+P456 = 0
+
+# Seventh codec. 0 - PCMU, 3 - GSM, 4 - G.723.1, 8 - PCMA, 18 - G.729A/B
+P457 = 0
+
+# Eighth codec.  0 - PCMU, 3 - GSM, 4 - G.723.1, 8 - PCMA, 18 - G.729A/B
+P458 = 0
+
+# Special Feature.    100 - Standard, 101 - Nortel MCS, 102 - BroadSoft, 104 - Sonus, 108 - CBCOM, 109 - RNK
+P424 = 100
+
+####################################################################
+# Profile 3 Settings
+####################################################################
+
+# Activate Profile  0 - no, 1 - yes
+P501 = 0
+
+# Profile Name
+P517 =
+
+# SIP Server
+P502 =
+
+# Outbound Proxy Server
+P503 =
+
+# Use DNS SRV. 0 - No, 1 - Yes.
+P508 = 0
+
+# User ID is phone. "user=phone". 0 - no, 1 - yes
+P509 = 0
+
+# SIP Registration. 0 - no, 1 - yes
+P510 = 1
+
+# Unregister on Reboot. 0 - no, 1 - yes
+P511= 0
+
+# Register Expiration (in minutes. default 1 hour, max 45 days)
+P512 = 60
+
+# Registration Failure Retry Wait Time (in seconds. Between 1-3600, default is 20)
+P571 = 20
+
+# SIP Transport. 1 - UDP, 2 - TCP , (default is UDP)
+P548 = 1
+
+# NAT Traversal. 0 - yes, 1 - no
+P514 =
+
+# Proxy Require
+P518 =
+
+# Early Dial. 0 - no, 1 - yes
+P522 = 0
+
+# Session Expiration (in seconds. default 180 seconds. Allowed value: 90-65535)
+P534 = 180
+
+# Minimum SE (in seconds. default 90 seconds, must be lower than or equal to P260)
+P527 = 90
+
+# Caller Request Timer (Request for timer when calling) 0 - no, 1 - yes
+P528 = 0
+
+# Callee Request Timer (Request for timer when called. i.e. if remote party supports timer but did not request for one) 0 - no, 1 - yes
+P529 = 0
+
+# Force Timer (Still use timer when remote party does not support timer) 0 - no, 1 - yes
+P530 = 0
+
+# Force INVITE (Always refresh with INVITE instead of UPDATE even when remote party supports UPDATE) 0 - no, 1 - yes
+P531 = 0
+
+# UAC Specify Refresher. 0 - omit, 1 - UAC, 2 - UAS
+P532 = 0
+
+# UAS Specify Refresher. 1 - UAC, 2 - UAS
+P533 = 1
+
+# Enable 100rel. 0 - no, 1 - yes
+P535 = 0
+
+# Refer to Uses Target Contact
+# 0 - No, 1 - Yes
+P569 =
+
+# INVITE Ring-no-anwser Timeout
+P3182 = 40
+
+#--------------------------------------------------------------
+#Codec/Voice Quality settings
+#--------------------------------------------------------------
+
+# First codec.   0 - PCMU, 3 - GSM, 4 - G.723.1, 8 - PCMA, 18 - G.729A/B
+P551 = 0
+
+# Second codec.  0 - PCMU, 3 - GSM, 4 - G.723.1, 8 - PCMA, 18 - G.729A/B
+P552 = 3
+
+# Third codec.   0 - PCMU, 3 - GSM, 4 - G.723.1, 8 - PCMA, 18 - G.729A/B
+P553 = 4
+
+# Forth codec.   0 - PCMU, 3 - GSM, 4 - G.723.1, 8 - PCMA, 18 - G.729A/B
+P554 = 8
+
+# Fifth codec.   0 - PCMU, 3 - GSM, 4 - G.723.1, 8 - PCMA, 18 - G.729A/B
+P555 = 10
+
+# Sixth codec.   0 - PCMU, 3 - GSM, 4 - G.723.1, 8 - PCMA, 18 - G.729A/B
+P556 = 0
+
+# Seventh codec. 0 - PCMU, 3 - GSM, 4 - G.723.1, 8 - PCMA, 18 - G.729A/B
+P557 = 0
+
+# Eighth codec.  0 - PCMU, 3 - GSM, 4 - G.723.1, 8 - PCMA, 18 - G.729A/B
+P558 = 0
+
+# Special Feature.    100 - Standard, 101 - Nortel MCS, 102 - BroadSoft, 104 - Sonus, 108 - CBCOM, 109 - RNK
+P524 = 100
+
+########################################################################
+# FXO Lines Settings
+########################################################################
+
+#============================== 
+# FXO Termination 
+#==============================
+
+# Enable Current Disconnect
+# 0 - No, 1 - Yes
+P3603 = 1
+
+# Enable Current Disconnect Threshold. Default 100, normally 100 ~ 800ms.
+P3604 = 100
+
+# Enable Tone Disconnect. 0 - No, 1 - Yes.
+# If set yes, reorder tone is used as disconnect signal. Default No.
+P3605 = 0
+
+# Enable Polarity Reversal. 0 - No, 1 - Yes. 
+# Default No. Check with your PSTN carrier before set to Yes
+P3606 = 0
+
+# Silence Timeout. Default 60 seconds.
+P3202 = 60
+
+# AC Termination Impedance
+# 100 - 600 Ohm (North America)
+# 101 - 900 Ohm
+# 102 - 270 Ohm + (750 Ohm || 150 nF) and 275 Ohm + (780 Ohm || 150 nF)
+# 103 - 220 Ohm + (820 Ohm || 120 nF) and 220 Ohm + (820 Ohm || 115 nF)
+# 104 - 370 Ohm + (620 Ohm || 310 nF)
+# 105 - 320 Ohm + (1050 Ohm || 230 nF)
+# 106 - 370 Ohm + (820 Ohm || 110 nF)
+# 107 - 275 Ohm + (780 Ohm || 150 nF)
+# 108 - 120 Ohm + (820 Ohm || 110 nF)
+# 109 - 350 Ohm + (1000 Ohm || 210 nF)
+# 110 -  0 Ohm + (900 Ohm || 30 nF)
+# 111 - 600 Ohm + 2.16 uF
+# 112 - 900 Ohm + 1 uF
+# 113 - 900 Ohm + 2.16 uF
+# 114 - 600 Ohm + 1 uF
+# 115 - Global complex impedance
+P3631 = 100
+
+#============================== 
+# Channel Dialing to PSTN
+#==============================
+
+# Wait for Dial Tone (Y/N). Default Yes - dial upon dial-tone
+P3303 = 
+
+# Stage Method(1/2). Default 1 - 1 stage dialing.
+P3304 = 
+
+# Min Delay Before Dial PSTN. Default 500, range 50 ~ 6500ms.
+P3206 =
+
+# Unconditional Call Forward to VOIP. 
+# User ID
+P3607 =
+
+# SIP Server.
+P3306 =
+
+# Sip Destination Port.
+# P3307 =
+
+#===================================== 
+# PSTN to VoIP Caller ID Setting
+#=====================================
+
+# Number of Rings Before Pickup
+P3599 = 4
+
+# Caller ID Scheme
+# 1:Bellcore/Telcordia, 2:ETSI-FSK during ringing, 3:ETSI-FSK prior to ringing with DTAS
+# 4:ETSI-FSK prior to ringing with LR, 5:ETSI-FSK prior to ringing with RP, 6:ETSI-DTMF during ringing
+# 7:ETSI-DTMF prior to ringing with DTAS, 8:ETSI-DTMF prior to ringing with LR
+# 9:ETSI-DTMF prior to ringing with RP, 10:SIN 227 BT, 11: NTT
+P3600 = 1
+
+# Caller ID Transport Type.
+# 1:Relay via SIP From, 2:Disable, 3:Send Anonymous, 4:Relay via SIP P-Asserted-Identity
+P3601 = 1
+
+# T.38 Setting
+# Syntax: ch x-y: mode=val,rate=val,ecm=val;[...]
+# (mode: 1:Relay(default), 2:Passthough) 
+# (rate: 2400, 4800, 7200, 9600(default), 12000, 14400) 
+# (ecm: 1:Enable(default), 0:Disable) 
+P3602 =
+
+########################################################################
+# Channels Page
+########################################################################
+
+#===================================== 
+# Phone Number Settings
+#=====================================
+
+# FXO Port 1
+# Channel(s), SIP USER ID, Authenticate ID, Password, Profile ID (3000 - Profile 1, 3001 - Profile 2, 3003 - Profile 3)
+P3030 =
+P3060 =
+P3090 =
+P3120 = 
+P3150 =
+
+# FXO Port 2
+# Channel(s), SIP USER ID, Authenticate ID, Password, Profile ID (3000 - Profile 1, 3001 - Profile 2, 3003 - Profile 3)
+P3031 = 
+P3061 =
+P3091 =
+P3121 = 
+P3151 =
+
+# FXO Port 3
+# Channel(s), SIP USER ID, Authenticate ID, Password, Profile ID (3000 - Profile 1, 3001 - Profile 2, 3003 - Profile 3)
+P3032 =
+P3062 =
+P3092 =
+P3122 = 
+P3152 =
+
+# FXO Port 4
+# Channel(s), SIP USER ID, Authenticate ID, Password, Profile ID (3000 - Profile 1, 3001 - Profile 2, 3003 - Profile 3)
+P3033 =
+P3063 =
+P3093 =
+P3123 = 
+P3153 =
+
+# FXO Port 5
+# Channel(s), SIP USER ID, Authenticate ID, Password, Profile ID (3000 - Profile 1, 3001 - Profile 2, 3003 - Profile 3)
+P3034 =
+P3064 =
+P3094 =
+P3124 = 
+P3154 =
+
+# FXO Port 6
+# Channel(s), SIP USER ID, Authenticate ID, Password, Profile ID (3000 - Profile 1, 3001 - Profile 2, 3003 - Profile 3)
+P3035 =
+P3065 =
+P3095 =
+P3125 = 
+P3155 =
+
+# FXO Port 7
+# Channel(s), SIP USER ID, Authenticate ID, Password, Profile ID (3000 - Profile 1, 3001 - Profile 2, 3003 - Profile 3)
+P3036 =
+P3066 =
+P3096 =
+P3126 = 
+P3156 =
+
+# FXO Port 8
+# Channel(s), SIP USER ID, Authenticate ID, Password, Profile ID (3000 - Profile 1, 3001 - Profile 2, 3003 - Profile 3)
+P3037 =
+P3067 =
+P3097 =
+P3127 = 
+P3157 =
+
+#===================================== 
+# Call Progress Tones
+#=====================================
+
+# Dial Tone
+P3000 = ch1-8:f1=350@-11,f2=440@-11,c=0/0;
+
+# Ringback Tone
+P3001 = ch1-8:f1=440@-11,f2=480@-11,c=200/400;
+
+# Busy Tone
+P3002 = ch1-8:f1=480@-11,f2=620@-11,c=50/50;
+
+# Reorder Tone
+P3003 = ch1-8:f1=480@-11,f2=620@-11,c=25/25;
+
+#===================================== 
+# Channel Voice Settings
+#=====================================
+
+# Tx to PSTN Audio Gain (dB)
+P3400 =
+
+# Rx from PSTN Audio Gain (dB)
+P3401 =
+
+# Silence Suppression
+P3402 =
+
+# Echo Cancellation
+P3403 =
+
+#===================================== 
+# Channel Specific Settings
+#=====================================
+
+# DTMF Methods
+P3404 =
+
+# No Key Entry Timeot
+P3405 =
+
+# Local SIP Listen Port
+P3406 =
+
+# SRTP Mode(1-3). 
+# 1:disabled, 2:enabled but not forced, 3:enabled and forced
+P3409 =
+
+#============================================== 
+# Port Scheduling Schema (Voip->PSTN)
+#==============================================
+
+# Round-robin and/or Flexible
+# Syntax: rr: port_group; [...]), Default: rr:1-8; round-robin of all ports 
+P3407 =
+
+# Prefix to Specify Port(1 stage dialing method)
+# Syntax: prefix# + ch# + dialing# will request the ch# per call)
+# Note that this code has to prefix dialplan number and prefix doesn't impact round-robin
+P3408 = 
+
+########################################################################
+# Dial Plan
+########################################################################
+
+# PSTN Outgoing calls.
+P3331 = {x+)
+
+# Hookflash Duration (X10ms)
+P3308 = 60
+
+# Use DTMF Parameter from RFC2833 or SIP Info . 0 -Yes, 1 - No. Default Yes.
+P3190 = 0
+
+# DTMF Digit Length(X10ms)
+P3300 = 
+
+# DTMF Digit Volume(dB)
+P3301 = 
+
+# DTMF Dial Pause Between Each Digit(X10ms)
+P3310 = 
+
+########################################################################
+# End User Settings. Please do not edit this section.
+########################################################################
+
+# Web Access. 0 - HTTP, 1 - HTTPS
+# P900 = 0  
+
+# Web Port: HTTP default is 80 and HTTPS default is 443  
+# P901 = 80
+
+# End User Password
+# P196 = 123
+
+# DHCP support. 0 - yes, 1 - no
+# P8 = 0
+
+# DHCP hostname, alphabet, max. length is 32
+# P146 = 
+
+# DHCP domain, alphabet, max. length is 32
+# P147 = 
+
+# DHCP vendor class ID, alphabet, max. length is 32
+# P148 = Grandstream GXW-410x 
+
+# PPPoE support. PPPoE user ID
+# P82 =
+
+# PPPoE password
+# P83 =
+
+# PPPoE service name, max. length is 64 alpabit
+# P269 = 
+
+# Preferred DNS server, four field, octet digits
+# P92 =  
+# P93 = 
+# P94 = 
+# P95 = 
+
+# IP Address. Ignore if DHCP or PPPoE is used
+#P9 = 192
+#P10 = 168
+#P11 = 0
+#P12 = 1
+
+# Subnet mask. Ignore if DHCP or PPPoE is used
+#P13 = 255
+#P14 = 255
+#P15 = 255
+#P16 = 0
+
+# Default Router. Ignore if DHCP or PPPoE is used
+#P17 = 192
+#P18 = 168
+#P19 = 1
+#P20 = 1
+
+# DNS 1. Ignore if DHCP or PPPoE is used
+#P21 = 192
+#P22 = 168
+#P23 = 0
+#P24 = 1
+
+# DNS 2. Ignore if DHCP or PPPoE is used
+#P25 = 0
+#P26 = 0
+#P27 = 0
+#P28 = 0
+
+#----------------------------------------------------------------------------------
+# End User Time settings
+#----------------------------------------------------------------------------------
+
+# Time Zone. Offset in minutes to GMT
+P64 = 420
+
+# Allow DHCP Option 2 to override Time Zone setting. 0 - No, 1 - Yes.
+# When set to Yes(1), it will override the configured Time Zone setting if available. 
+P143 = 0
+
+# Daylight Savings Time. 0 - no, 1 - yes
+P75 = 0
+
+# Optional Rule: 
+# If Daylight Saving Time is selected (P75 = 1), optional rule will allow automatically time ajustment based on the configured rule
+# Maxlength = 33, default is North America or US Daylight Saving Time Schecule: value="3,2,7,2,0;11,1,7,2,0;60"
+P246 = 3,2,7,2,0;11,1,7,2,0;60
+
+
+
+
+
+
+
+
+
+
+
+
+
