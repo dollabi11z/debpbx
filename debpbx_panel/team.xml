@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<team>
+        <people>
+                <name>Federico Pereira</name>
+                <nickname>LordBaseX</nickname>
+                <birthday>15/01/1978</birthday>
+		<collaborator>Proyect Manager DebPBX</collaborator>
+                <desc><![CDATA[<p>Sus comienzos en informática fueron en 1995 luego en el 2002 tuvo su primera experiencia con <b>GNU/Linux</b>. 
+Trabajando con una empresa Argentina quién le encargó una solución VoIP con conectividad con la red PSTN. Fue allí donde descubrió el proyecto <a href="http://www.asterisk.org/" title="">Asterisk</a>.<p> 
+
+<p>Actualmente trabaja como desarrollador independiente y es líder y creador del proyecto 
+<a href="http://www.debpbx.org/" title="">DebPBX</a>, donde, entre otras cosas, se encarga de crear módulos de integración con otras redes tipo <a href="http://www.skype.org/" title="">Skype</a>, <a href="http://www.google.com/talk/" title="">Google talk</a>, entre otras tecnologías orientadas a las telecomunicaciones unificadas.</p>
+]]></desc>
+                <link>http://www.opentecnologic.com</link>
+                <image>federico_pereira.png</image>
+		<phone>(+54) 011 1564803155</phone>
+		<email>info@opentecnologic.com</email>
+        </people>
+	<people>
+		<name>Javier Riveros</name>
+      		<nickname>Goseeped</nickname>
+      		<birthday>26/05/1986</birthday>
+      		<collaborator>Ingeniero del Proyecto</collaborator>
+      		<desc><![CDATA[<p>Ingeniero de Sistemas, egresado de la UNEXPO Vr Luis Caballero Mejía Caracas-Ven, realizando las pasantías universitarias en <a href="http://www.pdvsa.com//" title="">PDVSA</a> se le encargó una solucion VoIP en software libre y allí descubrió el proyecto Asterisk.</p>
+<p>Actualmente trabaja para una empresa venezolana llamada MTM.CA en el cual es administrador (TI) en las plataformas Windows server,Unix/Linux,tecnologías Cisco,Nortel,Juniper,centrales VoIP Asterisk, cableado estructurado, entre otras. Hoy en dia Basando sus funciones en la implementación de Proyectos en Asterisk y colaborando con el desarrollo del proyecto <a href="http://www.debpbx.org/" title="">DebPBX</a></p>]]></desc>
+      		<link>http://www.facebook.com/JaViErRiVeR0s</link>
+      		<image>javier_riveros.png</image>
+      		<phone>(+58) 0412 9841430</phone>
+      		<email>javieriveros@live.com</email>
+   	</people>
+        <people>
+                <name>Karina Troian</name>
+                <nickname>karinatroian</nickname>
+                <birthday>17/09/1975</birthday>
+                <collaborator>Locuci<![CDATA[&oacute;]]>n en Off</collaborator>
+                <desc><![CDATA[<p>Locutora Nacional, egresada del ISER en 1997. Fue docente de taller de radio, conductora de eventos y locutora /operadora en distintas radios de Buenos Aires, Argentina. Actualmente reside en la Patagonia y desde hace 8 años graba y edita mensajes para centrales telefónicas, IVR´s, PBX, etc. Posee su propio estudio y entrega el material via web.</p>
+<p>Los mensajes son grabados en español "argentino", español "neutro" y en inglés; y musicalizados según las preferencias de los clientes.</p><p>Actualmente es la locutora oficial de <a href="http://www.debpbx.org/" title="">DebPBX</a>. Así que ya saben a quien recurrir por una locuci&oacute;n profesional.</p>]]></desc>
+                <link>http://www.karinatroian.com.ar</link>
+                <image>karina_troian.png</image>
+                <phone>(+54) 02944 15316701</phone>
+                <email>karinatroian@yahoo.com</email>
+        </people>
+        <people>
+        	<name>Jesús Gómez</name>
+	        <nickname>NAZA</nickname>
+	        <birthday>07/11/1979</birthday>
+	        <collaborator>Colaborador</collaborator>
+	        <desc><![CDATA[<p>Sus comienzos en 1998 como educador informático, en el 2000 encargado de ISP y administración de sistemas en Linux/Windows. Hoy en día continúa como administrador de sistema empresarial para diferentes empresas.</p>
+<p>Actualmente colabora con proyectos de Telefonía IP y Call Center con los servicios de <a href="http://www.debpbx.org/" title="">DebPBX</a>.</p>]]></desc>
+	        <link>http://www.facebook.com/naza.com.uy</link>
+	        <image>jesus_gomez.png</image>
+	        <phone>(+59) 899818010</phone>
+	        <email>mail@naza.com.uy</email>
+	</people>
+	<people>
+                <name>Juan Ceballos</name>
+                <nickname>Kronos</nickname>
+                <birthday>03/04/1974</birthday>
+                <collaborator>Beta Testing</collaborator>
+                <desc><![CDATA[<p>Desarrollador de addons para comercio electronico en España, teniendo su primer contacto con Asterisk en el 2009.</p><p>Actualmente haciendo trabajos de beta-tester para Debpbx, colaborador en el I+D+I de diversos plugins de valor añadido de Debpbx.
+ </p>]]></desc>
+                <link>http://www.kronos29.es</link>
+                <image>juan_ceballos.png</image>
+                <phone>(+34) 619836530</phone>
+                <email>kronos29@gmail.com</email>
+        </people>
+</team>
