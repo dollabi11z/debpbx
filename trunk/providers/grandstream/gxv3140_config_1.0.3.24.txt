@@ -1,0 +1,1271 @@
+################################################################################################
+## Configuration template for GXV-3140 firmware version 1.0.3.24
+################################################################################################
+
+
+#Account used for Line 1. 0- Account 1, 1- Account 2, 2- Account 3.
+#P7045 = 0
+
+#Account used for Line 2. 0- Account 1, 1- Account 2, 2- Account 3.
+#P7046 = 1
+
+#Account used for Line 3. 0- Account 1, 1- Account 2, 2- Account 3.
+#P7047 = 2
+
+##############################################################################
+##  Account1 Settings 
+##############################################################################
+
+#######################################################################
+##  Account1 General Settings
+#######################################################################
+# Account Active. 0- NO, 1- YES
+P271 = 1
+
+# Account Name 
+P270 = 
+
+# SIP Server 
+P47 = 
+
+# SIP User ID
+P35 = 
+
+# Authenticate ID
+P36 = 
+
+# Authenticate Password
+P34 = 
+
+# Voicemail UserID (User ID/extension for 3rd party voice mail system)
+P33 = 
+
+# Name (Display name :John Doe)
+P3 = 
+
+# User ID is phone number.  0- NO, 1- YES
+P63 = 0
+
+#######################################################################
+##  Account1 Network Settings
+#######################################################################
+# Outbound Proxy
+P48 = 
+
+# DNS Mode. 0 - A Record, 1 - SRV, 2 - NAPTR/SRV.
+P103 = 0
+
+# NAT Traversal. 0 - No, 1 - STUN, 2 - keep-alive, 3- UPnP, 4- Auto 5- VPN
+P52 = 0
+
+# Proxy-Require 
+P197 = 
+
+#######################################################################
+##  Account1 SIP Settings
+#######################################################################
+# SIP Registration. 0 - No, 1 - Yes.
+P31 = 1
+
+# Unregister On Reboot.0 - No, 1 - Yes.
+P81 = 0
+
+# Register Expiration (m)(in minutes. default 1 hour, max 45 days)
+P32 = 60
+
+# Wait Time Retry Registration (s)(in seconds. Between 1-3600, default is 20)
+P138 = 20
+
+# Local SIP Port (default 5060)
+P40 = 5060
+
+# SUBSCRIBE for MWI (Whether or not send SUBSCRIBE for Message Waiting Indication) 0 - No, 1 - Yes.
+P99 = 0
+
+# Session Expiration (in seconds. default 180 seconds. Allowed value: 90-65535)
+P260 = 180
+
+# Min-SE (s)(default 90 seconds)
+P261 = 90
+
+# UAC Specify Refresher. 0 - omit, 1 - UAC, 2 - UAS
+P266 = 0
+
+# UAS Specify Refresher. 1 - UAC, 2 - UAS
+P267 = 1
+
+# Force INVITE(Always refresh with INVITE instead of UPDATE even when remote party supports UPDATE) 0 - no, 1 - yes
+P265 = 0
+
+# Caller Request Timer(Request for timer when calling) 0 - no, 1 - yes
+P262 = 0
+
+# Callee Request Timer(Request for timer when called. i.e. if remote party supports timer but did not request for one) 0 - no, 1 - yes
+P263 = 0
+
+# Force Timer (Still use timer when remote party does not support timer) 0 - no, 1 - yes
+P264 = 0
+
+#Enable 100rel. 0- No, 1-Yes
+P272 = 0  
+
+# SIP Transport (0- UDP , 1- TCP, 2 -TLS)
+P130 = 0
+
+# Symmetric RTP (0- no, 1 -yes)
+P291 = 0 
+
+# Support SIP Instance ID (0- no, 1 -yes)
+P288 = 1
+
+# Validate Incoming Messages (0- no, 1 -yes)
+P4340 = 0 
+
+# SIP T1 Timeout. RFC 3261 T1 value (RTT estimate)
+# 50 - 0.5 sec, 100 - 1 sec, 200 - 2 sec. 
+P209 = 50
+
+# SIP T2 Timeout. RFC 3261 T2 value. The maximum retransmit interval for non-INVITE requests and INVITE responses.
+# 200 - 2 sec, 400 - 4 sec, 800 - 8 sec. Default 400.
+P250 = 400
+
+# Remove OBP from route (0- no, 1 -yes)
+P4562 = 0
+
+#######################################################################
+##  Account1 Codec Settings
+#######################################################################
+
+# Enable Video (0- no, 1 -yes)
+P292 = 1
+
+# DTMF in audio (0 - no, 1 -yes)
+P850 = 0
+
+# DTMF via RFC2833 (0 - no, 1 -yes)
+P851 = 1
+
+# DTMF via SIP INFO (0 - no, 1 -yes)
+P852 = 0
+
+# DTMF Payload Type
+P79 = 101
+
+# Preferred Vocoder
+# 0 - PCMU, 2 - G.726-32, 3 - GSM, 4 - G.723.1, 8 - PCMA, 
+# 9 - G.722, 18 - G.729A/B
+
+# First codec.
+P57 = 0
+
+# Second codec. 
+P58 = 8
+
+# Third codec.
+P59 = 4
+
+# Forth codec. 
+P60 = 18
+
+# Fifth codec.
+P61 = 9
+
+# Sixth codec.
+P62 = 3
+
+# Seventh codec.
+P46 = 0
+
+# Eighth codec.
+P98 = 0
+
+# Preferred Video Codec:   99 - H.264, 34 - H.263 103 - H.263+ (1998)
+# Choice 1
+P295 = 99
+
+# Choice 2
+P296 = 99
+
+# Choice 3 
+P1307 = 99
+
+# H.264 Payload Type
+P293 = 99
+
+# H.263+ Paylod Type
+P350 = 100
+ 
+# L16-256 Paylod Type
+P7024 = 98
+
+#H.263 Encoder Resolution. 0 - CIF, 1 - QCIF.
+P1330 = 0
+
+#SRTP Mode 0- Disabled. 1- Enabled but not forced. 2- Enabled and forced.
+P183 = 0 
+
+
+# Silence Suppression. 0-No, 1 -Yes.
+P50 = 0
+
+# Voice Frames per TX.
+P37 = 2
+
+# G723 Rate (0- 6.3 kbps, 1- 5.3kbps)
+P49 = 1
+
+# Jitter Buffer Type (0-Fixed , 1 -Adaptive) 
+P133 = 1
+
+# Jitter Buffer Length (0-Low, 1-Medium, 2- High)
+P132 =1
+
+#######################################################################
+##  Account1 Call Settings
+#######################################################################
+
+# Dial Plan Prefix
+P66 = 
+
+# Dial Plan Maxlength = 128, default is allow all {x+|*x+}
+P290 = {x+|*x+}
+
+# Early Dial.0 - no, 1 - yes
+P29 = 0
+
+# Refer-To Use Target Contact. 0 - no, 1 - yes
+P135 = 0
+
+# Auto Answer.0 - no, 1 - yes, 2 - Intercom/Paging
+P90 = 0
+
+# Send Anonymous. 0 - no, 1 - yes ((caller ID will be blocked if set to Yes)
+P65 = 0
+
+# Anonymous Call Rejection.  0 - no (default),  1 - yes  
+P129 = 0
+
+# Special Feature.  100-Standard, 108-CBCOM, 109-RNK, 113-China Mobile
+P198 = 100
+
+# Enable Call Features. 0 - no, 1 - yes.
+P191 = 1
+
+# Delayed Call Forward Wait Time (s). Default is 20 seconds, maxlength = 5  
+P139 = 20
+
+# No Key Entry Timeout (s)
+P6023 = 4 
+
+# Ring Timeout. (10-300, default is 60 seconds)
+P185 = 60
+
+# Transfer on Conference Hangup. 0 - no, 1 - yes
+P4560 = 0
+
+# Use # as Dial Key. 0 - no, 1 - yes.
+P72 = 1
+
+#Account Ring Tone
+#P104 = 
+
+#Match Incoming Caller ID1 
+#P871 = 
+
+#Distinctive Ring Tone1
+#P870 = 
+
+#Match Incoming Caller ID2
+#P873 = 
+
+#Distinctive Ring Tone2
+#P872 =
+
+#Match Incoming Caller ID3 
+#P875 = 
+
+#Distinctive Ring Tone2
+#P874 = 
+
+
+##############################################################################
+##  Account2 Settings 
+##############################################################################
+
+#######################################################################
+##  Account2 General Settings
+#######################################################################
+# Account Active. 0- NO, 1- YES
+P401 = 1
+
+# Account Name 
+P417 = 
+
+# SIP Server 
+P402 = 
+
+# SIP User ID
+P404 = 
+
+# Authenticate ID
+P405 = 
+
+# Authenticate Password
+P406 = 
+
+# Voicemail UserID (User ID/extension for 3rd party voice mail system)
+P426 = 
+
+# Name (Display name :John Doe)
+P407 = 
+
+# User ID is phone number.  0- NO, 1- YES
+P409 = 0
+
+#######################################################################
+##  Account2 Network Settings
+#######################################################################
+# Outbound Proxy
+P403 = 
+
+# DNS Mode. 0 - A Record, 1 - SRV, 2 - NAPTR/SRV.
+P408 = 0
+
+# NAT Traversal. 0 - No, 1 - STUN, 2 - keep-alive, 3- UPnP, 4- Auto, 5- VPN
+P414 = 0
+
+# Proxy-Require 
+P418 = 
+
+#######################################################################
+##  Account2 SIP Settings
+#######################################################################
+# SIP Registration. 0 - No, 1 - Yes.
+P410 = 1
+
+# Unregister On Reboot.0 - No, 1 - Yes.
+P411 = 0
+
+# Register Expiration (m)(in minutes. default 1 hour, max 45 days)
+P412 = 60
+
+# Wait Time Retry Registration (s)(in seconds. Between 1-3600, default is 20)
+P471 = 20
+
+# Local SIP Port (default 5062)
+P413 = 5062
+
+# SUBSCRIBE for MWI (Whether or not send SUBSCRIBE for Message Waiting Indication) 0 - No, 1 - Yes.
+P415 = 0
+
+# Session Expiration (in seconds. default 180 seconds. Allowed value: 90-65535)
+P434 = 180
+
+# Min-SE (s)(default 90 seconds)
+P427 = 90
+
+# UAC Specify Refresher. 0 - omit, 1 - UAC, 2 - UAS
+P432 = 0
+
+# UAS Specify Refresher. 1 - UAC, 2 - UAS
+P433 = 1
+
+# Force INVITE(Always refresh with INVITE instead of UPDATE even when remote party supports UPDATE) 0 - no, 1 - yes
+P431 = 0
+
+# Caller Request Timer(Request for timer when calling) 0 - no, 1 - yes
+P428 = 0
+
+# Callee Request Timer(Request for timer when called. i.e. if remote party supports timer but did not request for one) 0 - no, 1 - yes
+P429 = 0
+
+# Force Timer (Still use timer when remote party does not support timer) 0 - no, 1 - yes
+P430 = 0
+
+#Enable 100rel. 0- No, 1-Yes
+P435 = 0 
+
+# SIP Transport (0- UDP , 1- TCP, 2 -TLS)
+P448 = 0
+
+# Symmetric RTP (0- no, 1 -yes)
+P460 = 0 
+
+# Support SIP Instance ID (0- no, 1 -yes)
+P489 = 1
+
+# Validate Incoming Messages (0- no, 1 -yes)
+P4341 = 0 
+
+# SIP T1 Timeout. RFC 3261 T1 value (RTT estimate)
+# 50 - 0.5 sec, 100 - 1 sec, 200 - 2 sec. 
+P440 = 50
+
+# SIP T2 Timeout. RFC 3261 T2 value. The maximum retransmit interval for non-INVITE requests and INVITE responses.
+# 200 - 2 sec, 400 - 4 sec, 800 - 8 sec. Default 400.
+P441 = 400
+
+# Remove OBP from route (0- no, 1 -yes)
+P4563 = 0
+
+#######################################################################
+##  Account2 Codec Settings
+#######################################################################
+
+# Enable Video (0- no, 1 -yes)
+P461 = 1
+
+# DTMF in audio (0 - no, 1 -yes)
+P860 = 0
+
+# DTMF via RFC2833 (0 - no, 1 -yes)
+P861 = 1
+
+# DTMF via SIP INFO (0 - no, 1 -yes)
+P862 = 0
+
+# DTMF Payload Type
+P779 = 101
+
+# Preferred Vocoder
+# 0 - PCMU, 2 - G.726-32, 3 - GSM, 4 - G.723.1, 8 - PCMA, 
+# 9 - G.722, 18 - G.729A/B
+
+# First codec.
+P451 = 0
+
+# Second codec. 
+P452 = 8
+
+# Third codec.
+P453 = 4
+
+# Forth codec. 
+P454 = 18
+
+# Fifth codec.
+P455 = 9
+
+# Sixth codec.
+P456 = 3
+
+# Seventh codec.
+P457 = 0
+
+# Eighth codec.
+P458 = 0
+
+# Preferred Video Codec:   99 - H.264, 34 - H.263 103 - H.263+ (1998)
+# Choice 1
+P464 = 99
+
+# Choice 2
+P465 = 99
+
+# Choice 3
+P475 = 99
+
+# H.264 Payload Type
+P462 = 99
+
+# H.263+ Payload Type
+P473 = 100
+
+#L16-256 Payload Type
+P7025 = 98
+
+#H.263 Encoder Resolution. 0- CIF, 1-QCIF.
+P477 = 0
+
+#SRTP Mode. 0- Disabled. 1- Enabled but not forced. 2- Enabled and forced.
+P443 = 0 
+
+
+# Silence Suppression. 0-No, 1 -Yes.
+P750 = 0
+
+# Voice Frames per TX.
+P737 = 2
+
+# G723 Rate (0- 6.3 kbps, 1- 5.3kbps)
+P749 = 1
+
+# Jitter Buffer Type (0-Fixed , 1 -Adaptive) 
+P831 = 1
+
+# Jitter Buffer Length (0-Low, 1-Medium, 2- High)
+P832 =1
+
+#######################################################################
+##  Account2 Call Settings
+#######################################################################
+
+# Dial Plan Prefix
+P419 = 
+
+# Dial Plan Maxlength = 128, default is allow all {x+|*x+}
+P459 = {x+|*x+}
+
+# Early Dial.0 - no, 1 - yes
+P422 = 0
+
+# Refer-To Use Target Contact. 0 - no, 1 - yes
+P469 = 0
+
+# Auto Answer.0 - no, 1 - yes, 2 - Intercom/Paging
+P425 = 0
+
+# Send Anonymous. 0 - no, 1 - yes ((caller ID will be blocked if set to Yes)
+P421 = 0
+
+# Anonymous Call Rejection.  0 - no (default),  1 - yes  
+P446 = 0
+
+# Special Feature  100 - Standard, 108 - CBCOM, 109 - RNK
+P424 = 100
+
+# Enable Call Features. 0 - no, 1 - yes.
+P420 = 1
+
+# Delayed Call Forward Wait Time (s). Default is 20 seconds, maxlength = 5  
+P470 = 20
+
+# No Key Entry Timeout (s)
+P7023 = 4 
+
+# Ring Timeout. (10-300, default is 60 seconds)
+P816 = 60
+
+# Transfer on Conference Hangup. 0 - no, 1 - yes
+P4561 = 0
+
+# Use # as Dial Key. 0 - no, 1 - yes.
+P772 = 1
+
+#Account Ring Tone
+#P423 = 
+
+#Match Incoming Caller ID1 
+#P881 = 
+
+#Distinctive Ring Tone1
+#P880 = 
+
+#Match Incoming Caller ID2
+#P883 = 
+
+#Distinctive Ring Tone2
+#P882 =
+
+#Match Incoming Caller ID3 
+#P885 = 
+
+#Distinctive Ring Tone3
+#P884 = 
+
+
+##############################################################################
+##  Account3 Settings
+##############################################################################
+
+#######################################################################
+##  Account3 Settings/ General Settings
+#######################################################################
+# Account Active. 0- NO, 1- YES
+P501 = 1
+
+# Account Name 
+P517 = 
+
+# SIP Server 
+P502 = 
+
+# SIP User ID
+P504 = 
+
+# Authenticate ID
+P505 = 
+
+# Authenticate Password
+P506 = 
+
+# Voicemail UserID (User ID/extension for 3rd party voice mail system)
+P526 = 
+
+# Name (Display name :John Doe)
+P507 = 
+
+# User ID is phone number.  0- No, 1- Yes
+P509 = 0
+
+#######################################################################
+##  Account3 Network Settings
+#######################################################################
+# Outbound Proxy
+P503 = 
+
+# DNS Mode  0 - A Record, 1 - SRV, 2 - NAPTR/SRV.
+P508 = 0
+
+# NAT Traversal. 0 - No, 1 - STUN, 2 - keep-alive, 3- UPnP, 4- Auto, 5- VPN 
+P514 = 0
+
+# Proxy-Require 
+P518 = 
+
+#######################################################################
+##  Account3 SIP Settings
+#######################################################################
+
+# SIP Registration. 0 - No, 1 - Yes.
+P510 = 
+
+# Unregister On Reboot.0 - No, 1 - Yes.
+P511 = 0
+
+# Register Expiration (m)(in minutes. default 1 hour, max 45 days)
+P512 = 60
+
+# Wait Time Retry Registration (s)(in seconds. Between 1-3600, default is 20)
+P571 = 20
+
+# Local SIP Port (default 5064)
+P513 = 5064
+
+# SUBSCRIBE for MWI (Whether or not send SUBSCRIBE for Message Waiting Indication) 0 - No, 1 - Yes.
+P515 = 0
+
+# Session Expiration (in seconds. default 180 seconds. Allowed value: 90-65535)
+P534 = 180
+
+# Min-SE (s)(default 90 seconds)
+P527 = 90
+
+# UAC Specify Refresher. 0 - omit, 1 - UAC, 2 - UAS
+P532 = 0
+
+# UAS Specify Refresher. 1 - UAC, 2 - UAS
+P533 = 1
+
+# Force INVITE(Always refresh with INVITE instead of UPDATE even when remote party supports UPDATE) 0 - no, 1 - yes
+P531 = 0
+
+# Caller Request Timer(Request for timer when calling) 0 - no, 1 - yes
+P528 = 0
+
+# Callee Request Timer(Request for timer when called. i.e. if remote party supports timer but did not request for one) 0 - no, 1 - yes
+P529 = 0
+
+# Force Timer (Still use timer when remote party does not support timer) 0 - no, 1 - yes
+P530 = 0
+
+#Enable 100rel. 0- No, 1-Yes
+P535 = 0
+
+# SIP Transport (0- UDP , 1- TCP, 2 -TLS)
+P548 = 0
+
+# Symmetric RTP (0- no, 1 -yes)
+P7002 = 0
+
+# Support SIP Instance ID (0- no, 1 -yes)
+P589 = 1
+
+# Validate Incoming Messages (0- no, 1 -yes)
+P7022 = 0
+ 
+# SIP T1 Timeout. RFC 3261 T1 value (RTT estimate)
+# 50 - 0.5 sec, 100 - 1 sec, 200 - 2 sec. 
+P540 = 50
+
+# SIP T2 Timeout. RFC 3261 T2 value. The maximum retransmit interval for non-INVITE requests and INVITE responses.
+# 200 - 2 sec, 400 - 4 sec, 800 - 8 sec. Default 400.
+P541 = 400
+
+# Remove OBP from route (0- no, 1 -yes)
+P7021 = 0
+
+#######################################################################
+##  Account3 Codec Settings
+#######################################################################
+
+# Enable Video (0- no, 1 -yes)
+P561 = 1
+
+# DTMF- in audio (method to send DTMF)  0-no, 1-yes.
+P7014 = 0
+
+# DTMF- in RFC2833 (method to send DTMF)  0-no, 1-yes.
+P7015 = 1
+
+# DTMF- in SIP INFO (method to send DTMF)  0-no, 1-yes.
+P7016 = 0
+
+# DTMF Payload Type
+P7012 = 101
+
+# Preferred Vocoder
+# 0 - PCMU, 2 - G.726-32, 3 - GSM, 4 - G.723.1, 8 - PCMA, 
+# 9 - G.722, 18 - G.729A/B
+
+# First codec.
+P551 = 0
+
+# Second codec. 
+P552 = 8
+
+# Third codec.
+P553 = 4
+
+# Forth codec. 
+P554 = 18
+
+# Fifth codec.
+P555 = 9
+
+# Sixth codec.
+P556 = 3
+
+# Seventh codec.
+P557 = 0
+
+# Eighth codec.
+P558 = 0
+
+# Preferred Video Codec:   99 - H.264, 34 - H.263 103 - H.263+ (1998)
+# Choice 1
+P564 = 99
+
+# Choice 2
+P565 = 99
+
+# Choice 3
+P575 = 99
+
+# H.264 Payload Type
+P562 = 99
+
+# H.263+ Payload Type
+P573 = 100
+
+# L15-256 Payload Type
+P7026 = 98
+
+# H.263 Encoder Resolution. 0- CIF, 1- QCIF.
+P577 = 0
+
+# Silence Suppression. 0-No, 1 -Yes.
+P550 = 0
+
+# Voice Frames per TX.
+P7003 = 2 
+
+# G723 Rate (0- 6.3 kbps, 1- 5.3kbps)
+P7009 = 1
+
+# Jitter Buffer Type (0-Fixed , 1 -Adaptive) 
+P7017 = 1
+
+# Jitter Buffer Length (0-Low, 1-Medium, 2- High)
+P7018 =1
+
+#######################################################################
+##  Account3 Call Settings
+#######################################################################
+# Dial Plan Prefix
+P519 = 
+
+# Dial Plan Maxlength = 128, default is allow all {x+|*x+}
+P559 = {x+|*x+}
+
+# Early Dial.0 - no, 1 - yes
+P522 = 0
+
+# Refer-To Use Target Contact. 0 - no, 1 - yes
+P569 = 0
+
+# Auto Answer.0 - no, 1 - yes, 2 - Intercom/Paging
+P525 = 0
+
+# Send Anonymous. 0 - no, 1 - yes ((caller ID will be blocked if set to Yes)
+P521 = 0
+
+# Anonymous Call Rejection.  0 - no (default),  1 - yes  
+P546 = 0
+
+# Special Feature  100 - Standard, 108 - CBCOM, 109 - RNK
+P524 = 100
+
+# Enable Call Features. 0 - no, 1 - yes.
+P520 = 1
+
+# Delayed Call Forward Wait Time (s). Default is 20 seconds, maxlength = 5  
+P570 = 20
+
+# No Key Entry Timeout (s)
+P7004 = 4
+
+# Ring Timeout. (10-300, default is 60 seconds)
+P7006 = 60
+
+# Transfer on Conference Hangup. 0 - no, 1 - yes
+P7020 = 0
+
+# Use # as Dial Key. 0 - no, 1 - yes.
+P7005 = 1 
+
+#Account Ring Tone
+#P523 = 
+
+#Match Incoming Caller ID1 
+#P7061 = 
+
+#Distinctive Ring Tone1
+#P7060 = 
+
+#Match Incoming Caller ID2
+#P7063 = 
+
+#Distinctive Ring Tone2
+#P7062 =
+
+#Match Incoming Caller ID3 
+#P7065 = 
+
+#Distinctive Ring Tone3
+#P7064 = 
+
+
+##############################################################################
+##  Advanced Settings
+##############################################################################
+
+#######################################################################
+##  Advanced Settings/ General Settings
+#######################################################################
+
+# Local RTP Port
+P39 = 5004 
+
+# Use Random Port. 0 - no, 1 - yes
+P78 = 1
+
+# Keep-alive Interval (s)(in seconds. default 20 seconds)
+P84 = 20
+
+# STUN Server
+P76 = stun.ipvideotalk.com
+
+# Use NAT IP  This will enable our SIP client to use this IP in the SIP message. Example 64.3.153.50.
+P101 =
+
+# SSL Certificate
+P280 = 
+
+# SSL Private Key 
+#P279 = 
+
+# SSL Private Key Password
+#P282 = 
+
+#######################################################################
+##  Advanced Settings/ Call Features
+#######################################################################
+# Disable Call-Waiting. 0 - no, 1 - yes
+P91 = 0
+
+# Disable Call-Waiting Tone. 0 - no (default), 1 - yes
+P186 = 0
+
+# Disable Direct IP Call. 0 - no, 1 - yes
+P277 = 0
+
+# Offhook Auto Dial
+P71 = 
+
+
+#######################################################################
+##  Advanced Settings/ Video Settings
+#######################################################################
+
+#Enable Motion Detection. 0 - No, 1- Yes
+P7044 = 1 
+
+# Video Frame Rate: default - 15
+P904 = 15
+
+# Video Bit Rate(kbps): default is 128
+P905 = 128
+
+# Video Packet Size: maxlength = 4, from 100~1400, default is 1400
+P927 = 1400
+
+# Video Rate Control. 0 - Frame, 1 - TMN8
+P924 =0
+
+# Video Frame Skipping. 0 - no, 1 - yes
+P925 = 0
+
+#I-Frame Reference Only. 0 - No, 1- Yes
+P949 = 0
+
+#Packetization Mode. 0- for 0, 1- for 1.
+P957 = 0
+
+#Redundant P-frame. 0 - No, 1- Yes
+P956 = 0
+
+#Adaptive MB Intra Refresh. 0 - No, 1- Yes
+P958 = 0
+
+#Video Packet Loss Rate. 0 每 Less Than 5%, 1 每 Less than 10%, 2 每 Less than 15%, 3 每 Less than 20% and 4 每 Less than 25%
+P959 = 1
+
+#######################################################################
+##  Advanced Settings/ Application Settings
+#######################################################################
+
+# Start Browser on Boot. 0 - no (default), 1 - yes
+P950 = 0
+
+# Browser Home Page.  maxlength=64
+#P952 = 
+
+##############################################################################
+##  Maintenance
+##############################################################################
+
+#######################################################################
+##  Maintenance/ Network Settings
+#######################################################################
+#Address Type
+
+#PPPoE Account ID
+# P82 =
+
+# PPPoE password
+# P83 =
+
+# PPPoE service name, max. length is 64 alpabit
+# P269 = 
+
+#Static IP. IP address
+#P9 = 192
+#P10 = 168
+#P11 = 0
+#P12 = 160
+
+#Static IP. Subnet Mask
+#P13 = 255
+#P14 = 255
+#P15 = 0
+#P16 = 0
+
+#Static IP. Default Gateway
+#P17 = 0
+#P18 = 0
+#P19 = 0
+#P20 = 0
+
+
+#Static IP. DNS Server 1. Ignore if DHCP or PPPoE is used
+#P21 = 0
+#P22 = 0
+#P23 = 0
+#P24 = 0
+
+#Static IP. DNS Server 2. Ignore if DHCP or PPPoE is used
+#P25 = 0
+#P26 = 0
+#P27 = 0
+#P28 = 0
+
+
+# Preferred DNS server, four field, octet digits
+P92 = 0
+P93 = 0
+P94 = 0
+P95 = 0
+
+# Layer 3 QoS (IP Diff-Serv or Precedence value for RTP)
+P38 = 48
+
+# Layer 2 QoS. 802.1Q/VLAN Tag (VLAN classification for RTP)
+P51 = 0
+
+# Layer 2 QoS. 802.1p priority value (0 - 7)
+P87 = 0
+
+#######################################################################
+##  Maintenance/ Wifi Settings
+#######################################################################
+
+#Wifi Function. 0- Enabled, 1- Disabled 
+#P7800 = 0
+
+#Wifi Network Type. 0-Infra, 1-Adhoc
+#P7811 = 0
+
+#ESSID 
+#P7812 = 
+
+#Authentication Mode. 0-Open, 1-Shared, 2-WEPAUTO, 3-WPAPSK, 4-WPA2PSK, 4- WPANONE
+#P7814 =
+ 
+#Encryption 
+#P7815 =  
+
+#WEP Default Key ID (1 to 4) 
+#P7821 = 
+#P7822 = 
+#P7823 = 
+#P7824 = 
+
+#WPAPSK key
+#P7829 = 
+
+
+#######################################################################
+##  Maintenance/ Time Settings
+#######################################################################
+
+# NTP Server
+P30 = ntp.ipvideotalk.com
+
+# DHCP Option 42 override NTP server. 0 - No, 1 - Yes. Default is No.
+# When set to Yes(1), it will override the configured NTP server.
+P144 = 0
+
+# Time Zone
+#
+# Australia
+#   Melbourne,Canberra,Sydney EST-10EDT-11,M10.5.0/02:00:00,M3.5.0/03:00:00 
+#   Perth                     WST-8 
+#   Brisbane                  EST-10 
+#   Adelaide                  CST-9:30CDT-10:30,M10.5.0/02:00:00,M3.5.0/03:00:00 
+#   Darwin                    CST-9:30 
+#   Hobart                    EST-10EDT-11,M10.1.0/02:00:00,M3.5.0/03:00:00 
+#
+# Europe 
+#   Amsterdam, Netherlands    CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00 
+#   Athens, Greece            EET-2EEST-3,M3.5.0/03:00:00,M10.5.0/04:00:00 
+#   Barcelona, Spain          CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00 
+#   Berlin, Germany           CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00 
+#   Brussels, Belgium         CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00 
+#   Budapest, Hungary         CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00 
+#   Copenhagen, Denmark       CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00 
+#   Dublin, Ireland           GMT+0IST-1,M3.5.0/01:00:00,M10.5.0/02:00:00 
+#   Geneva, Switzerland       CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00 
+#   Helsinki, Finland         EET-2EEST-3,M3.5.0/03:00:00,M10.5.0/04:00:00 
+#   Kyiv, Ukraine             EET-2EEST,M3.5.0/3,M10.5.0/4 
+#   Lisbon, Portugal          WET-0WEST-1,M3.5.0/01:00:00,M10.5.0/02:00:00 
+#   London, Great Britain     GMT+0BST-1,M3.5.0/01:00:00,M10.5.0/02:00:00 
+#   Madrid, Spain             CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00 
+#   Oslo, Norway              CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00 
+#   Paris, France             CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00 
+#   Prague, Czech Republic    CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00 
+#   Roma, Italy               CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00 
+#   Moscow, Russia            MSK-3MSD,M3.5.0/2,M10.5.0/3 
+#   St.Petersburg, Russia     MST-3MDT,M3.5.0/2,M10.5.0/3 
+#   Stockholm, Sweden         CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00 
+#   Tallinn, Estonia          EET-2EEST-3,M3.5.0/03:00:00,M10.5.0/04:00:00 
+#
+# New Zealand 
+#   Auckland, Wellington      NZST-12NZDT-13,M10.1.0/02:00:00,M3.3.0/03:00:00 
+#
+# USA & Canada1 
+#   Hawaii Time               HAW10 
+#   Alaska Time               AKST9AKDT 
+#   Pacific Time              PST8PDT 
+#   Mountain Time             MST7MDT 
+#   Mountain Time (Arizona)   MST7 
+#   Central Time              CST6CDT 
+#   Eastern Time              EST5EDT 
+#   Atlantic Time             AST4ADT 
+#   New Brunswick             AST4ADT,M4.1.0/00:01:00,M10.5.0/00:01:00 
+#   Newfoundland              NST+3:30NDT+2:30,M4.1.0/00:01:00,M10.5.0/00:01:00 
+#
+# Asia 
+#   Jakarta                   WIB-7 
+#   Singapore                 SGT-8
+#   Beijing, Taipei           TZY-8
+#   Ulaanbaatar, Mongolia     ULAT-8ULAST,M3.5.0/2,M9.5.0/2 
+#   Japan, Korea, Yakutsk     TZY-9
+#
+# Central and South America 
+#   Brazil, S緌 Paulo         BRST+3BRDT+2,M10.3.0,M2.3.0 
+#   Argentina                 UTC+3 
+#   Central America           CST+6
+#
+# customize
+#
+P64 = EST5EDT
+
+# Self-Defined Time Zone
+P246 = MTZ+6MDT+5,M4.1.0,M11.1.0
+
+#######################################################################
+##  Maintenance/ Web Access
+#######################################################################
+
+#Disable Telnet. 0-No, 1- Yes
+P276 = 0
+
+#Web Access Method. 0- HTTP, 1- HTTPS
+P900 = 0  
+
+# Web Port: HTTP default is 80 and HTTPS default is 443  
+P901 = 80
+
+# Admin password for web interface, max. length is 30
+P2 = admin
+
+# End User Password
+#P196 = 
+
+#######################################################################
+##  Maintenance/ Upgrade and Provisioning
+#######################################################################
+
+# Lock Keypad Update. 0 - no, 1 - yes
+P88 = 0
+
+# Upgrade Via: (0-TFTP,1- HTTP and 2-HTTPS)
+P212 = 1
+
+# XML Config File Password
+#P1359 = 
+
+#HTTP/HTTPS User Name
+#P1360 = 
+
+#HTTP/HTTPS Password
+#P1361 = 
+
+# Firmware Server Path
+P192 = fw.ipvideotalk.com/gs
+
+# Config Server Path
+P237 = fm.grandstream.com/gs
+
+# Firmware File Prefix
+P232 =
+
+# Firmware File Postfix
+P233 =
+
+# Config File Prefix
+P234 =
+
+# Config File Postfix
+P235 =
+
+# Allow DHCP Option 66 to override server. 0 - No, 1 - Yes. Default is  Yes.
+# When set to Yes(1), it will override the configured provision path and method.
+P145 = 1
+
+# Automatic Upgrade. 0 - No, 1 - Check every day, 2 - Check every week. Default is No.
+P194 = 0
+
+# Period time of upgrade checking. Unit is in minute, minimum 60 minutes, default is 7 days.
+P193 = 10080
+
+# Hour of the day (0-23) 
+P285 = 1 
+
+# Day of the week (0-6)
+P286 = 1
+
+# Automatic Upgrade Rule
+# Use firmware pre/postfix to determine if f/w is required
+# 0 = Always Check for New Firmware 
+# 1 = Check New Firmware only when F/W pre/suffix changes
+# 2 = Always Skip the Firmware Check
+P238 = 0
+
+# Authenticate Conf File
+P240 = 0
+
+#######################################################################
+##  Maintenance/ Syslog 
+#######################################################################
+
+
+# Syslog Server- name of the server, max length is 64 charactors)
+P207 = log.ipvideotalk.com
+
+# Syslog Level (Default setting is NONE)
+# 0 - NONE, 1 - DEBUG, 2 - INFO, 3 - WARNING, 4 - ERROR
+P208 = 0
+
+#######################################################################
+##  Maintenance/ Device Manager
+#######################################################################
+
+# Headset TX Gain (dB)
+P1301 = 0
+
+# Headset RX Gain (dB)
+P1302 = 0
+
+# Camera Zoom Mode
+# value = 0   1.0:1 (wide and default)
+# value = 1   1.1:1
+# value = 2   1.2:1
+# value = 3   1.3:1
+# value = 4   1.4:1
+# value = 5   1.5:1
+# value = 6   1.6:1
+# value = 7   1.7:1
+# value = 8   1.8:1
+# value = 9   1.9:1
+# value = 10  2.0:1 <optical tele)
+# value = 11  2.2:1
+# value = 12  2.4:1
+# value = 13  2.6:1
+# value = 14  2.8:1
+# value = 15  3.0:1
+# value = 16  3.2:1
+# value = 17  3.4:1
+# value = 18  3.6:1
+# value = 19  3.8:1
+# value = 20  4.0:1 (digital tele)
+P914 = 0 
+
+# Camera Exposure:    0 - 19
+P915 = 8
+
+# Camera Color Mode:     0 = Color mode (Default), 1 = Monochrome
+P919 = 0
+
+# Camera White Balance:  0 = auto (Default), 1 = fixed
+P920 = 0 
+
+# Camera Lens Correction: 0 = no, 1 = yes (Default)
+P926 = 1
+
+# Flicker Control: 0- auto, 1 - 60Hz, 2 - 50Hz
+P7042 = 0
+
+# TV Output:  0 = off (Default)
+# value = 0   Off
+# value = 1   NTSC (4:3)
+# value = 2   NTSC (16:9)
+# value = 3   PAL (4:3)
+# value = 4   PAL (16:9)
+P916 = 0
+ 
+#######################################################################
+##  Maintenance/OpenVPN Settings
+#######################################################################
+
+#Enable OpenVPN. 
+#P7050 = 0 
+
+#OpenVPN Server Address
+#P7051 = 
+
+#OpenVPN Server Port
+#P7052 = 
+
+
