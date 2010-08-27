@@ -14,4 +14,12 @@
  */
 
 define('TITLE', '::DebPBX - Team::');
+define('TITLE_TEAM', 'Team');
+
+define('BIRTHDAY', 'Birthday: ');
+define('COLLABORATOR', 'Collaborator: ');
+define('PHONE', 'Phone: ');
+define('EMAIL', 'Email: ');
+define('SITE', 'Web Site: ');
 ?>
+
