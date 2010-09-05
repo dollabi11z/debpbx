@@ -25,4 +25,5 @@ debpbx-chan_skype      Official integration of Skype for asterisk.
 debpbx-siptosis        Autoinstall SipToSis of Skype integration through X and Java.
 debpbx-a2billing
 debpbx-festival
+debpbx-fop2	       Integracion fop2
 EOF
