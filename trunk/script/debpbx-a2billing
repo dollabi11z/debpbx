@@ -51,7 +51,6 @@ echo "# A2BILLING" >> /root/passwords
 echo "A2BILLING_USER=\"${A2BILLING_USER}\";" >> /root/passwords
 echo "A2BILLING_DB=\"${A2BILLING_DB}\";" >> /root/passwords
 echo "A2BILLING_DB_PW=\"${A2BILLING_DB_PW}\";" >> /root/passwords
-echo "" >> $LOG
 
 mkdir -p /usr/src/a2billing/
 cd /usr/src/a2billing/
@@ -64,20 +63,20 @@ echo "GRANT ALL PRIVILEGES ON ${A2BILLING_DB}.* TO ${A2BILLING_USER}@localhost I
 
 sed -i "s/myasterisk/${A2BILLING_MGR}/g" "/usr/src/a2billing/DataBase/mysql-5.x/a2billing-schema-v1.4.0.sql"
 sed -i "s/mycode/${A2BILLING_MGR_PW}/g" "/usr/src/a2billing/DataBase/mysql-5.x/a2billing-schema-v1.4.0.sql"
-mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} </usr/src/a2billing/DataBase/mysql-5.x/a2billing-schema-v1.4.0.sql
-mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} </usr/src/a2billing/DataBase/mysql-5.x/UPDATE-a2billing-v1.4.0-to-v1.4.1.sql
-mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} </usr/src/a2billing/DataBase/mysql-5.x/UPDATE-a2billing-v1.4.1-to-v1.4.2.sql
-mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} </usr/src/a2billing/DataBase/mysql-5.x/UPDATE-a2billing-v1.4.2-to-v1.4.3.sql
-mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} </usr/src/a2billing/DataBase/mysql-5.x/UPDATE-a2billing-v1.4.3-to-v1.4.4.sql
-mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} </usr/src/a2billing/DataBase/mysql-5.x/UPDATE-a2billing-v1.4.4-to-v1.4.4.1.sql
-mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} </usr/src/a2billing/DataBase/mysql-5.x/UPDATE-a2billing-v1.4.4.1-to-v1.4.5.sql
-mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} </usr/src/a2billing/DataBase/mysql-5.x/UPDATE-a2billing-v1.4.5-to-v1.5.0.sql
-mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} </usr/src/a2billing/DataBase/mysql-5.x/UPDATE-a2billing-v1.5.0-to-v1.5.1.sql
-mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} </usr/src/a2billing/DataBase/mysql-5.x/UPDATE-a2billing-v1.5.1-to-v1.6.0.sql
-mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} </usr/src/a2billing/DataBase/mysql-5.x/UPDATE-a2billing-v1.6.0-to-v1.6.1.sql
-mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} </usr/src/a2billing/DataBase/mysql-5.x/UPDATE-a2billing-v1.6.1-to-v1.6.2.sql
-mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} </usr/src/a2billing/DataBase/mysql-5.x/UPDATE-a2billing-v1.6.2-to-v1.7.0.sql
-mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} </usr/src/a2billing/DataBase/mysql-5.x/UPDATE-a2billing-v1 .7.0-to-v1.7.1.sql
+mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} < /usr/src/a2billing/DataBase/mysql-5.x/a2billing-schema-v1.4.0.sql
+mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} < /usr/src/a2billing/DataBase/mysql-5.x/UPDATE-a2billing-v1.4.0-to-v1.4.1.sql
+mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} < /usr/src/a2billing/DataBase/mysql-5.x/UPDATE-a2billing-v1.4.1-to-v1.4.2.sql
+mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} < /usr/src/a2billing/DataBase/mysql-5.x/UPDATE-a2billing-v1.4.2-to-v1.4.3.sql
+mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} < /usr/src/a2billing/DataBase/mysql-5.x/UPDATE-a2billing-v1.4.3-to-v1.4.4.sql
+mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} < /usr/src/a2billing/DataBase/mysql-5.x/UPDATE-a2billing-v1.4.4-to-v1.4.4.1.sql
+mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} < /usr/src/a2billing/DataBase/mysql-5.x/UPDATE-a2billing-v1.4.4.1-to-v1.4.5.sql
+mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} < /usr/src/a2billing/DataBase/mysql-5.x/UPDATE-a2billing-v1.4.5-to-v1.5.0.sql
+mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} < /usr/src/a2billing/DataBase/mysql-5.x/UPDATE-a2billing-v1.5.0-to-v1.5.1.sql
+mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} < /usr/src/a2billing/DataBase/mysql-5.x/UPDATE-a2billing-v1.5.1-to-v1.6.0.sql
+mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} < /usr/src/a2billing/DataBase/mysql-5.x/UPDATE-a2billing-v1.6.0-to-v1.6.1.sql
+mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} < /usr/src/a2billing/DataBase/mysql-5.x/UPDATE-a2billing-v1.6.1-to-v1.6.2.sql
+mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} < /usr/src/a2billing/DataBase/mysql-5.x/UPDATE-a2billing-v1.6.2-to-v1.7.0.sql
+mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} < /usr/src/a2billing/DataBase/mysql-5.x/UPDATE-a2billing-v1 .7.0-to-v1.7.1.sql
 
 echo "+----------------------------------------------------------------+"
 echo "| Configurando archivo a2billing.conf                            |"
