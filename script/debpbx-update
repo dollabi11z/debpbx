@@ -10,6 +10,7 @@
 #
 
 svn update http://debpbx.googlecode.com/svn/trunk/ /var/www/pub/debpbx
+cp /var/www/pub/debpbx/.screenrc /root/
 cp /var/www/pub/debpbx/script/* /usr/local/sbin/
 chmod -R 777 /usr/local/sbin/
 cp -R /var/www/pub/debpbx/debpbx_panel/.svn/  /var/www/html/
