@@ -16,8 +16,6 @@ A2BILLING_MGR="a2billing_mgr";
 A2BILLING_DB_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20`
 A2BILLING_MGR_PW=`head -c 200 /dev/urandom | tr -cd 'A-Za-z0-9' | head -c 20`
 
-
-
 clear
 cat /etc/debpbx
 echo "Author: Federico Pereira <fpereira@opentecnologic.com>"
@@ -60,9 +58,9 @@ tar xzf A2Billing_${VER_A2BILLING}.tar.gz
 echo "create database ${A2BILLING_DB};" | mysql -u root -p${MYSQL_ROOT_PW}
 echo "GRANT ALL PRIVILEGES ON ${A2BILLING_DB}.* TO ${A2BILLING_USER}@localhost IDENTIFIED BY '${A2BILLING_DB_PW}';" | mysql -u root -p${MYSQL_ROOT_PW}
 
-
 sed -i "s/myasterisk/${A2BILLING_MGR}/g" "/usr/src/a2billing/DataBase/mysql-5.x/a2billing-schema-v1.4.0.sql"
 sed -i "s/mycode/${A2BILLING_MGR_PW}/g" "/usr/src/a2billing/DataBase/mysql-5.x/a2billing-schema-v1.4.0.sql"
+
 mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} < /usr/src/a2billing/DataBase/mysql-5.x/a2billing-schema-v1.4.0.sql
 mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} < /usr/src/a2billing/DataBase/mysql-5.x/UPDATE-a2billing-v1.4.0-to-v1.4.1.sql
 mysql -uroot -p${MYSQL_ROOT_PW} ${A2BILLING_DB} < /usr/src/a2billing/DataBase/mysql-5.x/UPDATE-a2billing-v1.4.1-to-v1.4.2.sql
@@ -114,7 +112,6 @@ chmod 755 /var/www/html/a2billing/agent/templates_c
 chown -Rf asterisk:asterisk /var/www/html/a2billing/admin/templates_c
 chown -Rf asterisk:asterisk /var/www/html/a2billing/customer/templates_c
 chown -Rf asterisk:asterisk /var/www/html/a2billing/agent/templates_c
-
 
 echo "+----------------------------------------------------------------+"
 echo "| Configure recurring services                                   |"
@@ -256,48 +253,6 @@ echo "+----------------------------------------------------------------+"
 echo "| Instalando componentes AGI                                     |"
 echo "+----------------------------------------------------------------+"
 
-cp /usr/src/a2billing/AGI/a2billing.php /var/lib/asterisk/agi-bin/
-cp -rf /usr/src/a2billing/common/lib /var/lib/asterisk/agi-bin/
-chmod +x /var/lib/asterisk/agi-bin/a2billing.php
-chown -R asterisk:asterisk /var/lib/asterisk/agi-bin
-
-echo "+----------------------------------------------------------------+"
-echo "| Call back daemon (only for Call backs)                         |"
-echo "+----------------------------------------------------------------+"
-
-cd /usr/src/a2billing/CallBack
-easy_install callback-daemon-py/dist/callback_daemon-1.0.prod_r1527-py2.5.egg
-
-cd /usr/src/a2billing/CallBack/callback-daemon-py/callback_daemon/
-cp a2b-callback-daemon.debian /etc/init.d/a2b-callback-daemon
-chmod +x /etc/init.d/a2b-callback-daemon
-
-update-rc.d a2b-callback-daemon defaults 40 603
-mkdir -p /var/lib/asterisk/mohmp3/acc_7
-mkdir -p /var/lib/asterisk/mohmp3/acc_8
-mkdir -p /var/lib/asterisk/mohmp3/acc_9
-mkdir -p /var/lib/asterisk/mohmp3/acc_10
-chmod -R 777 /var/lib/asterisk/mohmp3/acc_*
-chown -R asterisk:asterisk /var/lib/asterisk/mohmp3/
-
-echo "
-; class definitions for a2billing
-acc_1 => mp3:/var/lib/asterisk/mohmp3/acc_1
-acc_2 => mp3:/var/lib/asterisk/mohmp3/acc_2
-acc_3 => mp3:/var/lib/asterisk/mohmp3/acc_3
-acc_4 => mp3:/var/lib/asterisk/mohmp3/acc_4
-acc_5 => mp3:/var/lib/asterisk/mohmp3/acc_5
-acc_6 => mp3:/var/lib/asterisk/mohmp3/acc_6
-acc_7 => mp3:/var/lib/asterisk/mohmp3/acc_7
-acc_8 => mp3:/var/lib/asterisk/mohmp3/acc_8
-acc_9 => mp3:/var/lib/asterisk/mohmp3/acc_9
-acc_10 => mp3:/var/lib/asterisk/mohmp3/acc_10
-" >> /etc/asterisk/musiconhold_custom.conf
-
-echo "+----------------------------------------------------------------+"
-echo "| Instalando componentes AGI                                     |"
-echo "+----------------------------------------------------------------+"
-
 cd /usr/src/a2billing/AGI
 cp a2billing.php /var/lib/asterisk/agi-bin/
 cp a2billing-monitoring.php /var/lib/asterisk/agi-bin/
@@ -322,3 +277,4 @@ update-rc.d a2b-callback-daemon defaults 40 60
 echo "+----------------------------------------------------------------+"
 echo "| Instalation succesfull                                         |"
 echo "+----------------------------------------------------------------+"
+
