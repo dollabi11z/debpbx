@@ -25,36 +25,36 @@ echo "This Distro is licensed under GNU/GPL version 2.0"
 echo "Web Site: www.debpbx.org"
 echo ""
 echo ""
-echo "Se procederá a instalar la integración de Skype con DebPBX."
-echo "Se necesitan los datos de la cuenta a configurar Skype,  usuario y clave."
-echo "También se necesitará la extensión (interno) en donde entrará la llamada de Skype."
-echo "Sino tiene una extensión cancele ésta instalación con control+z y cree el interno"
-echo "y luego ejecute de nuevo éste comando: debpbx-siptosis"
+echo "Will proceed to install the Skype integration with DebPBX."
+echo "Data are needed to configure Skype account, username and password."
+echo "You will also need the extension (internal) where enter the Skype call."
+echo "but if not have a extension to cancel this with "control+c" and make extension"
+echo "and then re-run this command: debpbx-siptosis"
 echo ""
-read -p "Usuario Skype: " USER
-read -p "Clave: Skype:  " PASS
-read -p "Extensión:     " EXTENSION
+read -p "User Skype: " USER
+read -p "Password Skype: " PASS
+read -p "Extension DebPBX: " EXTENSION
 echo ""
 key=""
 while [ "$key" != "y" ] && [ "$key" != "n" ];do
 	clear
 	echo ""
 	echo "+----------------------------------------------------------------+"
-	echo "| CONFIRME QUE LOS DATOS SON CORRECTOS                           |"
+	echo "| CONFIRM THAT THE INFORMATION IS CORRECT                        |"
 	echo "+----------------------------------------------------------------+"
         echo ""
-	echo "Usuario:   $USER"
-	echo "Clave:     $PASS"
-	echo "Extensión: $EXTENSION"
+	echo "User Skype: $USER"
+	echo "Passwoed Skype: $PASS"
+	echo "Extension DebPBX: $EXTENSION"
 	echo ""
-	read -n 1 -p "Confirme que los datos sean correctos [y/N]" key
+	read -n 1 -p "Please confirm that the information is correct [y/N]" key
 done
 echo ""
 echo ""
 if [ $key == "y" ]; then
 	#INSTALACIÓN DE PAQUETES Y LIBRERIAS
 	aptitude update
-	aptitude -y install xserver-xorg-video-fbdev xterm libqt4-dev libxss-dev x11proto-scrnsaver-dev xvfb elinks tightvncserver blackbox 
+	aptitude -y install xserver-xorg-video-fbdev xterm libqt4-dev libxss-dev x11proto-scrnsaver-dev xvfb elinks tightvncserver tightvnc-java  blackbox  
 	#VERIFICADOR DE CPU
 	#architecture=$CPUINFO
 	if [ "$CPUINFO" == "amd64" ]; then
@@ -69,7 +69,22 @@ if [ $key == "y" ]; then
 	#CREATE USER
 	adduser stsuser --disabled-password --home /home/stsuser/ --gecos "stsuser SKYPE user" --force-badname
 	adduser stsuser audio
-	echo "stsuser:$PASS" | chpasswd --md5
+        echo "stsuser:$(echo $PASS | openssl passwd -1 -stdin)" | chpasswd -e
+        mkdir -p /home/stsuser/.vnc/
+        chown -R stsuser:stsuser /home/stsuser/.vnc/
+
+expect << EOF
+spawn su -l stsuser -c "tightvncpasswd"
+expect "*.vnc/passwd*"
+expect "*assword:*"
+send "${PASS}\r"
+expect "*erify:*"
+send "${PASS}\r"
+expect "*Would you like to enter a view-only password (y/n)?*"
+send "n\r"
+expect eof;
+EOF
+
 	#SipToSis
 	cp /var/www/pub/debpbx/modules/SipToSis_20100720.zip /usr/src/SipToSis_20100720.zip
 	mkdir -p /home/stsuser/siptosis/
