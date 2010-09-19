@@ -248,7 +248,7 @@ startChannel()
 		  then
 		    echo start vncserver on display ${DISPLAY}
             #check /etc/dbus-1/system.d/xorg-server.conf if dbus error
-Xtightvnc :1 -desktop X -auth /home/stsuser/.Xauthority -geometry 800x600 -depth 24 -rfbwait 1200 &
+Xtightvnc :1 -desktop X -auth /home/stsuser/.Xauthority -rfbauth /home/stsuser/.vnc/passwd -geometry 800x600 -depth 24 -rfbwait 1200 &
 	
 		  fi
 		  rm $pidfile
