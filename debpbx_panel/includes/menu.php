@@ -23,6 +23,7 @@
 			<li><a href="./avantfax.php"><?php echo AVANTFAX; ?></a></li>
 			<li><a href="./voicemail.php"><?php echo VOICEMAIL; ?></a></li>
 			<li><a href="./calllog.php"><?php echo CALLLOG; ?></a></li>
+			<li><a href="./skype.php"><?php echo SKYPE; ?></a></li>
 		</ul>
 	</li>
 	<li><a href="./" class="dir"><?php echo SUPPORT; ?></a>
