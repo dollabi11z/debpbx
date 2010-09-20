@@ -18,6 +18,7 @@ cp -R /var/www/pub/debpbx/debpbx_panel/images/  /var/www/html/
 cp -R /var/www/pub/debpbx/debpbx_panel/includes/  /var/www/html/
 cp -R /var/www/pub/debpbx/debpbx_panel/panel/  /var/www/html/
 cp -R /var/www/pub/debpbx/debpbx_panel/skin/  /var/www/html/
+cp -R /var/www/pub/debpbx/debpbx_panel/vnc/  /var/www/html/
 cp -R /var/www/pub/debpbx/debpbx_panel/*.*  /var/www/html/
 chown asterisk:asterisk -R /var/www/html/
 echo "ACTUALIZACION REALIZADA"
