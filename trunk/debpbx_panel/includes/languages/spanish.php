@@ -20,6 +20,7 @@ define('VITIGERCRM', 'VitigerCRM');
 define('AVANTFAX', 'AvantFAX');
 define('VOICEMAIL', 'VoiceMail');
 define('CALLLOG', 'Calllog');	
+define('SKYPE', 'Integraci&oacute;n Skype');
 define('SUPPORT', 'Soporte');
 define('PAID_SUPPORT', 'Soporte Pago');
 define('COMMUNITIES', 'Comunidad');
