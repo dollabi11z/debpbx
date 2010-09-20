@@ -26,7 +26,7 @@ require(DIR_WS_INCLUDES . 'header.php');
 				        name="iframe"
 				        src="../vnc"
 				        width="981px"
-				        height="650px"
+				        height="750px"
 				        scrolling="no"
 				        align="top"
 				        frameborder="0"
