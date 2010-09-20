@@ -21,19 +21,20 @@ require(DIR_WS_INCLUDES . 'header.php');
 ?>
         <div id="container">
 
-			<div id="vnc_iframe">
-				<iframe onload="iFrameHeight()"	id="vncIframe"
-				        name="iframe"
-				        src="../vnc"
-				        width="900px"
-				        height="700px"
-				        scrolling="no"
-				        align="top"
-				        frameborder="0"
-				        class="XautoHeight">
-				        Esta opción no funcionará correctamente. Lamentablemente su navegador no tiene soporte para Inline Frames
-				</iframe>
-			</div>
+                        <div id="vnc_iframe">
+                                <iframe onload="iFrameHeight()" id="vncIframe"
+                                        name="iframe"
+                                        src="http://<?php echo $_SERVER['HTTP_HOST'] ?>:5801"
+                                        width="900px"
+                                        height="700px"
+                                        scrolling="no"
+                                        align="top"
+                                        frameborder="0"
+                                        class="XautoHeight">
+                                        Esta opción no funcionará correctamente. Lamentablemente su navegador no tiene sopor$
+                                </iframe>
+                        </div>
+
 
         </div>
 <?php require(DIR_WS_INCLUDES . 'footer.php'); ?>
