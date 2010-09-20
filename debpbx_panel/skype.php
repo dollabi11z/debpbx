@@ -20,17 +20,20 @@ require(DIR_WS_LANGUAGES . $language . '/' . 'freepbx.php');
 require(DIR_WS_INCLUDES . 'header.php');
 ?>
         <div id="container">
-			<div id="vnc">
+                        <div id="vnc">
 
-<APPLET CODE="/var/www/html/includes/library/tightvnc-java/VncViewer.class" ARCHIVE="/var/www/html/includes/library/tightvnc-java/tightvncviewer-1.2.7.jar"
-WIDTH="920" HEIGHT="800">
-<PARAM NAME="PORT" VALUE="5901">
-<PARAM NAME="Scaling factor" VALUE="50">
-<param name="HOST" value="172.16.1.6">
-
-
-
-
-			</div>
-	</div>
+                <iframe onload="iFrameHeight()" id="vncIframe"
+                                        name="iframe"
+                                        src="../vnc"
+                                        width="900px"
+                                        height="650px"
+                                        scrolling="no"
+                                        align="top"
+                                        frameborder="0"
+                                        class="XautoHeight">
+                                        Esta opción no funcionará correctamente. Lamentablemente su navegador no tiene sopor$
+                </iframe>
+                        </div>
+        </div>
 <?php require(DIR_WS_INCLUDES . 'footer.php'); ?>
+
