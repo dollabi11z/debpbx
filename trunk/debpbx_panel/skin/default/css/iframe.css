@@ -37,14 +37,12 @@
 }
 
 #vnc_iframe {
-        top:-83px;
+        top:-23px;
         left: -112px;
-        margin:-5px 0px -180px;
-        padding:10px; 
+        margin:-5px 80px -100px;
+        padding:10px;
         position:relative;
 }
-
-
 
 #vtigercrm_iframe {
         top:-25px;
