@@ -20,20 +20,21 @@ require(DIR_WS_LANGUAGES . $language . '/' . 'freepbx.php');
 require(DIR_WS_INCLUDES . 'header.php');
 ?>
         <div id="container">
-                        <div id="vnc">
 
-                <iframe onload="iFrameHeight()" id="vncIframe"
-                                        name="iframe"
-                                        src="../vnc"
-                                        width="900px"
-                                        height="650px"
-                                        scrolling="no"
-                                        align="top"
-                                        frameborder="0"
-                                        class="XautoHeight">
-                                        Esta opción no funcionará correctamente. Lamentablemente su navegador no tiene sopor$
-                </iframe>
-                        </div>
+			<div id="vnc_iframe">
+				<iframe onload="iFrameHeight()"	id="vncIframe"
+				        name="iframe"
+				        src="../vnc"
+				        width="981px"
+				        height="650px"
+				        scrolling="no"
+				        align="top"
+				        frameborder="0"
+				        class="XautoHeight">
+				        Esta opción no funcionará correctamente. Lamentablemente su navegador no tiene soporte para Inline Frames
+				</iframe>
+			</div>
+
         </div>
 <?php require(DIR_WS_INCLUDES . 'footer.php'); ?>
 
