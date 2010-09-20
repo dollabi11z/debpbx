@@ -22,8 +22,8 @@ require(DIR_WS_INCLUDES . 'header.php');
         <div id="container">
 			<div id="vnc">
 
-<APPLET CODE="../includes/library/tightvnc-java/VncViewer.class" ARCHIVE="../includes/library/tightvnc-java/tightvncviewer-1.2.7.jar"
-WIDTH="950" HEIGHT="800">
+<APPLET CODE="/var/www/html/includes/library/tightvnc-java/VncViewer.class" ARCHIVE="/var/www/html/includes/library/tightvnc-java/tightvncviewer-1.2.7.jar"
+WIDTH="920" HEIGHT="800">
 <PARAM NAME="PORT" VALUE="5901">
 <PARAM NAME="Scaling factor" VALUE="50">
 <param name="HOST" value="172.16.1.6">
