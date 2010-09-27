@@ -15,6 +15,7 @@ echo "debpbx-pstn beta1"
 echo ""
 
 function debpbx_dahdi_conf(){
+	rm dahdi_dummy
  	/usr/sbin/amportal stop
 	/usr/sbin/dahdi_genconf
 	> /tmp/dahdi.txt
