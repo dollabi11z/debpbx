@@ -11,6 +11,8 @@
 #VARIABLE
 source /etc/amportal.conf
 
+echo "debpbx-pstn beta1"
+echo ""
 
 function debpbx_dahdi_conf(){
  	/usr/sbin/amportal stop
