@@ -70,8 +70,8 @@ function debpbx_dahdi_conf(){
 
 			echo "INSERT INTO \`devices\` (\`id\`, \`tech\`, \`dial\`, \`devicetype\`, \`user\`, \`description\`, \`emergency_cid\`) VALUES ('$EXTENSION', 'zap', 'ZAP/$CON_FXO', 'fixed', '$EXTENSION', 'DAHDI $CON_FXO', '');" | mysql -u${AMPDBUSER} -p${AMPDBPASS} -D${AMPDBNAME}
 
-			"INSERT INTO \`users\` (\`extension\`, \`password\`, `name`, `voicemail`, `ringtimer`, `noanswer`, `recording`, `outboundcid`, `sipname`, `mohclass`) VALUES ('$EXTENSION', '', 'DAHDI $CON_FXO ', 'novm', 0, '', 'out=Adhoc|in=Adhoc', '', '', 'default');" | mysql -u${AMPDBUSER} -p${AMPDBPASS} -D${AMPDBNAME} 
-	        fi
+	        	echo "INSERT INTO \`users\` (\`extension\`, \`password\`, \`name\`, \`voicemail\`, \`ringtimer\`, \`noanswer\`, \`recording\`, \`outboundcid\`, \`sipname\`, \`mohclass\`) VALUES ('$EXTENSION', '', 'DAHDI $CON_FXO ', 'novm', 0, '', 'out=Adhoc|in=Adhoc', '', '', 'default');" | mysql -u${AMPDBUSER} -p${AMPDBPASS} -D${AMPDBNAME}
+		fi
 	done
 }
 
