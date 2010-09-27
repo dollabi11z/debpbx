@@ -29,17 +29,21 @@ function debpbx_dahdi_conf(){
         	        CON_FXS=$(($CON_FXS+1))
         	        #echo "$CON_FXS:$MODULES"
 			CHANNELS=$CON_FXS
-			#MYSQL INJECTION AND TRUNK EXTENSION
-			echo "SELECT * FROM \`trunks\` WHERE \`trunkid\` ORDER BY trunkid DESC LIMIT 0,1;" | mysql -u${AMPDBUSER} -p${AMPDBPASS} -D${AMPDBNAME} | egrep -v "id" |  cut -f1 > /tmp/debpbx-pstn.tmp && ID_TRUNK=`cat /tmp/debpbx-pstn.tmp`
+
+			#SELECT ID+1 
+			ID_TRUNK=$(echo "SELECT * FROM \`trunks\` WHERE \`trunkid\` ORDER BY trunkid DESC LIMIT 0,1;" | mysql -u${AMPDBUSER} -p${AMPDBPASS} -D${AMPDBNAME} | egrep -v "id" |  cut -f1)
 			ID_TRUNK=$(($ID_TRUNK+1))
 
-			## BUILDING TRUNK FOR SKYPE SIP
-			echo "INSERT INTO \`trunks\` (\`trunkid\`, \`name\`, \`tech\`, \`outcid\`, \`keepcid\`, \`maxchans\`, \`failscript\`, \`dialoutprefix\`, \`channelid\`, \`usercontext\`, \`provider\`, \`disabled\`) VALUES ($ID_TRUNK, 'DAHDI $CHANNELS', 'zap', '', 'off', '', '', '', '$CHANNELS', 'notneeded', '', 'off');" | mysql -u${AMPDBUSER} -p${AMPDBPASS} -D${AMPDBNAME}
-		
-		## CREATE ZAPCHANDIDS
-			echo "SELECT * FROM  \`zapchandids\` WHERE \`channel\` ORDER BY channel DESC LIMIT 0,1;" | mysql -u${AMPDBUSER} -p${AMPDBPASS} -D${AMPDBNAME} | egrep -v "id" |  cut -f1 > /tmp/debpbx-pstn2.tmp && ID_CHANNEL=`cat /tmp/debpbx-pstn2.tmp`
-			ID_CHANNEL=$(($ID_CHANNEL+1))	
-			echo "INSERT INTO \`zapchandids\` (\`channel\`, \`description\`, \`did\`) VALUES ($ID_CHANNEL, 'FXO $CHANNELS', '$CHANNELS-1');" | mysql -u${AMPDBUSER} -p${AMPDBPASS} -D${AMPDBNAME}	
+			#CHECK DUPLICATION
+			CHECK=$(echo "SELECT 1 FROM trunks WHERE name = 'DAHDI $CHANNELS'" | mysql -u${AMPDBUSER} -p${AMPDBPASS} -D${AMPDBNAME})
+			if [ "$CHECK" != "" ]; then
+				## BUILDING TRUNK FOR DAHDI ZAP
+				echo "INSERT INTO \`trunks\` (\`trunkid\`, \`name\`, \`tech\`, \`outcid\`, \`keepcid\`, \`maxchans\`, \`failscript\`, \`dialoutprefix\`, \`channelid\`, \`usercontext\`, \`provider\`, \`disabled\`) VALUES ($ID_TRUNK, 'DAHDI $CHANNELS', 'zap', '', 'off', '', '', '', '$CHANNELS', 'notneeded', '', 'off');" | mysql -u${AMPDBUSER} -p${AMPDBPASS} -D${AMPDBNAME}
+				## CREATE ZAPCHANDIDS
+				ID_CHANNEL=$(echo "SELECT * FROM  \`zapchandids\` WHERE \`channel\` ORDER BY channel DESC LIMIT 0,1;" | mysql -u${AMPDBUSER} -p${AMPDBPASS} -D${AMPDBNAME} | egrep -v "id" |  cut -f1)
+				ID_CHANNEL=$(($ID_CHANNEL+1))	
+				echo "INSERT INTO \`zapchandids\` (\`channel\`, \`description\`, \`did\`) VALUES ($ID_CHANNEL, 'FXO $CHANNELS', '$CHANNELS-1');" | mysql -u${AMPDBUSER} -p${AMPDBPASS} -D${AMPDBNAME}
+			fi	
 
 		elif [ $MODULES != "FXS" ]; then
 	    		#CREATE EXTENSION  
