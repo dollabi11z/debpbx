@@ -8,6 +8,7 @@
 # This script is licensed under GNU GPL version 2.0 
 #                                                   
 #                                                   
+#
 
 
 for INTERFACES in `/sbin/ifconfig | grep -i "eth" |  cut -c1-4` ;
