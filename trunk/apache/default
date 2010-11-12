@@ -1,0 +1,61 @@
+#
+#   HMMMMI              MI       MMMMI    MMMMM.  MMI    MM
+#   HM: IMMM            MI       MM IMMM  MM  MMM  MM.  MMI
+#   HM:    MM   MMMMM   MIMMMM   MM   MM  MM   MM   MM MMI
+#   HM:     MM MM   MM  MM   MM  MM   MM  MMMMMM     MMM.
+#   HM:     MM:MMMMMMM  MI   MM  MMMMMM   MM   MM:   MMM:
+#   HM:    MM .MM       MI   MM  MM       MM    MM  MM MMM
+#   HM: IMMM   MMM  HM  MM  MMI  MM       MM  MMM  MM   MMI
+#   HMMMMI      .MMMM   MHMMM    MM       MMMMM   MM     MM
+#
+#                                            www.debpbx.org
+#
+# $ID: default, v 0.1  2010/11/12 00:00:00 federico Exp $
+#
+# default Virtual Hosting - Version 0.1
+# Author: Federico Pereira <fpereira@debpbx.org>
+# Copyright 2010 DebPBX - Federico Pereira (LordBaseX)
+# Content-Type: text/plain; charset=UTF-8
+# This script is licensed under GNU GPL version 2.0
+
+<VirtualHost *:80>
+	ServerAdmin webmaster@localhost
+	
+	DocumentRoot /var/www/html/
+	<Directory />
+		Options FollowSymLinks
+		AllowOverride None
+	</Directory>
+	<Directory /var/www/>
+		Options Indexes FollowSymLinks MultiViews
+		AllowOverride None
+		Order allow,deny
+		allow from all
+	</Directory>
+
+	ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+	<Directory "/usr/lib/cgi-bin">
+		AllowOverride None
+		Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+		Order allow,deny
+		Allow from all
+	</Directory>
+
+	ErrorLog /var/log/apache2/error.log
+
+	# Possible values include: debug, info, notice, warn, error, crit,
+	# alert, emerg.
+	LogLevel warn
+
+	CustomLog /var/log/apache2/access.log combined
+
+    Alias /doc/ "/usr/share/doc/"
+    <Directory "/usr/share/doc/">
+        Options Indexes MultiViews FollowSymLinks
+        AllowOverride None
+        Order deny,allow
+        Deny from all
+        Allow from 127.0.0.0/255.0.0.0 ::1/128
+    </Directory>
+
+</VirtualHost>
