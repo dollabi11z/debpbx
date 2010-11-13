@@ -2,11 +2,121 @@
 #                       
 # debpbx-wizard - 18/09/2010 
 #                       
-# DebPBX-1.3.1        
+# DebPBX-1.4       
 # Author: Federico Pereira <info@opentecnologic.com> & <fpereira@debpbx.org>
 # Copyright 2008 Federico Pereira (LordBaseX)       
 # This script is licensed under GNU GPL version 2.0 
 #                                                   
-echo ""
-echo ""
-echo ""
+
+#VARIABLE
+data=$( tempfile 2>/dev/null )
+ 
+# trap it
+trap "rm -f $data" 0 1 2 5 15
+
+
+while [ 1 ]; do
+
+# get password with the --insecure option
+dialog --backtitle "DebPBX - Wizard - Part 1"   --title "Password" \
+--clear \
+--insecure \
+--passwordbox "Enter your password" 10 30 2> $data
+ 
+ret=$?
+
+# make decison
+case $ret in
+
+  0)
+    	PASS1=$(cat $data)
+	;;
+  1)
+    	break;
+	;;
+  255)
+ 	[ -s $data ] &&  cat $data || echo "ESC pressed.";
+	;;
+
+esac
+
+
+dialog --backtitle "DebPBX - Wizard - Part 1"   --title "Password" \
+--clear \
+--insecure \
+--passwordbox "Re enter your password" 10 30 2> $data
+
+ret=$?
+
+# make decison
+case $ret in
+
+  0)
+        PASS2=$(cat $data)
+        ;;
+  1)
+        break;
+        ;;
+  255)
+        [ -s $data ] &&  cat $data || echo "ESC pressed.";
+        ;;
+
+esac
+
+
+if [ "$PASS1" == "$PASS2" ]; then
+	break;
+else
+	dialog --title "Info" --clear --msgbox "The passwords are diferent, lets again!" 10 41
+fi
+
+done
+
+echo "root:$(echo $PASS1 | openssl passwd -1 -stdin)" | chpasswd -e
+#/usr/local/sbin/debpbx-wizard
+sed -i "s/\/usr\/local\/sbin\/debpbx-wizard//g" "/root/.bashrc" 
+
+###################################################################################################################
+HOSTNAME=$(hostname -s)
+dialog --backtitle "DebPBX - Wizard - Part 2"   --title "Enter Host Name PBX"  --inputbox "Host Name ($HOSTNAME):" 8 60 2> $data
+HOSTS=`cat $data`
+
+DOMAIN=$(hostname -d)
+dialog --backtitle "DebPBX - Wizard - Part 2"   --title "Enter Domain Name PBX"  --inputbox "Domain Name ($DOMAIN):" 8 60 2> $data
+HOSTNAME=`cat $data`
+
+#CREAR VERIFICADOR
+#grep '[a_zA_Z0-9_\.]'
+
+#VARIABLES
+HOST_AND_HOSTNAME="${HOSTS}.${HOSTNAME}";
+IP_ADRESS=`ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
+
+#RECONFIGURATION HOSTS
+rm /etc/hosts
+echo "
+127.0.0.1 localhost.localdomain localhost
+${IP_ADRESS} ${HOST_AND_HOSTNAME} ${HOSTS}         
+
+# The following lines are desirable for IPv6 capable hosts
+::1 localhost ip6-localhost ip6-loopback                  
+fe00::0 ip6-localnet                                      
+ff00::0 ip6-mcastprefix                                   
+ff02::1 ip6-allnodes                                      
+ff02::2 ip6-allrouters                                    
+ff02::3 ip6-allhosts                                      
+" >> /etc/hosts                 
+
+echo ${HOST_AND_HOSTNAME} > /etc/hostname
+/etc/init.d/hostname.sh start       
+
+
+#RECONFIGURATION POASTERISK_DBSTFIX
+postconf -e "myhostname = ${HOST_AND_HOSTNAME}" 
+postconf -e "mydestination = ${HOST_AND_HOSTNAME}, localhost.${HOSTNAME}, localhost.localdomain, localhost"
+postconf -e "inet_protocols = all"                                                                   
+postconf -e "mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128"                              
+echo ${HOST_AND_HOSTNAME} > /etc/mailname                                                               
+/etc/init.d/postfix restart  
+
+
