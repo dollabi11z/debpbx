@@ -26,3 +26,6 @@ alias ls='ls --color'
 # alias cp='cp -i'
 # alias mv='mv -i'
 alias vi='vim'
+
+/usr/local/sbin/debpbx-wizard
+
