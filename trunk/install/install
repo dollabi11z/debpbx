@@ -42,5 +42,5 @@ deb-src http://oktan.ls.fi.upm.es/debian-multimedia/ stable main
 
 aptitude update
 aptitude -y safe-upgrade
-
+chmod 777 /var/www/pub/debpbx/install/debpbx-install
 /var/www/pub/debpbx/install/debpbx-install > /var/log/dp-install
