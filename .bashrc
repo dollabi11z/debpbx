@@ -27,5 +27,5 @@ alias ls='ls --color'
 # alias mv='mv -i'
 alias vi='vim'
 
-/usr/local/sbin/debpbx-wizard
+HISTTIMEFORMAT="%h/%d - %H:%M:%S "
 
