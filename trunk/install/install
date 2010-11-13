@@ -1,0 +1,46 @@
+#!/bin/bash             
+#                       
+# install - 11/11/2010 
+#                       
+# DebPBX-1.4        
+# Author: Federico Pereira <info@opentecnologic.com> & <fpereira@debpbx.org>
+# Copyright 2010 Federico Pereira (LordBaseX)       
+# This script is licensed under GNU GPL version 2.0 
+#                                                   
+#                                                   
+clear
+cat /var/www/pub/debpbx/debpbx
+echo "Author: Federico Pereira <fpereira@opentecnologic.com>"
+echo "Copyright 2010 - Federico Pereira (LordBasex)"
+echo "This Distro is licensed under GNU/GPL version 2.0"
+echo "Web Site: www.debpbx.org"
+echo ""
+echo ""
+sleep 8;
+
+cp /var/www/pub/debpbx/install/dialog_1.1-20080316-1_i386.deb /var/cache/apt/archives/
+cp /var/www/pub/debpbx/install/debian-multimedia-keyring_2008.10.16_all.deb /var/cache/apt/archives/
+dpkg -i /var/cache/apt/archives/dialog_1.1-20080316-1_i386.deb
+dpkg -i /var/cache/apt/archives/debian-multimedia-keyring_2008.10.16_all.deb
+
+rm /etc/apt/sources.list
+touch /etc/apt/sources.list
+
+echo "
+deb http://ftp.us.debian.org/debian/ lenny main non-free contrib
+deb-src http://ftp.us.debian.org/debian/ lenny main non-free contrib
+
+deb http://security.debian.org/ lenny/updates main contrib non-free
+deb-src http://security.debian.org/ lenny/updates main contrib non-free
+
+deb http://volatile.debian.org/debian-volatile lenny/volatile main contrib non-free
+deb-src http://volatile.debian.org/debian-volatile lenny/volatile main contrib non-free
+
+deb http://oktan.ls.fi.upm.es/debian-multimedia/ stable main
+deb-src http://oktan.ls.fi.upm.es/debian-multimedia/ stable main
+" >> /etc/apt/sources.list
+
+aptitude update
+aptitude -y safe-upgrade
+
+/var/www/pub/debpbx/install/debpbx-install > /var/log/dp-install
