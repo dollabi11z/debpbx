@@ -8,6 +8,9 @@
 # This script is licensed under GNU GPL version 2.0 
 #                                                   
 
+#remove debpbx-wizard /usr/local/sbin/debpbx-wizard
+sed -i "s/\/usr\/local\/sbin\/debpbx-wizard/\/bin\/bash/g" "/etc/passwd" 
+
 #VARIABLE
 data=$( tempfile 2>/dev/null )
  
@@ -73,10 +76,7 @@ fi
 done
 
 echo "root:$(echo $PASS1 | openssl passwd -1 -stdin)" | chpasswd -e
-#/usr/local/sbin/debpbx-wizard
-sed -i "s/\/usr\/local\/sbin\/debpbx-wizard//g" "/root/.bashrc" 
-
-###################################################################################################################
+#################################################################################################################################
 HOSTNAME=$(hostname -s)
 dialog --backtitle "DebPBX - Wizard - Part 2"   --title "Enter Host Name PBX"  --inputbox "Host Name ($HOSTNAME):" 8 60 2> $data
 HOSTS=`cat $data`
@@ -118,5 +118,12 @@ postconf -e "inet_protocols = all"
 postconf -e "mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128"                              
 echo ${HOST_AND_HOSTNAME} > /etc/mailname                                                               
 /etc/init.d/postfix restart  
-
+#################################################################################################################################
+MAIL=`cat /etc/aliases |  grep "@" | cut -d: -f2`
+dialog --backtitle "DebPBX - Wizard - Part 3" --title "Enter Mail Administrator" --inputbox "Mail Administrator ($MAIL): " 8 60 2> $data
+NEW_MAIL=`cat $data`
+sed -i "s/$MAIL/$NEW_MAIL/g" "/etc/aliases"
+/usr/bin/newaliases
+#################################################################################################################################
+dialog --backtitle "DebPBX - Wizard - Part 3"  --title "Installation Successful" --clear --msgbox "Thanks for your time. This only runs one time per installation. Sorry for the inconvenience, try to reconnect to the console." 10 41
 
