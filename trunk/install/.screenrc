@@ -114,7 +114,7 @@ defnonblock 5
 #
 screen -t Bash1 1 bash
 screen -t Bash2 2 bash
-screen -t Top 3 top
+screen -t Htop 3 htop
 screen -t Asterisk 4 asterisk -rvvvvvvvvvvvvvvvv
 screen -t Log 5 tail -f /var/log/syslog
 screen -t Iptraf 6 iptraf
