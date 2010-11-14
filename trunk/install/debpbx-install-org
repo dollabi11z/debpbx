@@ -93,9 +93,7 @@ echo "FOP_PW=\"${FOP_PW}\";" >> /root/passwords
 echo "" >> /root/passwords
 
 #TAG:PARTE 1 - PREPARING INSTALLATION
-echo "##################################################################" 
-echo "# PARTE 1 - PREPARING INSTALLATION                               #" 
-echo "##################################################################" 
+echo "<<<<<<<<<<  PARTE 1 - PREPARING INSTALLATION  >>>>>>>>>>" 
 
 #TAG:UPDATING GRUB
 aptitude update
@@ -107,7 +105,7 @@ update-grub
 aptitude -y install linux-source-$KERNEL_VERSION kernel-package g++ libncurses5-dev linux-libc-dev sqlite libnewt-dev libusb-dev zlib1g-dev libmysqlclient15-dev libsqlite0-dev loco mc unzip zip iptraf nmap screen subversion libqt4-core libqt4-gui ntpdate tcpdump libiksemel-dev libtiff4-dev libxml2-dev bison libaudiofile-dev                 
 
 #TAG:INSTALLATION PACKEGER TOOLS
-aptitude install -y linux-headers-`uname -r` build-essential hylafax-server iaxmodem bind9 postfix ghostscript netpbm libungif4-dev sudo cups expect libmagic-dev cmake vim-full
+aptitude install -y linux-headers-`uname -r` build-essential hylafax-server iaxmodem bind9 postfix ghostscript netpbm libungif4-dev sudo cups expect libmagic-dev cmake vim-full htop
 
 #TAG:INSTALLATION PACKEGER ASTERISK
 aptitude install -y apache2 php5 php5-common php5-cli mysql-server-5.0 php-pear php5-mysql php-db libapache2-mod-php5 php5-gd php5-curl libapache2-mod-perl2 php5-dev php5-ldap php5-mhash php5-odbc php5-mcrypt curl libwww-perl php5-imap python-setuptools python-mysqldb python-sqlalchemy python-psycopg2 imagemagick phpmyadmin mpg123 sox lame libmad0 libmad0-dev
@@ -118,7 +116,7 @@ aptitude install -y jack resample libtonezone-dev libtonezone1 unixodbc-bin unix
 
 #TAG:DECOMPRESSING SOURCES KERNEL
 echo ""
-echo "# DECOMPRESSING SOURCES KERNEL..."
+echo "<<<<<<<<<<  DECOMPRESSING SOURCES KERNEL >>>>>>>>>>"
 cd /usr/src/ 
 tar xjf linux-source-${KERNEL_VERSION}.tar.bz2
 ln -s /usr/src/linux-source-${KERNEL_VERSION} /usr/src/linux
@@ -126,7 +124,7 @@ ln -s /lib/modules/${KERNEL_VERSION}/ /lib/modules/`uname -r`/asterisk
 
 #TAG:RECONFIGURATION LOCALE
 echo ""
-echo "RECONFIGURATION LOCALE"
+echo "<<<<<<<<<<  RECONFIGURATION LOCALE  >>>>>>>>>>"
 sed -i "s/# es_AR.UTF-8 UTF-8/es_AR.UTF-8 UTF-8/g" "/etc/locale.gen"
 sed -i "s/# es_AR ISO-8859-1/es_AR ISO-8859-1/g" "/etc/locale.gen"
 sed -i "s/# es_ES ISO-8859-1/es_ES ISO-8859-1/g" "/etc/locale.gen"
@@ -140,12 +138,12 @@ dpkg-reconfigure -f noninteractive locales 2>&1
 
 #TAG:RECONFIGURATION MYSQL
 echo ""
-echo "RECONFIGURATION MYSQL"
+echo "<<<<<<<<<<  RECONFIGURATION MYSQL  >>>>>>>>>>"
 echo "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('${MYSQL_ROOT_PW}');" | mysql -u root
 
 #TAG:RECONFIGURATION HOSTS
 echo ""
-echo "RECONFIGURATION HOSTS"
+echo "<<<<<<<<<<  RECONFIGURATION HOSTS  >>>>>>>>>>"
 rm /etc/hosts
 echo "
 127.0.0.1 localhost.localdomain localhost
@@ -165,13 +163,13 @@ echo ${HOST_AND_HOSTNAME} > /etc/hostname
 
 #TAG:RECONFIGURATION ALIASES
 echo ""
-echo "RECONFIGURATION ALIASES"
+echo "<<<<<<<<<<  RECONFIGURATION ALIASES  >>>>>>>>>>"
 echo "root: $MAIL" >> /etc/aliases
 /usr/bin/newaliases
 
 #TAG:RECONFIGURATION POASTERISK_DBSTFIX
 echo ""
-echo "RECONFIGURATION POASTERISK_DBSTFIX"
+echo "<<<<<<<<<<  RECONFIGURATION POASTERISK_DBSTFIX  >>>>>>>>>>"
 postconf -e "myhostname = ${HOST_AND_HOSTNAME}" 
 postconf -e "mydestination = ${HOST_AND_HOSTNAME}, localhost.${HOSTNAME}, localhost.localdomain, localhost"
 postconf -e "inet_protocols = all"                                                                   
@@ -181,7 +179,7 @@ echo ${HOST_AND_HOSTNAME} > /etc/mailname
                                                     
 #TAG:EXTRACTING TEMPORARY FILES
 echo ""
-echo "EXTRACTING TEMPORARY FILES..."
+echo "<<<<<<<<<<  EXTRACTING TEMPORARY FILES  >>>>>>>>>>"
 cd /usr/src/
 tar zxf /var/www/pub/telephony/asterisk/asterisk-${VER_ASTERISK}.tar.gz
 tar zxf /var/www/pub/telephony/asterisk/asterisk-addons-${VER_ADDONS}.tar.gz
@@ -194,13 +192,11 @@ tar zxf /var/www/pub/tools/speex-1.2rc1.tar.gz
 
 #TAG:PARTE 2 - ASTERISK INSTALLATION
 echo ""
-echo "##################################################################"
-echo "# PARTE 2 - ASTERISK INSTALLATION                                #"
-echo "##################################################################"
+echo "<<<<<<<<<<  PARTE 2 - ASTERISK INSTALLATION  >>>>>>>>>>"
 
 #TAG:COMPILER IKSEMEL - CONFIGURE
 echo ""
-echo "COMPILER IKSEMEL"
+echo "<<<<<<<<<<  COMPILER IKSEMEL  >>>>>>>>>>"
 # download, make and install XML library for Google Talk
 cd /usr/src/
 cd iksemel-*
@@ -212,7 +208,7 @@ make install
 cd ..
 
 #TAG:COMPILER SPEEX CODEC - CONFIGURE
-echo "COMPILER SPEEX CODEC"
+echo "<<<<<<<<<<  COMPILER SPEEX CODEC  >>>>>>>>>>"
 cd /usr/src/
 cd speex-*
 ./configure
@@ -224,7 +220,7 @@ cd ..
 
 #TAG:COMPILER SPANDSP FAX - CONFIGURE
 echo ""
-echo "COMPILER SPANDSP"
+echo "<<<<<<<<<<  COMPILER SPANDSP  >>>>>>>>>>"
 cd /usr/src/spandsp-*
 ./configure
 #TAG:COMPILER SPANDSP FAX - MAKE
@@ -234,7 +230,7 @@ make install
 
 #TAG:COMPILER DAHDI-LINUX-COMPLETE - MAKE ALL
 echo ""
-echo "COMPILER DAHDI-LINUX-COMPLETE"
+echo "<<<<<<<<<<  COMPILER DAHDI-LINUX-COMPLETE  >>>>>>>>>>"
 cd /usr/src/dahdi-linux-complete-${VER_DAHDI_COMPLETE}
 make all 
 #TAG:COMPILER DAHDI-LINUX-COMPLETE - MAKE INSTALL
@@ -244,7 +240,7 @@ make config
 
 #TAG:COMPILER LIBPRI - MAKE
 echo ""
-echo "COMPILER LIBPRI"
+echo "<<<<<<<<<<  COMPILER LIBPRI  >>>>>>>>>>"
 cd /usr/src/libpri-${VER_LIBPRI}                                         
 make 
 #TAG:COMPILER LIBPRI - MAKE INSTALL
@@ -252,10 +248,17 @@ make install
 
 #TAG:COMPILER ASTERISK - CONFIGURE
 echo ""
-echo "COMPILER ASTERISK"
+echo "<<<<<<<<<<  COMPILER ASTERISK  >>>>>>>>>>"
 cd /usr/src/asterisk-${VER_ASTERISK}
-#codec ilbc -yes
-#/usr/src/asterisk-${VER_ASTERISK}/contrib/scripts/get_ilbc_source.sh 
+
+echo ""
+echo "<<<<<<<<<<  INSTALLATION CODEC ILBC >>>>>>>>>>"
+#codec ilbc
+#/usr/src/asterisk-${VER_ASTERISK}/contrib/scripts/get_ilbc_source.sh
+wget -P codecs/ilbc http://www.ietf.org/rfc/rfc3951.txt
+wget -q -O - http://www.ilbcfreeware.org/documentation/extract-cfile.awk | sed -e 's/\r//g' > codecs/ilbc/extract-cfile.awk
+(cd codecs/ilbc && awk -f extract-cfile.awk rfc3951.txt)
+
 ./configure
 cp /var/www/pub/debpbx/asterisk/menuselect/${VER_ASTERISK}/menuselect-tree /usr/src/asterisk-${VER_ASTERISK}
 cp /var/www/pub/debpbx/asterisk/menuselect/${VER_ASTERISK}/menuselect.makedeps /usr/src/asterisk-${VER_ASTERISK}
@@ -269,7 +272,7 @@ make samples
 
 #TAG:COMPILER ASTERISK ADDONS - CONFIGURE
 echo ""
-echo "COMPILER ASTERISK ADDONS"
+echo "<<<<<<<<<<  COMPILER ASTERISK ADDONS  >>>>>>>>>>"
 cd /usr/src/asterisk-addons-${VER_ADDONS}
 ./configure                              
 #TAG:COMPILER ASTERISK ADDONS - MAKE
@@ -281,7 +284,7 @@ make samples
 
 #TAG:PREPARING ASTERISK INSTALLATION
 echo ""
-echo "PREPARING ASTERISK INSTALLATION"
+echo "<<<<<<<<<<  PREPARING ASTERISK INSTALLATION  >>>>>>>>>>"
 #CREATE USER ASTERISK & GROUP
 adduser asterisk --disabled-password --no-create-home --gecos "asterisk PBX user"
 adduser www-data asterisk
@@ -308,9 +311,8 @@ rm /etc/asterisk/sip_notify.conf
 ###################################################################################################
 ###################################################################################################
 #TAG:PARTE 2 - INSTALATION FREEPBX
-echo "##################################################################"
-echo "# PARTE 2 - INSTALATION FREEPBX                                  #"
-echo "##################################################################"
+echo ""
+echo "<<<<<<<<<<  PARTE 2 - INSTALATION FREEPBX  >>>>>>>>>>"
 
 echo "CREATE DATABASE IF NOT EXISTS asteriskcdrdb;" | mysql -u root -p${MYSQL_ROOT_PW}
 echo "CREATE DATABASE IF NOT EXISTS ${ASTERISK_DB};" | mysql -u root -p${MYSQL_ROOT_PW} 
@@ -320,23 +322,28 @@ echo "GRANT ALL PRIVILEGES ON ${ASTERISK_DB}.* TO ${ASTERISK_USER}@localhost IDE
 sed -i "s/\(CREATE TABLE cdr\)/DROP TABLE IF EXISTS \`cdr\`;\n\1/" /usr/src/freepbx-${VER_FREEPBX}/SQL/cdr_mysql_table.sql
 mysql -u${ASTERISK_USER} -p${ASTERISK_DB_PW} asteriskcdrdb < /usr/src/freepbx-${VER_FREEPBX}/SQL/cdr_mysql_table.sql      
 mysql -u${ASTERISK_USER} -p${ASTERISK_DB_PW} ${ASTERISK_DB} < /usr/src/freepbx-${VER_FREEPBX}/SQL/newinstall.sql                              
-echo ""
-echo "FIX APACHE2"
-cp /etc/apache2/apache2.conf /etc/apache2/apache2.conf-orig
-sed -i "s/\(^User *\)\(.*\)/\1asterisk/" /etc/apache2/apache2.conf
-sed -i "s/\(^Group *\)\(.*\)/\1asterisk/" /etc/apache2/apache2.conf
 
 echo ""
-echo "FIX PHP5"
+echo "<<<<<<<<<<  FIX PHP5  >>>>>>>>>>"
 cp /etc/php5/apache2/php.ini /etc/php5/apache2/php.ini-orig
 sed -e 's/upload_max_filesize = .*/upload_max_filesize = 128M/' /etc/php5/apache2/php.ini > /tmp/php.ini
 cat /tmp/php.ini > /etc/php5/apache2/php.ini                                                            
 sed -e 's/memory_limit = .*/memory_limit = 1100M/' /etc/php5/apache2/php.ini > /tmp/php.ini             
 cat /tmp/php.ini > /etc/php5/apache2/php.ini                                                            
-sed -i "s/\(magic_quotes_gpc *= *\)\(.*\)/\1Off/" /etc/php5/apache2/php.ini                             
+sed -i "s/\(magic_quotes_gpc *= *\)\(.*\)/\1Off/" /etc/php5/apache2/php.ini   
 
+
+#TAG:RECONFIGURATION APACHE2
+echo "<<<<<<<<<<  RECONFIGURATION APACHE  >>>>>>>>>>"
+cp /etc/apache2/apache2.conf /etc/apache2/apache2.conf-orig
+sed -i "s/\(^User *\)\(.*\)/\1asterisk/" /etc/apache2/apache2.conf
+sed -i "s/\(^Group *\)\(.*\)/\1asterisk/" /etc/apache2/apache2.conf
+
+cp /var/www/pub/debpbx/apache/default  /etc/apache2/sites-available
+/etc/init.d/apache2 force-reload
+                        
 echo ""
-echo "CONFIGURE FREEPBX"
+echo "<<<<<<<<<<  CONFIGURE FREEPBX  >>>>>>>>>>"
 cp /usr/src/freepbx-${VER_FREEPBX}/install_amp /usr/src/freepbx-${VER_FREEPBX}/install_amp-orig
 sed -i "s/\(^\$webroot*\)\(.*\)/\1 = \"\/var\/www\/html\";/" /usr/src/freepbx-${VER_FREEPBX}/install_amp
 sed -i "s/xx.xx.xx.xx/${IP_ADRESS}/g" "/usr/src/freepbx-${VER_FREEPBX}/install_amp"                                          
@@ -345,7 +352,7 @@ cd /usr/src/freepbx-${VER_FREEPBX}/
 
 #TAG:CONFIGURE AMPORTAL
 echo ""
-echo "CONFIGURE AMPORTAL"
+echo "<<<<<<<<<<  CONFIGURE AMPORTAL  >>>>>>>>>>>"
 cp /usr/src/freepbx-${VER_FREEPBX}/amportal.conf /etc/amportal.conf
 chown asterisk:asterisk /etc/amportal.conf
 sed -i "s/\(AMPDBHOST= *\)\(.*\)/\1localhost/" /etc/amportal.conf 
@@ -377,14 +384,14 @@ echo "SSHPORT=${SSHPORT}" >> /etc/amportal.conf
 
 #TAG:INSTALATION FREEPBX
 echo ""
-echo "INSTALATION FREEPBX"
+echo "<<<<<<<<<<  INSTALATION FREEPBX  >>>>>>>>>>"
 ./start_asterisk start
 ./install_amp --username=${ASTERISK_USER} --password=$ASTERISK_DB_PW  
 ./apply_conf.sh
 
 #TAG:CONFIGURE DAHDI
 echo ""
-echo "CONFIGURE DAHDI"
+echo "<<<<<<<<<<  CONFIGURE DAHDI  >>>>>>>>>>"
 cp /var/www/pub/debpbx/install/chan_dahdi.conf /etc/asterisk/chan_dahdi.conf
 mv /etc/dahdi/genconf_parameters /etc/dahdi/genconf_parameters.bak
 echo "context_lines          from-zaptel" > /etc/dahdi/genconf_parameters
@@ -392,7 +399,7 @@ modprobe dahdi_dummy
 
 #TAG:FREEPBX CUSTOMIZING SETTINGS & EXTENSION
 echo ""
-echo "FREEPBX CUSTOMIZING SETTINGS & EXTENSION"
+echo "<<<<<<<<<<  FREEPBX CUSTOMIZING SETTINGS & EXTENSION  >>>>>>>>>>"
 sed -i "s/FREEPBX_ADMIN/${FREEPBX_USER_WU}/g" "/var/www/pub/debpbx/install/myextension.sql"
 sed -i "s/SHA1_PASS/${FREEPBX_ADMIN_PW_SHA1}/g" "/var/www/pub/debpbx/install/myextension.sql"
 sed -i "s/IAX2_SECRET/${AVANTFAX_IAX_PW}/g" "/var/www/pub/debpbx/install/myextension.sql"
@@ -401,7 +408,7 @@ sed -i "s/E_MAIL/${MAIL}/g" "/var/www/pub/debpbx/install/myextension.sql"
 mysql -u${ASTERISK_USER} -p${ASTERISK_DB_PW}  ${ASTERISK_DB} < /var/www/pub/debpbx/install/myextension.sql
 
 echo ""
-echo "SCRIPT INITIATION ASTERISK"
+echo "<<<<<<<<<<  SCRIPT INITIATION ASTERISK  >>>>>>>>>>"
 sed -i "s/exit 0/\/usr\/local\/sbin\/amportal start/g" "/etc/rc.local"
 echo "exit 0" >> /etc/rc.local
 
@@ -410,17 +417,9 @@ sed -i "s/\(format=*\)\(.*\)/\1wav/" /etc/asterisk/vm_general.inc
 ###################################################################################################
 ###################################################################################################
 ###################################################################################################
-#TAG:RECONFIGURATION APACHE2
-echo "+----------------------------------------------------------------+"
-echo "| RECONFIGURATION APACHE2                                        |"
-echo "+----------------------------------------------------------------+"
-cp /var/www/pub/debpbx/apache/default  /etc/apache2/sites-available
-/etc/init.d/apache2 force-reload
-
 #TAG:INSTALATION PANEL DEBPBX 
-echo "+----------------------------------------------------------------+"
-echo "| INSTALATION PANEL DEBPBX                                       |"
-echo "+----------------------------------------------------------------+"
+echo ""
+echo "<<<<<<<<<<  INSTALATION PANEL DEBPBX  >>>>>>>>"
 rm /var/www/index.html
 cd /var/www/html/
 rm /var/www/html/index.html
@@ -433,56 +432,49 @@ cp -R /var/www/pub/debpbx/debpbx_panel/*.*  /var/www/html/
 chown asterisk:asterisk -R /var/www/html/
 
 #TAG:RECONFIGURATION PHPMYADMIN
-echo "+----------------------------------------------------------------+"
-echo "| RECONFIGURATION PHPMYADMIN                                     |"
-echo "+----------------------------------------------------------------+"
+echo ""
+echo "<<<<<<<<<<  RECONFIGURATION PHPMYADMIN  >>>>>>>>"
 ln -s /usr/share/phpmyadmin/ /var/www/html/phpmyadmin
 cd /etc/phpmyadmin/
 sed '39a\$cfg['blowfish_secret'] ="asterisk";' config.inc.php > config.inc.tmp
 mv config.inc.tmp config.inc.php
 
 #TAG:RECONFIGURATION GRUB
-echo "+----------------------------------------------------------------+"
-echo "| RECONFIGURATION GRUB                                           |"
-echo "+----------------------------------------------------------------+"
+echo ""
+echo "<<<<<<<<<<  RECONFIGURATION GRUB  >>>>>>>>"
 sed -i s/moreblue-orbit-grub/debpbx/g /etc/grub.d/05_debian_theme      
 sed -i "s/\(color_normal*= *\)\(.*\)/\1white\/black/" /etc/grub.d/05_debian_theme
 sed -i "s/\(color_highlight*= *\)\(.*\)/\1black\/white/" /etc/grub.d/05_debian_theme
 sed -i s/OS=\"${GRUB_DISTRIBUTOR}/OS=\"DebPBX\ debpbx-${VER_VERSION}\ -\ ${GRUB_DISTRIBUTOR}/g /etc/grub.d/10_linux
 update-grub                                                                                                        
 
-echo "+----------------------------------------------------------------+"
-echo "| RECONFIGURATION GRUB                                           |"
-echo "+----------------------------------------------------------------+"
+echo ""
+echo "<<<<<<<<<<  RECONFIGURATION GRUB  >>>>>>>>>"
 echo "tftp            dgram   udp     wait    nobody  /usr/sbin/tcpd  /usr/sbin/in.tftpd /tftpboot" > /etc/inetd.conf
 mkdir /tftpboot
 chown asterisk:asterisk -R /tftpboot
 chmod 777 /tftpboot
 
-echo "+----------------------------------------------------------------+"
-echo "| RECONFIGURATION CRON                                           |"
-echo "+----------------------------------------------------------------+"
+echo ""
+echo "<<<<<<<<<<  RECONFIGURATION CRON  >>>>>>>>>>"
 echo "# m h  dom mon dow   command
 0 * * * *   root  /usr/local/sbin/debpbx-update >> /dev/null 2>&1
 " >>  /etc/cron.d/debpbx
 
-echo "+----------------------------------------------------------------+"
-echo "| RECONFIGURATION BASH_LOGIN & BASHRC                            |"
-echo "+----------------------------------------------------------------+"
+echo ""
+echo "<<<<<<<<<<  RECONFIGURATION BASH_LOGIN & BASHRC  >>>>>>>>>>"
 cp /var/www/pub/debpbx/install/.bash_login /root/.bash_login                                                                
 cp /var/www/pub/debpbx/install/.bashrc /root/.bashrc
 
-echo "+----------------------------------------------------------------+"
-echo "| INSTALATION COMMAND DEBPBX                                     |"
-echo "+----------------------------------------------------------------+"
+echo ""
+echo "<<<<<<<<<<  INSTALATION COMMAND DEBPBX  >>>>>>>>>>"
 cp /var/www/pub/debpbx/script/* /usr/local/sbin/
 cd /usr/local/sbin/
 chmod +x debpbx-*
 
 #TAG:RECONFIGURATION OPEN-SSH-SERVER
-echo "+----------------------------------------------------------------+"
-echo "| RECONFIGURATION OPEN-SSH-SERVER                                |"
-echo "+----------------------------------------------------------------+"
+echo ""
+echo "<<<<<<<<<<  RECONFIGURATION OPEN-SSH-SERVER  >>>>>>>>>>"
 mkdir /root/.ssh/
 touch /root/.ssh/authorized_keys
 sed -i "s/Port 22/Port ${SSHPORT}/" /etc/ssh/sshd_config
@@ -491,19 +483,16 @@ cp /var/www/pub/debpbx/install/debpbx /etc/debpbx
 /etc/init.d/ssh restart
 
 echo ""
-echo "RECONFIGURATION SCREENRC"
+echo "<<<<<<<<<<  RECONFIGURATION SCREENRC  >>>>>>>>>>"
 cp /var/www/pub/debpbx/install/.screenrc /root/
 
 echo ""
-echo "RECONFIGURATION SCREENRC"
+echo "<<<<<<<<<<  SECURITY PASSWORD  >>>>>>>>>"
 sed -i "s/\/root:\/bin\/bash/\/root:\/usr\/local\/sbin\/debpbx-wizard/g" "/etc/passwd"
 
-clear
-echo "+----------------------------------------------------------------+"
-echo "|                   -  Instalation Succesfull -                  |"
-echo "|                       http://www.debpbx.org                    |"
-echo "+----------------------------------------------------------------+"
 #TAG:AMPORTAL RESTART
+echo ""
+echo "<<<<<<<<<<  AMPORTAL RESTART  >>>>>>>>>>"
 amportal restart
 rm /etc/rc2.d/S99install
 
