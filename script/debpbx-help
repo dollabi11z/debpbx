@@ -26,4 +26,5 @@ debpbx-siptosis        Autoinstall SipToSis of Skype integration through X and J
 debpbx-a2billing       Instalation a2billing 
 debpbx-festival        Instalation festival
 debpbx-fop2	       Integracion fop2
+debpbx-wizard          Wizard (Password root, edit host and hostname, change mail admin from /etc/aliases) 
 EOF
