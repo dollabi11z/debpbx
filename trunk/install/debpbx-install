@@ -220,8 +220,8 @@ echo ""
 echo "<<<<<<<<<<  INSTALLATION CODEC ILBC  >>>>>>>>>>"
 #codec ilbc
 #/usr/src/asterisk-${VER_ASTERISK}/contrib/scripts/get_ilbc_source.sh
-wget -P codecs/ilbc http://www.ietf.org/rfc/rfc3951.txt
-wget -q -O - http://www.ilbcfreeware.org/documentation/extract-cfile.awk | sed -e 's/\r//g' > codecs/ilbc/extract-cfile.awk
+wget -P codecs/ilbc http://www.ietf.org/rfc/rfc3951.txt 2>&1
+wget -q -O - http://www.ilbcfreeware.org/documentation/extract-cfile.awk | sed -e 's/\r//g' > codecs/ilbc/extract-cfile.awk 2>&1
 (cd codecs/ilbc && awk -f extract-cfile.awk rfc3951.txt)
 ./configure
 cp /var/www/pub/debpbx/asterisk/menuselect/${VER_ASTERISK}/menuselect-tree /usr/src/asterisk-${VER_ASTERISK}
