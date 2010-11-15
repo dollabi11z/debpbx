@@ -93,7 +93,7 @@ aptitude install -y linux-headers-`uname -r` build-essential hylafax-server iaxm
 echo "18" | dialog --backtitle "DebPBX - AutoInstall" --gauge "INSTALLATION PACKEGER ASTERISK" 10 70 0 >&2
 aptitude install -y apache2 php5 php5-common php5-cli mysql-server-5.0 php-pear php5-mysql php-db libapache2-mod-php5 php5-gd php5-curl libapache2-mod-perl2 php5-dev php5-ldap php5-mhash php5-odbc php5-mcrypt curl libwww-perl php5-imap python-setuptools python-mysqldb python-sqlalchemy python-psycopg2 imagemagick phpmyadmin mpg123 sox lame libmad0 libmad0-dev
 aptitude install -y apache2-mpm-prefork apache2-utils apache2.2-common libapr1 libaprutil1 libsqlite3-0 libnetpbm10-dev libungif-bin php-mail php-mail-mime php-file psutils wdiff rsync atftpd libgnutls-dev libogg-dev   
-aptitude install -y jack resample libtonezone-dev libtonezone1 unixodbc-bin unixodbc-dev libsnmp15 libsnmp-base libsnmp-dev libiksemel3 libiksemel-dev libiksemel-utils libspeexdsp-dev libsnmp15 libsnmp-base libsnmp-dev libvorbis-dev libogg-dev libasound2 libasound2-dev libspandsp1 libspandsp-dev libbluetooth-dev libcurl4-dev
+aptitude install -y jack resample libtonezone-dev libtonezone1 unixodbc-bin unixodbc-dev libsnmp15 libsnmp-base libsnmp-dev libiksemel3 libiksemel-dev libiksemel-utils libspeexdsp-dev libsnmp15 libsnmp-base libsnmp-dev libvorbis-dev libogg-dev libasound2 libasound2-dev libspandsp1 libspandsp-dev libbluetooth-dev libcurl4-dev libgtk2.0-dev 
 echo "19" | dialog --backtitle "DebPBX - AutoInstall" --gauge "DECOMPRESSING SOURCES KERNEL" 10 70 0 >&2
 echo ""
 echo "<<<<<<<<<<  DECOMPRESSING SOURCES KERNEL >>>>>>>>>>"
@@ -217,7 +217,7 @@ echo ""
 echo "<<<<<<<<<<  COMPILER ASTERISK  >>>>>>>>>>"
 cd /usr/src/asterisk-${VER_ASTERISK}
 echo ""
-echo "<<<<<<<<<<  INSTALLATION CODEC ILBC >>>>>>>>>>"
+echo "<<<<<<<<<<  INSTALLATION CODEC ILBC  >>>>>>>>>>"
 #codec ilbc
 #/usr/src/asterisk-${VER_ASTERISK}/contrib/scripts/get_ilbc_source.sh
 wget -P codecs/ilbc http://www.ietf.org/rfc/rfc3951.txt
