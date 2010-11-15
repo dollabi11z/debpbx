@@ -56,11 +56,11 @@ rm -fr irmod4/
 cd /mnt/cd
 md5sum `find -follow -type f` > md5sum.txt
 cd /mnt
-mkisofs -o debpbx-13-i386-netinst.iso -r -J -no-emul-boot -boot-load-size 4 -boot-info-table -b isolinux/isolinux.bin -c isolinux/boot.cat ./cd
+mkisofs -o debpbx-14-i386-netinst.iso -r -J -no-emul-boot -boot-load-size 4 -boot-info-table -b isolinux/isolinux.bin -c isolinux/boot.cat ./cd
 
 echo ""
 echo "Felicitaciones el ISO se a creado con éxito"
-echo "/mnt/debpbx-13-i386-netinst.iso"
+echo "/mnt/debpbx-14-i386-netinst.iso"
 echo ""
 
 echo "+----------------------------------------------------------------+"
