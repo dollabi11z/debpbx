@@ -87,7 +87,7 @@ aptitude -y install dpkg-dev grub2 startupmanager grub2-splashimages desktop-bas
 upgrade-from-grub-legacy
 update-grub
 echo "17" | dialog --backtitle "DebPBX - AutoInstall" --gauge "INSTALLATION LIBRARIES AND PACKAGES FOR COMPILER" 10 70 0 >&2
-aptitude -y install linux-source-$KERNEL_VERSION kernel-package g++ libncurses5-dev linux-libc-dev sqlite libnewt-dev libusb-dev zlib1g-dev libmysqlclient15-dev libsqlite0-dev loco mc unzip zip iptraf nmap screen subversion libqt4-core libqt4-gui ntpdate tcpdump libiksemel-dev libtiff4-dev libxml2-dev bison libaudiofile-dev                 
+aptitude -y install linux-source-$KERNEL_VERSION kernel-package g++ libncurses5-dev linux-libc-dev sqlite libnewt-dev libusb-dev zlib1g-dev libmysqlclient15-dev libsqlite0-dev loco mc unzip zip iptraf nmap screen subversion libqt4-core libqt4-gui ntpdate tcpdump libiksemel-dev libtiff4-dev libxml2-dev bison libaudiofile-dev selinux-utils                
 echo "18" | dialog --backtitle "DebPBX - AutoInstall" --gauge "INSTALLATION PACKEGER TOOLS" 10 70 0 >&2
 aptitude install -y linux-headers-`uname -r` build-essential hylafax-server iaxmodem bind9 postfix ghostscript netpbm libungif4-dev sudo cups expect libmagic-dev cmake vim-full htop
 echo "18" | dialog --backtitle "DebPBX - AutoInstall" --gauge "INSTALLATION PACKEGER ASTERISK" 10 70 0 >&2
