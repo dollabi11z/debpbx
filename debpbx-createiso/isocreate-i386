@@ -7,6 +7,9 @@
 # Copyright 2008 Federico Pereira (LordBaseX)       
 # This script is licensed under GNU GPL version 2.0 
 #                                                   
+
+
+cp /mnt/cd/debpbx/pub/debpbx/debpbx-createiso/mt86plus /mnt/cd/install.386/ 
    
 rm -fr /mnt/cd/isolinux/
 cp -R /mnt/cd/debpbx/pub/debpbx/isolinux.386/ /mnt/cd/isolinux
