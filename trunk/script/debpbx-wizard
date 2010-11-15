@@ -8,6 +8,8 @@
 # This script is licensed under GNU GPL version 2.0 
 #                                                   
 
+trap "echo 'ctr-c rejected!'" INT TERM
+
 #remove debpbx-wizard /usr/local/sbin/debpbx-wizard
 sed -i "s/\/usr\/local\/sbin\/debpbx-wizard/\/bin\/bash/g" "/etc/passwd" 
 
@@ -81,12 +83,18 @@ HOSTNAME=$(hostname -s)
 dialog --backtitle "DebPBX - Wizard - Part 2"   --title "Enter Host Name PBX"  --inputbox "Host Name ($HOSTNAME):" 8 60 2> $data
 HOSTS=`cat $data`
 
+if [ "$(echo $HOSTS | grep '^[A-Za-z_-]*$' )" == "" ]; then
+        HOSTS=$HOSTNAME;
+fi
+
 DOMAIN=$(hostname -d)
 dialog --backtitle "DebPBX - Wizard - Part 2"   --title "Enter Domain Name PBX"  --inputbox "Domain Name ($DOMAIN):" 8 60 2> $data
 HOSTNAME=`cat $data`
 
-#CREAR VERIFICADOR
-#grep '[a_zA_Z0-9_\.]'
+if [ "$(echo $HOSTNAME | grep '^[A-Za-z\._-]*$' )" == "" ]; then
+	HOSTNAME=$DOMAIN;
+fi
+
 
 #VARIABLES
 HOST_AND_HOSTNAME="${HOSTS}.${HOSTNAME}";
@@ -119,10 +127,24 @@ postconf -e "mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128"
 echo ${HOST_AND_HOSTNAME} > /etc/mailname                                                               
 /etc/init.d/postfix restart  
 #################################################################################################################################
-MAIL=`cat /etc/aliases |  grep "@" | cut -d: -f2`
-dialog --backtitle "DebPBX - Wizard - Part 3" --title "Enter Mail Administrator" --inputbox "Mail Administrator ($MAIL): " 8 60 2> $data
-NEW_MAIL=`cat $data`
-sed -i "s/$MAIL/$NEW_MAIL/g" "/etc/aliases"
+MAIL=`cat /etc/aliases |  grep "@" | cut -d: -f2 | sed 's/^ //g'`
+
+while [ 1 ]; do
+
+	dialog --backtitle "DebPBX - Wizard - Part 3" --title "Enter Mail Administrator" --inputbox "Mail Administrator ($MAIL): " 8 60 2> $data
+NEW_MAIL=`cat $data` 
+
+	if [ "$(echo $NEW_MAIL | grep '^[a-zA-Z0-9\._-]\+@[a-zA-Z0-9\._-]\+$')" != "" ]; then
+		break;
+	fi
+
+done;
+
+rm /etc/aliases
+echo "# See man 5 aliases for format
+postmaster:    root
+root: $NEW_MAIL
+" >> /etc/aliases
 /usr/bin/newaliases
 #################################################################################################################################
 dialog --backtitle "DebPBX - Wizard - Part 3"  --title "Installation Successful" --clear --msgbox "Thanks for your time. This only runs one time per installation. Sorry for the inconvenience, try to reconnect to the console." 10 41
