@@ -1,27 +1,24 @@
 #!/bin/bash    
 #                       
-# isocreate - 31/07/2010 
+# isocreate - 15/11/2010 
 #                       
-# DebPBX-1.3.0        
+# DebPBX-1.4   
 # Author: Federico Pereira <info@opentecnologic.com> & <fpereira@debpbx.org>
 # Copyright 2008 Federico Pereira (LordBaseX)       
 # This script is licensed under GNU GPL version 2.0 
 #                                                   
 
-cp /mnt/cd/debpbx/pub/debpbx/debpbx-createiso/mt86plus /mnt/cd/install.amd/
-   
 rm -fr /mnt/cd/isolinux/
 cp -R /mnt/cd/debpbx/pub/debpbx/isolinux.amd/ /mnt/cd/isolinux
 cd /mnt/cd/install.amd
 mkdir auto advance normal test
-cp /mnt/cd/debpbx/pub/debpbx/mt86plus /mnt/cd/install.amd/
-
+cp /mnt/cd/debpbx/pub/debpbx/debpbx-createiso/mt86plus /mnt/cd/install.amd/
 
 #preseed auto
 mkdir /mnt/irmod1
 cd /mnt/irmod1
 gzip -d < ../cd/install.amd/initrd.gz | cpio --extract --verbose --make-directories --no-absolute-filenames
-cp /mnt/cd/debpbx/pub/debpbx/preseed.cfg /mnt/irmod1/preseed.cfg
+cp /mnt/cd/debpbx/pub/debpbx/install/preseed.cfg /mnt/irmod1/preseed.cfg
 find . | cpio -H newc --create --verbose |  gzip -9 > ../cd/install.amd/auto/initrd.gz
 cd ../
 rm -fr irmod1/
@@ -30,7 +27,7 @@ rm -fr irmod1/
 mkdir /mnt/irmod2
 cd /mnt/irmod2
 gzip -d < ../cd/install.amd/initrd.gz | cpio --extract --verbose --make-directories --no-absolute-filenames
-cp /mnt/cd/debpbx/pub/debpbx/preseed-adv.cfg /mnt/irmod2/preseed.cfg
+cp /mnt/cd/debpbx/pub/debpbx/install/preseed-adv.cfg /mnt/irmod2/preseed.cfg
 find . | cpio -H newc --create --verbose |  gzip -9 > ../cd/install.amd/advance/initrd.gz
 cd ../
 rm -fr irmod2/
@@ -39,7 +36,7 @@ rm -fr irmod2/
 mkdir /mnt/irmod3
 cd /mnt/irmod3
 gzip -d < ../cd/install.amd/initrd.gz | cpio --extract --verbose --make-directories --no-absolute-filenames
-cp /mnt/cd/debpbx/pub/debpbx/preseed-normal.cfg /mnt/irmod3/preseed.cfg
+cp /mnt/cd/debpbx/pub/debpbx/install/preseed-normal.cfg /mnt/irmod3/preseed.cfg
 find . | cpio -H newc --create --verbose |  gzip -9 > ../cd/install.amd/normal/initrd.gz
 cd ../
 rm -fr irmod3/
@@ -48,7 +45,7 @@ rm -fr irmod3/
 mkdir /mnt/irmod4
 cd /mnt/irmod4
 gzip -d < ../cd/install.amd/initrd.gz | cpio --extract --verbose --make-directories --no-absolute-filenames
-cp /mnt/cd/debpbx/pub/debpbx/preseed-test.cfg /mnt/irmod4/preseed.cfg
+cp /mnt/cd/debpbx/pub/debpbx/install/preseed-test.cfg /mnt/irmod4/preseed.cfg
 find . | cpio -H newc --create --verbose |  gzip -9 > ../cd/install.amd/test/initrd.gz
 cd ../
 rm -fr irmod4/
@@ -67,5 +64,3 @@ echo "+----------------------------------------------------------------+"
 echo "| Done, enjoy                                                    |"
 echo "+----------------------------------------------------------------+"
 exit 0
-
-
