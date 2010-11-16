@@ -105,7 +105,7 @@ update-grub
 aptitude -y install linux-source-$KERNEL_VERSION kernel-package g++ libncurses5-dev linux-libc-dev sqlite libnewt-dev libusb-dev zlib1g-dev libmysqlclient15-dev libsqlite0-dev loco mc unzip zip iptraf nmap screen subversion libqt4-core libqt4-gui ntpdate tcpdump libiksemel-dev libtiff4-dev libxml2-dev bison libaudiofile-dev selinux-utils                 
 
 #TAG:INSTALLATION PACKEGER TOOLS
-aptitude install -y linux-headers-`uname -r` build-essential hylafax-server iaxmodem bind9 postfix ghostscript netpbm libungif4-dev sudo cups expect libmagic-dev cmake vim-full htop 
+aptitude install -y linux-headers-`uname -r` build-essential postfix ghostscript netpbm libungif4-dev sudo cups expect libmagic-dev cmake vim-full htop 
 
 #TAG:INSTALLATION PACKEGER ASTERISK
 aptitude install -y apache2 php5 php5-common php5-cli mysql-server-5.0 php-pear php5-mysql php-db libapache2-mod-php5 php5-gd php5-curl libapache2-mod-perl2 php5-dev php5-ldap php5-mhash php5-odbc php5-mcrypt curl libwww-perl php5-imap python-setuptools python-mysqldb python-sqlalchemy python-psycopg2 imagemagick phpmyadmin mpg123 sox lame libmad0 libmad0-dev
