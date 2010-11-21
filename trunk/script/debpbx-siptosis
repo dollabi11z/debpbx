@@ -99,7 +99,9 @@ EOF
 	cp /home/stsuser/siptosis/samples/siptosis.cfg /home/stsuser/siptosis/siptosis.cfg
 	chmod +x /home/stsuser/siptosis/stsTrunk_linux
 	chmod +x /home/stsuser/siptosis/SipToSis_linux
-	cp /var/www/pub/debpbx/rc.local /etc/rc.local
+	
+        sed -i "s/exit 0/su -l stsuser -c \"\/home\/stsuser\/siptosis\/stsTrunk_linux start\"/g" "/etc/rc.local"
+	echo "exit 0" >> /etc/rc.local
 
 
 
