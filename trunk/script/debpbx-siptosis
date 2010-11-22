@@ -46,7 +46,7 @@ case $ret in
 	;;
   1)
     	break;
-	;
+	;;
   255)
  	[ -s $data ] &&  cat $data || echo "ESC pressed.";
 	;;
@@ -99,125 +99,5 @@ EXTENSION=`cat $data`
 
 done;
 
-#################################################################################################################################
-echo "1" | dialog --backtitle "DebPBX - SipToSis" --gauge "Repository Update" 10 70 0 >&2
-aptitude update 2>&1
-echo "3" | dialog --backtitle "DebPBX - SipToSis" --gauge "xserver-xorg-video-fbdev" 10 70 0 >&2
-aptitude -y install xserver-xorg-video-fbdev 2>&1
-echo "5" | dialog --backtitle "DebPBX - SipToSis" --gauge " xterm" 10 70 0 >&2
-aptitude -y install xterm 2>&1
-echo "7" | dialog --backtitle "DebPBX - SipToSis" --gauge "libqt4-dev" 10 70 0 >&2
-aptitude -y install libqt4-dev 2>&1
-echo "9" | dialog --backtitle "DebPBX - SipToSis" --gauge "libxss-dev" 10 70 0 >&2
-aptitude -y install libxss-dev 2>&1
-echo "11" | dialog --backtitle "DebPBX - SipToSis" --gauge "x11proto-scrnsaver-dev" 10 70 0 >&2
-aptitude -y install x11proto-scrnsaver-dev 2>&1
-echo "13" | dialog --backtitle "DebPBX - SipToSis" --gauge "xvfb" 10 70 0 >&2
-aptitude -y install xvfb 2>&1
-echo "15" | dialog --backtitle "DebPBX - SipToSis" --gauge "elinks" 10 70 0 >&2
-aptitude -y install elinks 2>&1
-echo "17" | dialog --backtitle "DebPBX - SipToSis" --gauge "tightvncserver" 10 70 0 >&2
-aptitude -y install tightvncserver 2>&1
-echo "19" | dialog --backtitle "DebPBX - SipToSis" --gauge "tightvnc-java" 10 70 0 >&2
-aptitude -y install tightvnc-java 2>&1
-echo "21" | dialog --backtitle "DebPBX - SipToSis" --gauge "blackbox" 10 70 0 >&2
-aptitude -y install blackbox 2>&1
-     
-#CPU CHECKER
-if [ "$CPUINFO" == "amd64" ]; then
-		echo "36" | dialog --backtitle "DebPBX - SipToSis" --gauge "skype 64bit" 10 70 0 >&2
-		aptitude -y install ia32-libs ia32-libs-gtk libqt4-core libqt4-gui 2>&1
-		wget http://debpbx.googlecode.com/svn/trunk/modules/skype_2.1.0.81-1_amd64.deb -O  /var/cache/apt/archives/skype_2.1.0.81-1_amd64.deb 2>&1
-		dpkg -i  /var/cache/apt/archives/skype_2.1.0.81-1_amd64.deb
-	else
-		echo "36" | dialog --backtitle "DebPBX - SipToSis" --gauge "skype 32bit" 10 70 0 >&2
- 		wget http://debpbx.googlecode.com/svn/trunk/modules/skype_2.1.0.81-1_i386.deb -O /var/cache/apt/archives/skype_2.1.0.81-1_i386.deb 2>&1
-		dpkg -i /var/cache/apt/archives/skype_2.1.0.81-1_i386.deb 2>&1 
-fi
-echo "38" | dialog --backtitle "DebPBX - SipToSis" --gauge "sun-java6-jdk" 10 70 0 >&2
-aptitude -y install sun-java6-jdk
-echo "40" | dialog --backtitle "DebPBX - SipToSis" --gauge "installation SipToSis" 10 70 0 >&2
-adduser ${USER} --disabled-password --home /home/${USER}/ --gecos "Skype ${USER}" --force-badname
-adduser ${USER} audio
-echo "${USER}:$(echo $PASS | openssl passwd -1 -stdin)" | chpasswd -e
-mkdir -p /home/${USER}/.vnc/
-chown -R ${USER}:${USER} /home/${USER}/.vnc/
-expect << EOF
-spawn su -l ${USER} -c "tightvncpasswd"
-expect "*.vnc/passwd*"
-expect "*assword:*"
-send "${PASS}\r"
-expect "*erify:*"
-send "${PASS}\r"
-expect "*Would you like to enter a view-only password (y/n)?*"
-send "n\r"
-expect eof;
-EOF
-
-echo "45" | dialog --backtitle "DebPBX - SipToSis" --gauge "Uncompressing temporary files" 10 70 0 >&2
-
-#SipToSis
-wget http://debpbx.googlecode.com/svn/trunk/modules/siptosis.tar.gz -O /usr/src/siptosis.tar.gz
-cd /usr/src/
-tar zxf /usr/src/siptosis.tar.gz
-cd /usr/src/siptosis
-
-mkdir -p /home/${USER}/siptosis/
-cd /home/${USER}/siptosis/
-unzip /usr/src/siptosis/SipToSis_*.zip
-chown ${USER}:${USER} -R /home/${USER}/siptosis/
-
-#CONFIGURATION SkypeToSipAuth.props
-cat > /home/${USER}/siptosis/SkypeToSipAuth.props << "EOF"
-*,sip:DIDXXX@$xxx.xxx.xxx.xxx:5060;dtmf:1365
-*,play:clips/invalidDest.wav
-EOF
-NEW_DID=`echo $(($RANDOM%29999999999))`
-sed -i "s/xxx.xxx.xxx.xxx/${IP_ADRESS}/g" "/home/${USER}/siptosis/SkypeToSipAuth.props"
-sed -i "s/DIDXXX/${NEW_DID}/g" "/home/${USER}/siptosis/SkypeToSipAuth.props"
-
-#CONFIGURATION daemon_template
-cp /usr/src/siptosis/daemon_template /etc/init.d/siptosis_${USER}
-chmod +x /etc/init.d/siptosis_${USER}
-cd /etc/init.d/
-update-rc.d siptosis_${USER} defaults	        
-	
-#CONFIGURATION siptosis.cfg
-cp /home/${USER}/siptosis/samples/siptosis.cfg /home/${USER}/siptosis/siptosis.cfg
-
-echo "
-host_port=5070
-contact_url=sip:123456789@127.0.0.1:5070
-from_url=\"${USER}\" <sip:${USER}@127.0.0.1:5070>
-username=${USER}
-passwd=${PASS}
-realm=127.0.0.1
-" >> /home/stsuser/siptosis/siptosis.cfg
-
-#CAMBIANDO DUESÑO Y PERMISOS
-chown ${USER}:${USER} -R /home/${USER}
-
-#CONFIGURATION FREEPBX
-#MYSQL INJECTION AND TRUNK EXTENSION
-echo "SELECT * FROM \`trunks\` WHERE \`trunkid\` ORDER BY trunkid DESC LIMIT 0,1;" | mysql -u${AMPDBUSER} -p${AMPDBPASS} -D${AMPDBNAME} | egrep -v "id" |  cut -f1 > /tmp/siptosip.tmp && ID_TRUNK=`cat /tmp/siptosip.tmp`
-
-ID_TRUNK=$(($ID_TRUNK+1))
-sed -i "s/IDXXX/${ID_TRUNK}/g" "/usr/src/siptosis/siptosis.sql"
-sed -i "s/USERXXX/${USER}/g" "/usr/src/siptosis/siptosis.sql"
-sed -i "s/PASSXXX/${PASS}/g" "/usr/src/siptosis/siptosis.sql"
-sed -i "s/EXTENSIONXXX/${EXTENSION}/g" "/usr/src/siptosis/siptosis.sql"
-sed -i "s/DIDXXX/${NEW_DID}/g" "/usr/src/siptosis/siptosis.sql"
-
-mysql -u${AMPDBUSER} -p${AMPDBPASS} -D${AMPDBNAME} < /usr/src/siptosis/siptosis.sql
-/var/lib/asterisk/bin/module_admin reload
-
-sleep 1
-echo "100" | dialog --backtitle "Complete" --gauge "DONE!" 10 70 0 >&2
-#################################################################################################################################
-sleep 1
-dialog --backtitle "DebPBX - SipToSis"  
---title "Installation Successful" 
---clear 
---msgbox "Thanks for your time. This only runs one time per installation. Sorry for the inconvenience, try to reconnect to the console." 10 41
-
-
+chmod 777 /usr/src/siptosis/install
+/usr/src/siptosis/install > /var/log/dp-siptosis
