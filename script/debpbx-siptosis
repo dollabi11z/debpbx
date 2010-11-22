@@ -128,22 +128,22 @@ if [ "$CPUINFO" == "amd64" ]; then
 		echo "36" | dialog --backtitle "DebPBX - SipToSis" --gauge "skype 64bit" 10 70 0 >&2
 		aptitude -y install ia32-libs ia32-libs-gtk libqt4-core libqt4-gui 2>&1
 		wget http://debpbx.googlecode.com/svn/trunk/modules/skype_2.1.0.81-1_amd64.deb -O  /var/cache/apt/archives/skype_2.1.0.81-1_amd64.deb 2>&1
-		dpkg -i  /var/www/pub/debpbx/modules/skype_2.1.0.81-1_amd64.deb
+		dpkg -i  /var/cache/apt/archives/skype_2.1.0.81-1_amd64.deb
 	else
 		echo "36" | dialog --backtitle "DebPBX - SipToSis" --gauge "skype 32bit" 10 70 0 >&2
  		wget http://debpbx.googlecode.com/svn/trunk/modules/skype_2.1.0.81-1_i386.deb -O /var/cache/apt/archives/skype_2.1.0.81-1_i386.deb 2>&1
-		dpkg -i  /var/www/pub/debpbx/modules/skype_2.1.0.81-1_i386.deb 2>&1 
+		dpkg -i /var/cache/apt/archives/skype_2.1.0.81-1_i386.deb 2>&1 
 fi
 echo "38" | dialog --backtitle "DebPBX - SipToSis" --gauge "sun-java6-jdk" 10 70 0 >&2
 aptitude -y install sun-java6-jdk
 echo "40" | dialog --backtitle "DebPBX - SipToSis" --gauge "installation SipToSis" 10 70 0 >&2
-adduser stsuser --disabled-password --home /home/stsuser/ --gecos "stsuser SKYPE user" --force-badname
-adduser stsuser audio
-echo "stsuser:$(echo $PASS | openssl passwd -1 -stdin)" | chpasswd -e
-mkdir -p /home/stsuser/.vnc/
-chown -R stsuser:stsuser /home/stsuser/.vnc/
+adduser ${USER} --disabled-password --home /home/${USER}/ --gecos "Skype ${USER}" --force-badname
+adduser ${USER} audio
+echo "${USER}:$(echo $PASS | openssl passwd -1 -stdin)" | chpasswd -e
+mkdir -p /home/${USER}/.vnc/
+chown -R ${USER}:${USER} /home/${USER}/.vnc/
 expect << EOF
-spawn su -l stsuser -c "tightvncpasswd"
+spawn su -l ${USER} -c "tightvncpasswd"
 expect "*.vnc/passwd*"
 expect "*assword:*"
 send "${PASS}\r"
@@ -162,23 +162,28 @@ cd /usr/src/
 tar zxf /usr/src/siptosis.tar.gz
 cd /usr/src/siptosis
 
-mkdir -p /home/stsuser/siptosis/
-cd /home/stsuser/siptosis/
+mkdir -p /home/${USER}/siptosis/
+cd /home/${USER}/siptosis/
 unzip /usr/src/siptosis/SipToSis_*.zip
-chown stsuser:stsuser -R /home/stsuser/siptosis/
+chown ${USER}:${USER} -R /home/${USER}/siptosis/
 
 #CONFIGURATION SkypeToSipAuth.props
-cat > /home/stsuser/siptosis/SkypeToSipAuth.props << "EOF"
-*,sip:123456789@${IP_ADRESS}:5060;dtmf:1365
+cat > /home/${USER}/siptosis/SkypeToSipAuth.props << "EOF"
+*,sip:DIDXXX@$xxx.xxx.xxx.xxx:5060;dtmf:1365
 *,play:clips/invalidDest.wav
 EOF
+NEW_DID=`echo $(($RANDOM%29999999999))`
+sed -i "s/xxx.xxx.xxx.xxx/${IP_ADRESS}/g" "/home/${USER}/siptosis/SkypeToSipAuth.props"
+sed -i "s/DIDXXX/${NEW_DID}/g" "/home/${USER}/siptosis/SkypeToSipAuth.props"
 
-#CONFIGURATION stsTrunk_linux
-cp /usr/src/siptosis/stsTrunk_linux /home/stsuser/siptosis/stsTrunk_linux
-chmod +x /home/stsuser/siptosis/stsTrunk_linux	        
+#CONFIGURATION daemon_template
+cp /usr/src/siptosis/daemon_template /etc/init.d/siptosis_${USER}
+chmod +x /etc/init.d/siptosis_${USER}
+cd /etc/init.d/
+update-rc.d siptosis_${USER} defaults	        
 	
 #CONFIGURATION siptosis.cfg
-cp /home/stsuser/siptosis/samples/siptosis.cfg /home/stsuser/siptosis/siptosis.cfg
+cp /home/${USER}/siptosis/samples/siptosis.cfg /home/${USER}/siptosis/siptosis.cfg
 
 echo "
 host_port=5070
@@ -189,9 +194,8 @@ passwd=${PASS}
 realm=127.0.0.1
 " >> /home/stsuser/siptosis/siptosis.cfg
 
-#CONFIGURATION rc.local	
-sed -i "s/exit 0/su -l stsuser -c \"\/home\/stsuser\/siptosis\/stsTrunk_linux start\"/g" "/etc/rc.local"
-echo "exit 0" >> /etc/rc.local	
+#CAMBIANDO DUESÑO Y PERMISOS
+chown ${USER}:${USER} -R /home/${USER}
 
 #CONFIGURATION FREEPBX
 #MYSQL INJECTION AND TRUNK EXTENSION
@@ -202,6 +206,8 @@ sed -i "s/IDXXX/${ID_TRUNK}/g" "/usr/src/siptosis/siptosis.sql"
 sed -i "s/USERXXX/${USER}/g" "/usr/src/siptosis/siptosis.sql"
 sed -i "s/PASSXXX/${PASS}/g" "/usr/src/siptosis/siptosis.sql"
 sed -i "s/EXTENSIONXXX/${EXTENSION}/g" "/usr/src/siptosis/siptosis.sql"
+sed -i "s/DIDXXX/${NEW_DID}/g" "/usr/src/siptosis/siptosis.sql"
+
 mysql -u${AMPDBUSER} -p${AMPDBPASS} -D${AMPDBNAME} < /usr/src/siptosis/siptosis.sql
 /var/lib/asterisk/bin/module_admin reload
 
