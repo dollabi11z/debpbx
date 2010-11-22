@@ -131,7 +131,6 @@ send "n\r"
 expect eof;
 EOF
 
-
 #SipToSis
 wget http://debpbx.googlecode.com/svn/trunk/modules/siptosis.tar.gz -O /usr/src/siptosis.tar.gz
 cd /usr/src/
@@ -152,11 +151,8 @@ sed -i "s/xxx.xxx.xxx.xxx/${IP_ADRESS}/g" "/home/${USER}/siptosis/SkypeToSipAuth
 sed -i "s/USERXXX/${USER}/g" "/home/${USER}/siptosis/SkypeToSipAuth.props"
 
 #CONFIGURATION daemon_template
-DISPLAY=`ps ax | grep -i "Xtightvnc" | cut -d":" -f3 | awk '{ print $1}'`
-NEW_DISPLAY=$(($NEW_DISPLAY+1))
 cp /usr/src/siptosis/daemon_template /etc/init.d/siptosis_${USER}
 chmod +x /etc/init.d/siptosis_${USER}
-sed -i "s/NUMBERXXX/${NEW_DISPLAY}/g" "/etc/init.d/siptosis_${USER}"
 sed -i "s/USERXXX/${USER}/g" "/etc/init.d/siptosis_${USER}"
 cd /etc/init.d/
 update-rc.d siptosis_${USER} defaults	        
