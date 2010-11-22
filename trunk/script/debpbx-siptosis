@@ -145,12 +145,11 @@ chown ${USER}:${USER} -R /home/${USER}/siptosis/
 
 #CONFIGURATION SkypeToSipAuth.props
 cat > /home/${USER}/siptosis/SkypeToSipAuth.props << "EOF"
-*,sip:DIDXXX@$xxx.xxx.xxx.xxx:5060;dtmf:1365
+*,sip:USERXXX@$xxx.xxx.xxx.xxx:5060;dtmf:1365
 *,play:clips/invalidDest.wav
 EOF
-NEW_DID=`echo $(($RANDOM%29999999999))`
 sed -i "s/xxx.xxx.xxx.xxx/${IP_ADRESS}/g" "/home/${USER}/siptosis/SkypeToSipAuth.props"
-sed -i "s/DIDXXX/${NEW_DID}/g" "/home/${USER}/siptosis/SkypeToSipAuth.props"
+sed -i "s/USERXXX/${USER}/g" "/home/${USER}/siptosis/SkypeToSipAuth.props"
 
 #CONFIGURATION daemon_template
 DISPLAY=`ps ax | grep -i "Xtightvnc" | cut -d":" -f3 | awk '{ print $1}'`
@@ -165,7 +164,10 @@ update-rc.d siptosis_${USER} defaults
 #CONFIGURATION siptosis.cfg
 cp /home/${USER}/siptosis/samples/siptosis.cfg /home/${USER}/siptosis/siptosis.cfg
 
+NEW_DID=`echo $(($RANDOM%29999999999))`
 echo "
+
+#DebPBX - SipToSis
 host_port=5070
 contact_url=sip:${NEW_DID}@127.0.0.1:5070
 from_url=\"${USER}\" <sip:${USER}@127.0.0.1:5070>
@@ -186,7 +188,6 @@ sed -i "s/IDXXX/${ID_TRUNK}/g" "/usr/src/siptosis/siptosis.sql"
 sed -i "s/USERXXX/${USER}/g" "/usr/src/siptosis/siptosis.sql"
 sed -i "s/PASSXXX/${PASS}/g" "/usr/src/siptosis/siptosis.sql"
 sed -i "s/EXTENSIONXXX/${EXTENSION}/g" "/usr/src/siptosis/siptosis.sql"
-sed -i "s/DIDXXX/${NEW_DID}/g" "/usr/src/siptosis/siptosis.sql"
 
 mysql -u${AMPDBUSER} -p${AMPDBPASS} -D${AMPDBNAME} < /usr/src/siptosis/siptosis.sql
 /var/lib/asterisk/bin/module_admin reload
