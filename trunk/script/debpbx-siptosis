@@ -114,7 +114,7 @@ if [ "$CPUINFO" == "amd64" ]; then
 fi
 
 aptitude -y install sun-java6-jdk
-#adduser ${USER} --disabled-password --home /home/${USER}/ --gecos "Skype ${USER}" --force-badname
+adduser ${USER} --disabled-password --home /home/${USER}/ --gecos "Skype ${USER}" --force-badname
 adduser ${USER} audio
 echo "${USER}:$(echo $PASS | openssl passwd -1 -stdin)" | chpasswd -e
 mkdir -p /home/${USER}/.vnc/
