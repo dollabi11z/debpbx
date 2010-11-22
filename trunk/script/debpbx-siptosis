@@ -15,6 +15,7 @@ CPUINFO=`uname -a | grep 'amd64' | cut -d"-" -f3 | awk '{ print $1}'`
 IP_ADRESS=`ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
 source /etc/amportal.conf
 data=$( tempfile 2>/dev/null )
+#echo "sun-java6-jdk shared/accepted-sun-dlj-v1-1 boolean true" | debconf-set-selections
 trap "rm -f $data" 0 1 2 5 15
 
 while [ 1 ]; do
@@ -99,5 +100,95 @@ EXTENSION=`cat $data`
 
 done;
 
-chmod 777 /usr/src/siptosis/install
-/usr/src/siptosis/install > /var/log/dp-siptosis
+aptitude update 
+aptitude -y install xserver-xorg-video-fbdev xterm libqt4-dev libxss-dev x11proto-scrnsaver-dev xvfb elinks tightvncserver tightvnc-java blackbox
+     
+#CPU CHECKER
+if [ "$CPUINFO" == "amd64" ]; then
+		aptitude -y install ia32-libs ia32-libs-gtk libqt4-core libqt4-gui 
+		wget http://debpbx.googlecode.com/svn/trunk/modules/skype_2.1.0.81-1_amd64.deb -O  /var/cache/apt/archives/skype_2.1.0.81-1_amd64.deb 
+		dpkg -i  /var/cache/apt/archives/skype_2.1.0.81-1_amd64.deb
+	else
+ 		wget http://debpbx.googlecode.com/svn/trunk/modules/skype_2.1.0.81-1_i386.deb -O /var/cache/apt/archives/skype_2.1.0.81-1_i386.deb 
+		dpkg -i /var/cache/apt/archives/skype_2.1.0.81-1_i386.deb  
+fi
+
+aptitude -y install sun-java6-jdk
+#adduser ${USER} --disabled-password --home /home/${USER}/ --gecos "Skype ${USER}" --force-badname
+adduser ${USER} audio
+echo "${USER}:$(echo $PASS | openssl passwd -1 -stdin)" | chpasswd -e
+mkdir -p /home/${USER}/.vnc/
+chown -R ${USER}:${USER} /home/${USER}/.vnc/
+expect << EOF
+spawn su -l ${USER} -c "tightvncpasswd"
+expect "*.vnc/passwd*"
+expect "*assword:*"
+send "${PASS}\r"
+expect "*erify:*"
+send "${PASS}\r"
+expect "*Would you like to enter a view-only password (y/n)?*"
+send "n\r"
+expect eof;
+EOF
+
+
+#SipToSis
+wget http://debpbx.googlecode.com/svn/trunk/modules/siptosis.tar.gz -O /usr/src/siptosis.tar.gz
+cd /usr/src/
+tar zxf /usr/src/siptosis.tar.gz
+cd /usr/src/siptosis
+
+mkdir -p /home/${USER}/siptosis/
+cd /home/${USER}/siptosis/
+unzip /usr/src/siptosis/SipToSis_*.zip
+chown ${USER}:${USER} -R /home/${USER}/siptosis/
+
+#CONFIGURATION SkypeToSipAuth.props
+cat > /home/${USER}/siptosis/SkypeToSipAuth.props << "EOF"
+*,sip:DIDXXX@$xxx.xxx.xxx.xxx:5060;dtmf:1365
+*,play:clips/invalidDest.wav
+EOF
+NEW_DID=`echo $(($RANDOM%29999999999))`
+sed -i "s/xxx.xxx.xxx.xxx/${IP_ADRESS}/g" "/home/${USER}/siptosis/SkypeToSipAuth.props"
+sed -i "s/DIDXXX/${NEW_DID}/g" "/home/${USER}/siptosis/SkypeToSipAuth.props"
+
+#CONFIGURATION daemon_template
+DISPLAY=`ps ax | grep -i "Xtightvnc" | cut -d":" -f3 | awk '{ print $1}'`
+NEW_DISPLAY=$(($NEW_DISPLAY+1))
+cp /usr/src/siptosis/daemon_template /etc/init.d/siptosis_${USER}
+chmod +x /etc/init.d/siptosis_${USER}
+sed -i "s/NUMBERXXX/${NEW_DISPLAY}/g" "/etc/init.d/siptosis_${USER}"
+sed -i "s/USERXXX/${USER}/g" "/etc/init.d/siptosis_${USER}"
+cd /etc/init.d/
+update-rc.d siptosis_${USER} defaults	        
+	
+#CONFIGURATION siptosis.cfg
+cp /home/${USER}/siptosis/samples/siptosis.cfg /home/${USER}/siptosis/siptosis.cfg
+
+echo "
+host_port=5070
+contact_url=sip:${NEW_DID}@127.0.0.1:5070
+from_url=\"${USER}\" <sip:${USER}@127.0.0.1:5070>
+username=${USER}
+passwd=${PASS}
+realm=127.0.0.1
+" >> /home/${USER}/siptosis/siptosis.cfg
+
+#CAMBIANDO DUESÑO Y PERMISOS
+chown ${USER}:${USER} -R /home/${USER}
+
+#CONFIGURATION FREEPBX
+#MYSQL INJECTION AND TRUNK EXTENSION
+echo "SELECT * FROM \`trunks\` WHERE \`trunkid\` ORDER BY trunkid DESC LIMIT 0,1;" | mysql -u${AMPDBUSER} -p${AMPDBPASS} -D${AMPDBNAME} | egrep -v "id" |  cut -f1 > /tmp/siptosip.tmp && ID_TRUNK=`cat /tmp/siptosip.tmp`
+
+ID_TRUNK=$(($ID_TRUNK+1))
+sed -i "s/IDXXX/${ID_TRUNK}/g" "/usr/src/siptosis/siptosis.sql"
+sed -i "s/USERXXX/${USER}/g" "/usr/src/siptosis/siptosis.sql"
+sed -i "s/PASSXXX/${PASS}/g" "/usr/src/siptosis/siptosis.sql"
+sed -i "s/EXTENSIONXXX/${EXTENSION}/g" "/usr/src/siptosis/siptosis.sql"
+sed -i "s/DIDXXX/${NEW_DID}/g" "/usr/src/siptosis/siptosis.sql"
+
+mysql -u${AMPDBUSER} -p${AMPDBPASS} -D${AMPDBNAME} < /usr/src/siptosis/siptosis.sql
+/var/lib/asterisk/bin/module_admin reload
+
+
