@@ -143,10 +143,7 @@ unzip /usr/src/siptosis/SipToSis_*.zip
 chown ${USER}:${USER} -R /home/${USER}/siptosis/
 
 #CONFIGURATION SkypeToSipAuth.props
-cat > /home/${USER}/siptosis/SkypeToSipAuth.props << "EOF"
-*,sip:USERXXX@$xxx.xxx.xxx.xxx:5060;dtmf:1365
-*,play:clips/invalidDest.wav
-EOF
+cp /usr/src/siptosis/SkypeToSipAuth.props /home/${USER}/siptosis/SkypeToSipAuth.props
 sed -i "s/xxx.xxx.xxx.xxx/${IP_ADRESS}/g" "/home/${USER}/siptosis/SkypeToSipAuth.props"
 sed -i "s/USERXXX/${USER}/g" "/home/${USER}/siptosis/SkypeToSipAuth.props"
 
