@@ -14,7 +14,7 @@ FOP2_USER="fop2_us";                                                            
 data=$( tempfile 2>/dev/null )
 trap "rm -f $data" 0 1 2 5 15
 
-if [ -f /root/passwordsX ]
+if [ -f /root/passwords ]
 then                    
     source /root/passwords
 else                                                     
