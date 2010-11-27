@@ -142,6 +142,6 @@ mysql -u$FOP2_USER -p$FOP2_DB_PW $FOP2_DB < /var/www/html/fop2/mysql.db
 echo "Restarting...."
 /usr/local/fop2/autoconfig-buttons-freepbx.sh
 /usr/local/fop2/autoconfig-users-freepbx.sh
-/usr/sbin/amportal restart
+/usr/local/sbin/amportal restart
 /etc/init.d/fop2 start
 exit 0
