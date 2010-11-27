@@ -185,4 +185,7 @@ sed -i "s/EXTENSIONXXX/${EXTENSION}/g" "/usr/src/siptosis/siptosis.sql"
 mysql -u${AMPDBUSER} -p${AMPDBPASS} -D${AMPDBNAME} < /usr/src/siptosis/siptosis.sql
 /var/lib/asterisk/bin/module_admin reload
 
+#START siptosis
+/etc/init.d/siptosis_${USER} start
+
 
