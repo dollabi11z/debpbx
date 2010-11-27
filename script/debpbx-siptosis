@@ -188,4 +188,6 @@ mysql -u${AMPDBUSER} -p${AMPDBPASS} -D${AMPDBNAME} < /usr/src/siptosis/siptosis.
 #START siptosis
 /etc/init.d/siptosis_${USER} start
 
+dialog --backtitle "DebPBX - FOP2" --title "Complete installation" --msgbox "\nYou may acceder via web or your VNC client to complete the configuration favorite.\n\nvia web: http://${IP_ADRESS}:5801\nvnc: ${IP_ADRESS}:5901\n\nNote: You must login for first time with skype account and password to remember not to ask again.\n\nThen you have to accept the java API to take control SipToSIS system and can route the call to DebPBX (Asterisk)." 20 80
+clear
 
