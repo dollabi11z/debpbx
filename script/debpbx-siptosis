@@ -1,10 +1,11 @@
 #!/bin/bash             
 #                       
-# debpbx-siptosis - 15/11/2010 
+# debpbx-siptosis - 04/12/2010 
 #                       
 # DebPBX-1.4       
-# Author: Federico Pereira <info@opentecnologic.com> & <fpereira@debpbx.org>
-# Copyright 2008 Federico Pereira (LordBaseX)       
+# Author: Federico Pereira <fpereira@debpbx.org>
+# Copyright 2008 Federico Pereira (LordBaseX)
+# Team DebPBX: Federico Pereria, Hector Kee, Alejandro Navarro, Javier Rivero       
 # This script is licensed under GNU GPL version 2.0 
 #                                                   
 
@@ -12,10 +13,11 @@
 ID_TRUNK=""
 EXTENSION=""
 CPUINFO=`uname -a | grep 'amd64' | cut -d"-" -f3 | awk '{ print $1}'`
+AUDIO=`lspci | grep -o -i audio | grep -m 1 -i audio`
 IP_ADRESS=`ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'`
 source /etc/amportal.conf
 data=$( tempfile 2>/dev/null )
-#echo "sun-java6-jdk shared/accepted-sun-dlj-v1-1 boolean true" | debconf-set-selections
+echo "sun-java6-jdk shared/accepted-sun-dlj-v1-1 boolean true" | debconf-set-selections
 trap "rm -f $data" 0 1 2 5 15
 
 while [ 1 ]; do
@@ -181,6 +183,13 @@ sed -i "s/IDXXX/${ID_TRUNK}/g" "/usr/src/siptosis/siptosis.sql"
 sed -i "s/USERXXX/${USER}/g" "/usr/src/siptosis/siptosis.sql"
 sed -i "s/PASSXXX/${PASS}/g" "/usr/src/siptosis/siptosis.sql"
 sed -i "s/EXTENSIONXXX/${EXTENSION}/g" "/usr/src/siptosis/siptosis.sql"
+
+if [ "$AUDIO" == "" ]; then
+	
+		modprobe snd-dummy
+	else
+		echo "detect sound"
+fi
 
 mysql -u${AMPDBUSER} -p${AMPDBPASS} -D${AMPDBNAME} < /usr/src/siptosis/siptosis.sql
 /var/lib/asterisk/bin/module_admin reload
