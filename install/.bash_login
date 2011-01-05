@@ -1,6 +1,6 @@
 #!/bin/bash
 clear
-cat /etc/debpbx
+source .bashrc
 echo "Author: Federico Pereira <fpereira@opentecnologic.com>"
 echo "Copyright 2009 - Federico Pereira (LordBasex)"
 echo "This Distro is licensed under GNU/GPL version 2.0"
@@ -8,4 +8,3 @@ echo "Web Site: www.debpbx.org"
 echo ""
 echo "Useful commands: debpbx-help"
 echo ""
-sh /root/.bashrc
