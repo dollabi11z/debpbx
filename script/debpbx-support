@@ -1,0 +1,85 @@
+#!/bin/bash
+#
+# debpbx-support - 03/01/2011
+#
+# DebPBX-1.4.0
+# Author: Federico Pereira <info@opentecnologic.com> & <fpereira@debpbx.org>
+# Copyright 2008 Federico Pereira (LordBaseX)
+# This script is licensed under GNU GPL version 2.0
+#
+#
+#VARIABLES GLOBAL
+PID_FILE=/var/run/debpbx-support.pid
+> $PID_FILE
+data=$( tempfile 2>/dev/null )
+trap "rm -f $data" 0 1 2 5 15
+
+#SERVER
+HOST="support.debpbx.org"
+SSH_PORT="9876"
+USER_NAME="support"
+
+#CLIENTE
+PORTS[1]="$(cat /etc/ssh/sshd_config | grep '^Port' | grep -o '[0-9]*$')"
+DESCS[1]="SSH"
+ACCES[1]=""
+NEXT_PORT[1]="9922"
+
+PORTS[2]=80
+DESCS[2]="HTTP"
+ACCESS[2]="0.0.0.0:"
+NEXT_PORT[2]="9980"
+
+
+dialog --backtitle "DebPBX - Support" --title "Support code" --clear  --inputbox "\nrequested the support code. Please request your support code on our official site or by mail to support@debpbx.org.\n 
+\nThanks.\n" 16 51 2> $data
+
+ret=$?
+# make decison
+case $ret in
+
+  0)
+        PASS=$(cat $data)
+        ;;
+  1)
+        break;
+        ;;
+  255)
+        exit;
+        
+	;;
+
+esac
+clear
+
+
+	for IDX in $(seq ${#PORTS[*]}); do
+
+    		COMMAND="ssh -o StrictHostKeyChecking=no -fN -R ${ACCESS[$IDX]}${NEXT_PORT[$IDX]}:localhost:${PORTS[$IDX]} $USER_NAME@$HOST -p $SSH_PORT"	
+		VAR=$(expect -c "
+		spawn  $COMMAND
+		match_max 100000
+		expect \"*?assword:*\"
+		send -- \"$PASS\r\"
+		send -- \"\r\"
+		expect eof
+		")
+		sleep 1;
+
+    		if [ $? == 0 ]; then
+
+			CMD_GET_PID="ps aux | grep  '$COMMAND' | grep -v 'grep' | awk '{print \$2}'"
+			PID=$(eval $CMD_GET_PID)
+			echo "$PID" >> $PID_FILE
+						
+		else
+			echo "Error run ssh to port ${PORTS[$IDX]} :("
+    		fi
+
+	done 		
+
+
+
+PID="$(cat /var/run/debpbx-support.pid)"
+
+
