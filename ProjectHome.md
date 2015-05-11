@@ -1,0 +1,1 @@
+DebPBX es una plataforma de software libre (bajo licencia GPL) basada en Asterisk que proporciona funcionalidades de una central telefónica (PBX). Como cualquier PBX, se puede conectar un número determinado de teléfonos para hacer llamadas entre sí e incluso conectar a un proveedor de VoIP o bien a una ISDN(RDSI) tanto básicos como primarios.
